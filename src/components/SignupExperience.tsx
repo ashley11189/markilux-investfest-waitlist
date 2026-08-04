@@ -1,0 +1,200 @@
+"use client";
+
+import Image from "next/image";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { SignupForm, type SignupSuccess } from "@/components/SignupForm";
+import { OrganizerPanel } from "@/components/OrganizerPanel";
+import { useKioskMode } from "@/lib/use-kiosk-mode";
+
+type Screen = "welcome" | "form" | "done";
+
+/** How long the confirmation lingers before the kiosk resets for the next person. */
+const KIOSK_RESET_MS = 7000;
+
+export function SignupExperience() {
+  const [kiosk, toggleKioskMode] = useKioskMode();
+
+  // null means "whatever this mode starts on", which keeps the kiosk welcome
+  // screen out of the render path until localStorage has actually been read.
+  const [screen, setScreen] = useState<Screen | null>(null);
+  const [result, setResult] = useState<SignupSuccess | null>(null);
+  const [organizerOpen, setOrganizerOpen] = useState(false);
+
+  const current: Screen = screen ?? (kiosk ? "welcome" : "form");
+  const headingRef = useRef<HTMLHeadingElement>(null);
+
+  const go = useCallback((next: Screen) => {
+    setScreen(next);
+    window.scrollTo(0, 0);
+  }, []);
+
+  // Auto-return to the welcome screen so the next visitor never sees the last
+  // person's name sitting on the iPad.
+  useEffect(() => {
+    if (current !== "done" || !kiosk) return;
+    const timer = setTimeout(() => {
+      setResult(null);
+      setScreen("welcome");
+      window.scrollTo(0, 0);
+    }, KIOSK_RESET_MS);
+    return () => clearTimeout(timer);
+  }, [current, kiosk]);
+
+  // Send focus to the new heading on every screen change, so a screen-reader
+  // or keyboard user is not stranded at the bottom of the previous view.
+  useEffect(() => {
+    headingRef.current?.focus();
+  }, [current]);
+
+  const toggleKiosk = useCallback(() => {
+    toggleKioskMode();
+    setResult(null);
+    setScreen(null);
+    setOrganizerOpen(false);
+    window.scrollTo(0, 0);
+  }, [toggleKioskMode]);
+
+  const handleSuccess = useCallback(
+    (value: SignupSuccess) => {
+      setResult(value);
+      go("done");
+    },
+    [go],
+  );
+
+  const organizer = organizerOpen ? (
+    <OrganizerPanel
+      kiosk={kiosk}
+      onToggleKiosk={toggleKiosk}
+      onClose={() => setOrganizerOpen(false)}
+    />
+  ) : null;
+
+  if (current === "welcome") {
+    return (
+      <>
+        <main className="center">
+          <Brand />
+          <h2 ref={headingRef} tabIndex={-1}>
+            Private sale.
+            <br />
+            By invitation.
+          </h2>
+          <p>
+            German engineered shading at private sale pricing, released to our
+            list before it opens to the market. Add your name and we will send
+            you first access.
+          </p>
+          <button
+            className="btn"
+            type="button"
+            style={{ width: "auto", padding: "19px 40px" }}
+            onClick={() => go("form")}
+          >
+            Start
+          </button>
+          <p className="tap">markilux USA · InvestFest 2026 · Booth</p>
+        </main>
+        {organizer}
+      </>
+    );
+  }
+
+  if (current === "done") {
+    const firstName = result?.name?.split(" ")[0] ?? "You";
+    const reset = () => {
+      setResult(null);
+      setScreen(kiosk ? "welcome" : "form");
+      window.scrollTo(0, 0);
+    };
+
+    return (
+      <main className="center">
+        <Brand />
+        <div className="mark" style={{ marginTop: "var(--leading)" }}>
+          <span aria-hidden="true">✓</span>
+        </div>
+        <h2 ref={headingRef} tabIndex={-1}>
+          {result?.duplicate
+            ? `${firstName}, you are already on the list.`
+            : `${firstName}, you are on the list.`}
+        </h2>
+        <p>
+          {result?.duplicate
+            ? "We already had this email, so there is nothing more to do. The private sale details are on their way to you."
+            : "Pricing, allocation, and the opening date go out by email before the sale is announced. Watch for a message from markilux USA."}
+        </p>
+        {result?.confirmation && (
+          <div className="ticket">CONFIRMATION {result.confirmation}</div>
+        )}
+        <button
+          className="btn ghost"
+          type="button"
+          onClick={reset}
+          style={{ marginTop: "var(--leading)" }}
+        >
+          {kiosk ? "Next person" : "Back to the form"}
+        </button>
+        {kiosk && <p className="tap">Returning to the start shortly</p>}
+      </main>
+    );
+  }
+
+  return (
+    <>
+      <main className="shell">
+        <Brand />
+
+        <div className="hero-media" style={{ marginTop: "var(--leading)" }}>
+          <Image
+            src="/img/awning-hero-1280.webp"
+            alt="A markilux awning shading a residential terrace"
+            width={1280}
+            height={720}
+            priority
+            sizes="(max-width: 620px) 100vw, 620px"
+          />
+        </div>
+
+        <p className="kick">Private sale list · InvestFest 2026</p>
+        <h1 className="h1" ref={headingRef} tabIndex={-1}>
+          Get first access before it opens.
+        </h1>
+        <p className="lede">
+          We are releasing a limited allocation of markilux systems at private
+          sale pricing. List members hear pricing and dates first, ahead of the
+          public Fall 2026 opening.
+        </p>
+
+        <SignupForm kiosk={kiosk} onSuccess={handleSuccess} />
+
+        {!kiosk && (
+          <div className="foot">
+            <span>markilux USA · InvestFest 2026</span>
+            <button type="button" onClick={() => setOrganizerOpen(true)}>
+              Organizer
+            </button>
+          </div>
+        )}
+      </main>
+
+      {organizer}
+    </>
+  );
+}
+
+function Brand() {
+  return (
+    <span className="brand">
+      <Image
+        src="/img/markilux-wordmark.png"
+        alt="markilux"
+        width={300}
+        height={38}
+        style={{ height: 15, width: "auto" }}
+        priority
+      />
+      <span>USA</span>
+    </span>
+  );
+}
