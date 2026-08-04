@@ -1,0 +1,1147 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>markilux — The Atlanta Private Sale</title>
+<link rel="stylesheet" href="_ds/modernist-d4da4840-ce89-4fdf-952d-c71f75c0b85a/styles.css" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap" />
+<style>
+:root { --mxred: #E3000B; --mxred-d: #B00009; --ink: var(--color-text); --leading: 28px; --half: 14px;
+  --div: var(--color-divider); --edge: clamp(20px, 4vw, 48px); }
+:root { --color-accent: #E3000B; --color-accent-600: #CC000A; --color-accent-700: #B00009; }
+html { scroll-behavior: smooth; }
+body { margin: 0; background: var(--color-bg); color: var(--ink); text-wrap: pretty; }
+a { color: var(--color-accent-700); }
+a:hover { color: var(--color-accent); }
+.wrap { max-width: 1280px; margin: 0 auto; padding-inline: var(--edge); }
+.kick { display: block; font-family: 'Open Sans', sans-serif; font-size: 12px; line-height: 1.4; letter-spacing: 0.14em;
+  text-transform: uppercase; color: var(--mxred); font-weight: 600; }
+.rule { height: 2px; border: 0; margin: 0; background: var(--div); }
+
+/* reveal choreography */
+.rv { opacity: 0; transform: translateY(26px); transition: opacity .7s cubic-bezier(.2,.6,.2,1), transform .7s cubic-bezier(.2,.6,.2,1); transition-delay: var(--d, 0ms); }
+.rv.in { opacity: 1; transform: none; }
+@media (prefers-reduced-motion: reduce) { .rv { opacity: 1; transform: none; transition: none; } html { scroll-behavior: auto; } }
+
+/* progress + nav */
+#progress { position: fixed; top: 0; left: 0; height: 3px; width: 0; background: var(--mxred); z-index: 1200; }
+.nav { position: sticky; top: 0; z-index: 1100; display: flex; align-items: center; gap: clamp(16px, 2.5vw, 36px);
+  padding: 18px var(--edge); background: color-mix(in srgb, var(--color-bg) 92%, transparent);
+  backdrop-filter: blur(10px); border-bottom: 2px solid transparent; transition: border-color .3s ease; }
+.nav.scrolled { border-bottom-color: var(--ink); }
+.nav .brand { margin-right: auto; display: flex; align-items: center; }
+.nav .brand img { height: 16px; width: auto; display: block; }
+.nav a { font-family: var(--font-heading); font-weight: var(--font-heading-weight); font-size: 14px; letter-spacing: 0.02em;
+  color: var(--ink); text-decoration: none; position: relative; padding-bottom: 3px; }
+.nav a::after { content: ""; position: absolute; left: 0; bottom: -2px; width: 0; height: 2px; background: var(--mxred); transition: width .25s ease; }
+.nav a:hover { color: var(--ink); } .nav a:hover::after { width: 100%; }
+.btn { -webkit-appearance: none; appearance: none; font-family: var(--font-heading); font-weight: var(--font-heading-weight);
+  font-size: 15px; letter-spacing: 0.02em; text-align: left; cursor: pointer; border: 2px solid transparent;
+  padding: 13px 20px; transition: background .18s ease, color .18s ease, border-color .18s ease, transform .12s ease; }
+.btn:active { transform: translateY(1px); }
+.btn:focus-visible { outline: 2px solid var(--mxred); outline-offset: 2px; }
+.btn-red { background: var(--mxred); color: #fff; }
+.btn-red:hover { background: var(--mxred-d); }
+.btn-ghost { background: transparent; color: var(--ink); border-color: var(--ink); }
+.btn-ghost:hover { border-color: var(--mxred); color: var(--mxred-d); }
+.btn-block { display: block; width: 100%; box-sizing: border-box; }
+.nav .btn { padding: 10px 16px; font-size: 13.5px; }
+
+/* hero */
+.hero { position: relative; min-height: 92vh; display: flex; align-items: flex-end; overflow: hidden; color: #fff; }
+.hero-media { position: absolute; inset: 0; }
+.hero-media img { width: 100%; height: 100%; object-fit: cover; display: block; animation: kenburns 22s ease-out both; }
+@keyframes kenburns { from { transform: scale(1.12); } to { transform: scale(1); } }
+@media (prefers-reduced-motion: reduce) { .hero-media img { animation: none; } }
+.hero::after { content: ""; position: absolute; inset: 0; pointer-events: none;
+  background: linear-gradient(to top, rgba(16,14,13,0.86) 0%, rgba(16,14,13,0.48) 34%, rgba(16,14,13,0.08) 66%, rgba(16,14,13,0.02) 100%); }
+.hero .wrap { position: relative; z-index: 2; width: 100%; padding-bottom: clamp(48px, 7vh, 88px); }
+.hero .kick { color: #fff; opacity: 0.92; }
+.hero h1 { font-family: var(--font-heading); font-weight: var(--font-heading-weight); font-size: clamp(52px, 8vw, 112px);
+  line-height: 0.98; letter-spacing: -0.025em; margin: 18px 0 0 -0.05em; }
+.hero h1 span { display: block; }
+.hero p { font-family: 'Open Sans', sans-serif; font-size: clamp(15px, 1.4vw, 17.5px); line-height: 1.65; max-width: 58ch;
+  margin: 22px 0 0; color: rgba(255,255,255,0.92); }
+.hero .row { display: flex; gap: 14px; flex-wrap: wrap; margin-top: 30px; }
+.hero .mark { position: absolute; top: 24px; right: var(--edge); z-index: 2; width: 14px; height: 14px; background: var(--mxred); }
+.scroll-cue { position: absolute; bottom: 22px; right: var(--edge); z-index: 2; width: 2px; height: 44px; overflow: hidden; }
+.scroll-cue::after { content: ""; display: block; width: 2px; height: 100%; background: rgba(255,255,255,0.85); animation: cue 1.8s ease-in-out infinite; }
+@keyframes cue { 0% { transform: translateY(-100%); } 55% { transform: translateY(0); } 100% { transform: translateY(100%); } }
+
+/* stats */
+.stats { padding: calc(2.2 * var(--leading)) 0; }
+.stats .grid { display: grid; grid-template-columns: repeat(4, auto); justify-content: space-between; gap: var(--leading); }
+.stat-num { font-family: var(--font-heading); font-weight: var(--font-heading-weight); font-size: clamp(38px, 3.8vw, 56px);
+  line-height: 1; margin: 0 0 0 -0.045em; font-feature-settings: "tnum" 1; }
+.stat-num.red { color: var(--mxred); }
+.stat-label { font-size: 12.5px; line-height: 1.5; letter-spacing: 0.08em; text-transform: uppercase;
+  color: color-mix(in srgb, var(--ink) 68%, transparent); margin: 12px 0 0; max-width: 22ch; }
+@media (max-width: 880px) { .stats .grid { grid-template-columns: 1fr 1fr; } }
+
+/* section grammar */
+.section { padding: calc(2.6 * var(--leading)) 0; }
+.sec-head { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1fr); gap: var(--half) clamp(24px, 4vw, 80px);
+  align-items: end; margin-bottom: calc(1.4 * var(--leading)); }
+.sec-head .kick { grid-column: 2; }
+.sec-head.solo .kick { grid-column: 1; }
+.sec-title { font-family: var(--font-heading); font-weight: var(--font-heading-weight); font-size: clamp(32px, 4vw, 54px);
+  line-height: 1.02; letter-spacing: -0.02em; margin: 0 0 0 -0.05em; text-wrap: balance; }
+.sec-lead { font-family: 'Open Sans', sans-serif; font-size: 15.5px; line-height: 1.7; max-width: 52ch; margin: 0;
+  color: color-mix(in srgb, var(--ink) 84%, transparent); }
+@media (max-width: 820px) { .sec-head { grid-template-columns: 1fr; } .sec-head .kick { grid-column: 1; } }
+
+/* collection */
+.configs { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--leading); }
+.config { position: relative; border: 2px solid var(--div); padding: calc(1.4 * var(--leading));
+  display: flex; flex-direction: column; transition: border-color .25s ease, transform .25s ease; background: var(--color-bg); }
+.config:hover { border-color: var(--ink); transform: translateY(-4px); }
+.config .w { font-family: var(--font-heading); font-weight: var(--font-heading-weight); font-size: clamp(44px, 4.6vw, 64px); line-height: 1; margin: 0; }
+.config .w small { font-size: 20px; color: color-mix(in srgb, var(--ink) 55%, transparent); margin-left: 4px; letter-spacing: 0.02em; }
+.config .n { font-family: var(--font-heading); font-weight: var(--font-heading-weight); font-size: 21px; margin: var(--half) 0 0; }
+.config .d { font-family: 'Open Sans', sans-serif; font-size: 14px; line-height: 1.6; margin: 8px 0 0;
+  color: color-mix(in srgb, var(--ink) 74%, transparent); }
+.config .sp { flex: 1 1 auto; min-height: var(--leading); }
+.config .p { font-family: var(--font-heading); font-weight: var(--font-heading-weight); font-size: 32px; margin: 0; letter-spacing: -0.01em; font-feature-settings: "tnum" 1; }
+.config .m { font-size: 11.5px; letter-spacing: 0.1em; text-transform: uppercase; color: color-mix(in srgb, var(--ink) 58%, transparent); margin: 8px 0 0; }
+.pop-tag { position: absolute; top: -2px; right: -2px; background: var(--mxred); color: #fff; font-family: var(--font-heading);
+  font-weight: var(--font-heading-weight); font-size: 10.5px; letter-spacing: 0.1em; text-transform: uppercase; padding: 6px 10px; }
+@media (max-width: 880px) { .configs { grid-template-columns: 1fr; } }
+
+/* video facade */
+.film { position: relative; width: 100%; aspect-ratio: 16 / 9; background: #000; cursor: pointer; overflow: hidden; margin-top: calc(1.4 * var(--leading)); }
+.film img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: transform .6s ease; }
+.film:hover img { transform: scale(1.03); }
+.film .veil { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; background: rgba(16,14,13,0.28); transition: background .3s ease; }
+.film:hover .veil { background: rgba(16,14,13,0.16); }
+.film .play { width: 84px; height: 84px; background: var(--mxred); display: flex; align-items: center; justify-content: center; transition: transform .25s ease; }
+.film:hover .play { transform: scale(1.06); }
+.film .play span { width: 0; height: 0; border-left: 26px solid #fff; border-top: 16px solid transparent; border-bottom: 16px solid transparent; margin-left: 7px; }
+.film iframe, .film video { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+
+/* specs */
+.specs { display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--leading) clamp(24px, 4vw, 80px); }
+.spec { border-top: 2px solid var(--ink); padding-top: var(--half); }
+.spec p { font-family: 'Open Sans', sans-serif; font-size: 14.5px; line-height: 1.7; margin: 12px 0 0;
+  color: color-mix(in srgb, var(--ink) 82%, transparent); max-width: 52ch; }
+@media (max-width: 820px) { .specs { grid-template-columns: 1fr; } }
+
+/* configurator */
+.cfg-preview { position: relative; overflow: hidden; margin: 0 auto var(--leading); }
+.cfg-preview img { display: block; width: 100%; aspect-ratio: 1600 / 1197; max-height: 62vh; object-fit: cover; }
+.cfg-preview figcaption { position: absolute; left: 0; right: 0; bottom: 0; display: flex; align-items: flex-end; justify-content: space-between; gap: 16px;
+  padding: 48px 20px 18px;
+  background: linear-gradient(to top, rgba(16,14,13,0.76), rgba(16,14,13,0)); color: #fff; pointer-events: none; }
+.cap-price { font-family: var(--font-heading); font-weight: var(--font-heading-weight); font-size: clamp(18px, 1.8vw, 26px); font-feature-settings: "tnum" 1; }
+.v3d-time { display: flex; align-items: center; gap: 8px; background: color-mix(in srgb, var(--color-bg) 90%, transparent); border: 2px solid var(--ink); padding: 6px 12px; }
+.v3d-time span { font-family: 'Open Sans', sans-serif; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink); font-weight: 600; }
+.v3d-time input { width: 104px; accent-color: var(--mxred); margin: 0; }
+#cfg-3d { position: relative; width: 100%; aspect-ratio: 4 / 3; max-height: calc(100vh - 200px); min-height: 340px; overflow: hidden;
+  background: linear-gradient(180deg, #f0eeea 0%, #ddd9d2 100%); }
+#cfg-3d img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.v3d-ui { position: absolute; top: 14px; right: 14px; z-index: 3; display: flex; align-items: center; gap: 14px; }
+#v3d-toggle { -webkit-appearance: none; appearance: none; cursor: pointer; background: var(--color-bg); color: var(--ink);
+  border: 2px solid var(--ink); font-family: var(--font-heading); font-weight: var(--font-heading-weight); font-size: 12.5px;
+  letter-spacing: 0.04em; padding: 8px 14px; transition: border-color .18s ease, color .18s ease; }
+#v3d-toggle:hover { border-color: var(--mxred); color: var(--mxred-d); }
+#v3d-toggle:focus-visible { outline: 2px solid var(--mxred); outline-offset: 2px; }
+.v3d-hint { font-family: 'Open Sans', sans-serif; font-size: 10.5px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(16,14,13,0.48); }
+.cap-model { font-family: var(--font-heading); font-weight: 500; font-size: 11px; letter-spacing: 0.32em; text-transform: uppercase; color: rgba(255,255,255,0.75); }
+.cap-sel { font-family: var(--font-heading); font-weight: 400; font-size: clamp(13px, 1.4vw, 18px); letter-spacing: 0.01em; }
+.cfg-layout { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); gap: clamp(24px, 3vw, 56px); align-items: start; }
+.cfg-stick { position: sticky; top: 76px; z-index: 5; }
+.cfg-right { min-width: 0; }
+.cfg-steps { display: grid; gap: calc(1.9 * var(--leading)); }
+.step-head { display: flex; align-items: baseline; gap: 12px; margin-bottom: var(--leading); border-top: 2px solid var(--ink); padding-top: var(--half); }
+.step-n { font-family: var(--font-heading); font-weight: var(--font-heading-weight); font-size: 13px; color: var(--mxred); font-feature-settings: "tnum" 1; }
+.step-title { font-family: var(--font-heading); font-weight: var(--font-heading-weight); font-size: 20px; margin: 0; }
+.opt-grid { display: grid; gap: var(--half); }
+.g-widths { grid-template-columns: repeat(3, 1fr); gap: var(--leading); }
+.g-fabrics { grid-template-columns: repeat(4, 1fr); }
+.g-frames { grid-template-columns: repeat(2, 1fr); }
+.g-pair { grid-template-columns: repeat(2, minmax(0, 210px)); }
+.g-trio { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.opt { -webkit-appearance: none; appearance: none; font: inherit; color: inherit; text-align: left; background: var(--color-bg);
+  border: 2px solid var(--div); padding: 0; margin: 0; cursor: pointer; position: relative; display: block;
+  transition: border-color .18s ease, background .18s ease, color .18s ease; }
+.opt:hover { border-color: color-mix(in srgb, var(--mxred) 55%, var(--div)); }
+.opt[aria-pressed="true"] { border-color: var(--mxred); }
+.opt[aria-pressed="true"]::after { content: ""; position: absolute; top: 0; left: 0; width: 15px; height: 15px; background: var(--mxred); }
+.opt:focus-visible { outline: 2px solid var(--mxred); outline-offset: 2px; }
+.opt.width { padding: var(--leading); display: flex; flex-direction: column; gap: 10px; }
+.opt.width .ow { font-family: var(--font-heading); font-weight: var(--font-heading-weight); font-size: 38px; line-height: 1; }
+.opt.width .ow span { font-size: 16px; color: color-mix(in srgb, var(--ink) 55%, transparent); margin-left: 3px; }
+.opt.width .on { font-family: var(--font-heading); font-weight: var(--font-heading-weight); font-size: 16px; }
+.opt.width .op { font-family: 'Open Sans', sans-serif; font-size: 13.5px; color: color-mix(in srgb, var(--ink) 70%, transparent); }
+.opt.chip { overflow: hidden; }
+.opt.chip img { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; display: block; transition: transform .4s ease; }
+.opt.chip:hover img { transform: scale(1.06); }
+.opt.frame img { aspect-ratio: 16 / 9; }
+.opt .cap { display: block; font-size: 12px; letter-spacing: 0.04em; padding: 8px 10px; line-height: 1.4; border-top: 2px solid var(--div); font-feature-settings: "tnum" 1; }
+.opt[aria-pressed="true"] .cap { border-top-color: var(--mxred); }
+.opt .cap .sub { display: block; color: color-mix(in srgb, var(--ink) 58%, transparent); }
+.opt.pill { padding: 14px 16px; font-family: var(--font-heading); font-weight: var(--font-heading-weight); font-size: 15.5px; }
+.opt.pill[aria-pressed="true"] { background: var(--mxred); color: #fff; border-color: var(--mxred); }
+.opt.pill[aria-pressed="true"]::after { display: none; }
+.step-note { font-family: 'Open Sans', sans-serif; font-size: 13px; line-height: 1.6; margin: var(--half) 0 0; color: color-mix(in srgb, var(--ink) 62%, transparent); }
+.cfg-summary { border: 2px solid var(--ink); padding: calc(1.4 * var(--leading)); background: var(--color-bg); margin-top: calc(1.9 * var(--leading)); }
+.cfg-summary .sk { display: block; font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--mxred); font-weight: 600; font-family: 'Open Sans', sans-serif; margin-bottom: var(--leading); }
+.sum-row { display: flex; justify-content: space-between; gap: 16px; padding: 8px 0; border-top: 2px solid var(--div); font-size: 13.5px; }
+.sum-row:first-of-type { border-top: 0; }
+.sum-row dt { color: color-mix(in srgb, var(--ink) 58%, transparent); margin: 0; font-family: 'Open Sans', sans-serif; }
+.sum-row dd { margin: 0; font-family: var(--font-heading); font-weight: var(--font-heading-weight); text-align: right; }
+.sum-price { font-family: var(--font-heading); font-weight: var(--font-heading-weight); font-size: 42px; line-height: 1; margin: var(--leading) 0 0; letter-spacing: -0.015em; font-feature-settings: "tnum" 1; transition: color .2s ease; }
+.sum-price.tick { color: var(--mxred); }
+.sum-meta { font-size: 11px; letter-spacing: 0.09em; text-transform: uppercase; color: color-mix(in srgb, var(--ink) 58%, transparent); margin: 8px 0 0; }
+.sum-finance { font-family: 'Open Sans', sans-serif; font-size: 13px; color: color-mix(in srgb, var(--ink) 70%, transparent); margin: 6px 0 0; }
+.sum-urgency { font-family: 'Open Sans', sans-serif; font-size: 12.5px; line-height: 1.55; margin: var(--leading) 0 0; padding: 10px 12px; border: 2px solid var(--mxred); }
+.sum-urgency strong { color: var(--mxred-d); }
+.cfg-summary .btn { margin-top: var(--leading); }
+.want-more { margin-top: var(--leading); padding: calc(1.3 * var(--leading)); background: var(--mxred); color: #fff; }
+.want-more strong { font-family: var(--font-heading); font-weight: var(--font-heading-weight); display: block; font-size: 26px; line-height: 1.02; letter-spacing: -0.01em; text-transform: uppercase; }
+.want-more p { font-family: 'Open Sans', sans-serif; font-size: 13.5px; line-height: 1.6; margin: 10px 0 0; }
+.want-more a { display: block; margin-top: var(--leading); padding: 13px 16px; background: #fff; color: var(--mxred);
+  font-family: var(--font-heading); font-weight: var(--font-heading-weight); font-size: 14px; text-transform: uppercase;
+  letter-spacing: 0.03em; text-decoration: none; transition: transform .15s ease; }
+.want-more a:hover { transform: translateX(4px); color: var(--mxred-d); }
+@media (max-width: 980px) { .cfg-layout { grid-template-columns: 1fr; } .cfg-stick { position: sticky; top: 64px; } #cfg-3d { max-height: 46vh; min-height: 260px; } .g-fabrics { grid-template-columns: repeat(4, 1fr); } }
+@media (max-width: 620px) { .g-widths { grid-template-columns: 1fr; } .g-fabrics { grid-template-columns: repeat(3, 1fr); } .g-frames { grid-template-columns: repeat(2, 1fr); } }
+
+/* pricing timeline */
+.tlh { list-style: none; margin: calc(0.5 * var(--leading)) 0 0; padding: 0; position: relative; display: grid; grid-template-columns: repeat(5, 1fr); gap: clamp(16px, 2vw, 32px); counter-reset: tl; }
+.tlh::before { content: ""; position: absolute; top: 5px; left: 0; right: 0; height: 2px; background: var(--div); }
+.tlh li { position: relative; padding-top: calc(var(--leading) + 4px); font-family: 'Open Sans', sans-serif; font-size: 13.5px; line-height: 1.6; }
+.tlh li::before { content: ""; position: absolute; top: 0; left: 0; width: 12px; height: 12px; background: var(--mxred); }
+.tlh-step { display: block; font-family: var(--font-heading); font-weight: var(--font-heading-weight); font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--mxred-d); margin-bottom: 5px; font-feature-settings: "tnum" 1; }
+.notinc { list-style: none; margin: calc(0.5 * var(--leading)) 0 0; padding: 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--leading) clamp(20px, 3vw, 40px); }
+.notinc li { border-top: 2px solid var(--div); padding-top: var(--half); font-family: 'Open Sans', sans-serif; font-size: 13.5px; line-height: 1.6; color: color-mix(in srgb, var(--ink) 68%, transparent); }
+@media (max-width: 880px) { .tlh { grid-template-columns: 1fr 1fr; } .tlh::before { display: none; } .notinc { grid-template-columns: 1fr 1fr; } }
+
+/* market */
+.tiers { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--leading) clamp(20px, 3vw, 48px); }
+.tier { border-top: 2px solid var(--ink); padding-top: var(--half); }
+.tier-name { font-family: var(--font-heading); font-weight: var(--font-heading-weight); font-size: 19px; margin: 0; }
+.tier-price { font-size: 12px; letter-spacing: 0.07em; text-transform: uppercase; color: var(--mxred-d); margin: 8px 0 0; white-space: nowrap; font-weight: 600; font-family: 'Open Sans', sans-serif; }
+.tier-copy { font-family: 'Open Sans', sans-serif; font-size: 14px; line-height: 1.65; margin: 10px 0 0; color: color-mix(in srgb, var(--ink) 80%, transparent); }
+.tier-here { grid-column: 1 / -1; display: grid; grid-template-columns: minmax(0, 1.1fr) 150px minmax(0, 1.7fr);
+  gap: var(--half) clamp(20px, 3vw, 48px); align-items: baseline; background: var(--mxred); color: #fff;
+  padding: calc(1.2 * var(--leading)) calc(1.4 * var(--leading)); margin-top: var(--half); }
+.tier-here .tier-name, .tier-here .tier-price, .tier-here .tier-copy { color: #fff; margin: 0; }
+@media (max-width: 760px) { .tiers { grid-template-columns: 1fr; } .tier-here { grid-template-columns: 1fr; } }
+
+/* flow */
+.flow { display: grid; grid-template-columns: repeat(3, 1fr); gap: calc(1.4 * var(--leading)) clamp(24px, 4vw, 72px); }
+.flow .step { border-top: 2px solid var(--ink); padding-top: var(--half); }
+.flow .sn { font-family: var(--font-heading); font-weight: var(--font-heading-weight); font-size: 13px; color: var(--mxred-d); }
+.flow .st { font-family: var(--font-heading); font-weight: var(--font-heading-weight); font-size: 17px; margin: 10px 0 0; }
+.flow .sc { font-family: 'Open Sans', sans-serif; font-size: 13.5px; line-height: 1.6; margin: 6px 0 0; color: color-mix(in srgb, var(--ink) 74%, transparent); }
+@media (max-width: 880px) { .flow { grid-template-columns: 1fr; } }
+
+/* communities */
+.phases { display: grid; grid-template-columns: repeat(3, 1fr); gap: calc(1.4 * var(--leading)) clamp(24px, 4vw, 72px); }
+.phase { border-top: 2px solid var(--ink); padding-top: var(--half); }
+.phase-k { display: block; font-size: 12px; letter-spacing: 0.09em; text-transform: uppercase; color: var(--mxred-d); font-weight: 600; font-family: 'Open Sans', sans-serif; }
+.phase ul { list-style: none; margin: var(--leading) 0 0; padding: 0; }
+.phase li { font-family: var(--font-heading); font-weight: var(--font-heading-weight); font-size: 18px; line-height: 1.9; letter-spacing: -0.01em; }
+.inquiry { font-family: 'Open Sans', sans-serif; font-size: 14px; line-height: 1.65; max-width: 60ch; color: color-mix(in srgb, var(--ink) 72%, transparent); margin: calc(1.4 * var(--leading)) 0 0; }
+@media (max-width: 760px) { .phases { grid-template-columns: 1fr; } }
+
+/* heritage */
+.heritage video { display: block; width: 100%; aspect-ratio: 16 / 9; object-fit: cover; background: #000; margin-top: calc(0.4 * var(--leading)); }
+
+/* close */
+.close { background: var(--mxred); color: #fff; }
+.close .wrap { padding-top: calc(3 * var(--leading)); padding-bottom: calc(3 * var(--leading)); }
+.close .kick { color: #fff; }
+.close h3 { font-family: var(--font-heading); font-weight: var(--font-heading-weight); font-size: clamp(38px, 4.6vw, 64px); line-height: 1.02; letter-spacing: -0.02em; margin: 16px 0 0 -0.05em; }
+.close h3 span { display: block; }
+.close .sub { font-family: 'Open Sans', sans-serif; font-size: 15.5px; line-height: 1.7; max-width: 46ch; margin: 22px 0 0; }
+.close .row { display: flex; gap: 14px; flex-wrap: wrap; margin-top: 28px; }
+.close .btn-ghost { color: #fff; border-color: #fff; }
+.close .btn-ghost:hover { background: #fff; color: var(--mxred); }
+.close .contact { display: flex; flex-wrap: wrap; gap: 10px 40px; margin-top: calc(1.6 * var(--leading)); font-family: 'Open Sans', sans-serif; font-size: 13.5px; }
+.close .contact a { color: #fff; text-decoration: underline; text-underline-offset: 3px; }
+footer { padding: calc(1.8 * var(--leading)) 0; font-family: 'Open Sans', sans-serif; font-size: 12.5px; letter-spacing: 0.04em;
+  color: color-mix(in srgb, var(--ink) 60%, transparent); display: flex; flex-wrap: wrap; justify-content: space-between; gap: 10px; }
+
+/* payment modal */
+#pay-backdrop { position: fixed; inset: 0; z-index: 1300; background: rgba(16,14,13,0.66); display: none; align-items: flex-start; justify-content: center; overflow: auto; padding: 40px 20px; }
+#pay-backdrop.open { display: flex; }
+.pay-dialog { background: var(--color-bg); border: 2px solid var(--ink); width: 100%; max-width: 1000px; animation: payin .35s cubic-bezier(.2,.7,.3,1) both; }
+@keyframes payin { from { opacity: 0; transform: translateY(28px); } to { opacity: 1; transform: none; } }
+.pay-head { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 18px 28px; border-bottom: 2px solid var(--ink); }
+.pay-head h3 { font-family: var(--font-heading); font-weight: var(--font-heading-weight); font-size: 22px; margin: 0; letter-spacing: -0.01em; }
+.pay-close { -webkit-appearance: none; appearance: none; background: none; border: 0; font-size: 26px; line-height: 1; cursor: pointer; color: var(--ink); padding: 4px 8px; }
+.pay-close:hover { color: var(--mxred); }
+.pay-body { display: grid; grid-template-columns: 1fr 1fr; }
+.pay-left { padding: 28px; border-right: 2px solid var(--div); }
+.pay-right { padding: 28px; }
+.pay-left video { width: 100%; aspect-ratio: 16 / 9; background: #000; display: block; margin-top: 12px; }
+.pay-note { font-family: 'Open Sans', sans-serif; font-size: 13px; line-height: 1.65; color: color-mix(in srgb, var(--ink) 76%, transparent); margin: var(--leading) 0 0; }
+.pay-sum { margin: var(--leading) 0 0; }
+.psum-row { display: flex; justify-content: space-between; gap: 16px; padding: 7px 0; border-top: 2px solid var(--div); font-size: 13px; }
+.psum-row:first-child { border-top: 0; }
+.psum-row dt { color: color-mix(in srgb, var(--ink) 58%, transparent); margin: 0; font-family: 'Open Sans', sans-serif; }
+.psum-row dd { margin: 0; font-family: var(--font-heading); font-weight: var(--font-heading-weight); text-align: right; }
+.psum-row.total { border-top: 2px solid var(--ink); margin-top: 4px; font-size: 14.5px; }
+.pay-deposit { font-family: var(--font-heading); font-weight: var(--font-heading-weight); font-size: 46px; line-height: 1; margin: var(--half) 0 0; letter-spacing: -0.02em; font-feature-settings: "tnum" 1; }
+.pay-meta { font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: color-mix(in srgb, var(--ink) 58%, transparent); margin: 8px 0 0; }
+.pay-field { display: block; margin-top: 16px; font-size: 11px; letter-spacing: 0.07em; text-transform: uppercase; color: color-mix(in srgb, var(--ink) 62%, transparent); font-family: 'Open Sans', sans-serif; font-weight: 600; }
+.pay-input { display: block; width: 100%; margin-top: 6px; padding: 12px 14px; border: 2px solid var(--div); background: #fff;
+  font-family: 'Open Sans', sans-serif; font-size: 15px; color: var(--ink); text-transform: none; letter-spacing: normal; box-sizing: border-box; transition: border-color .18s ease; }
+.pay-input:hover { border-color: color-mix(in srgb, var(--mxred) 40%, var(--div)); }
+.pay-input:focus { outline: 2px solid var(--mxred); outline-offset: 2px; border-color: var(--mxred); }
+.pay-row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.pay-fine { font-family: 'Open Sans', sans-serif; font-size: 12px; line-height: 1.6; color: color-mix(in srgb, var(--ink) 55%, transparent); margin: var(--leading) 0 0; }
+.pc-mark { width: 56px; height: 56px; background: var(--mxred); display: flex; align-items: center; justify-content: center; color: #fff; font-family: var(--font-heading); font-weight: var(--font-heading-weight); font-size: 30px; margin-top: var(--half); }
+.pay-confirm h4 { font-family: var(--font-heading); font-weight: var(--font-heading-weight); font-size: 26px; margin: var(--leading) 0 0; letter-spacing: -0.01em; }
+@media (max-width: 760px) { .pay-body { grid-template-columns: 1fr; } .pay-left { border-right: 0; border-bottom: 2px solid var(--div); } }
+</style>
+</head>
+<body>
+<div id="progress"></div>
+<nav class="nav" id="nav">
+  <span class="brand"><img src="assets/markilux-wordmark.png" alt="markilux" /></span>
+  <a href="#collection">Collection</a>
+  <a href="#configure">Configure</a>
+  <a href="#pricing">Pricing</a>
+  <a href="#process">Process</a>
+  <a href="#communities">Communities</a>
+  <button type="button" class="btn btn-red" data-reserve>Reserve a configuration</button>
+</nav>
+
+<header class="hero" id="top">
+  <div class="hero-media"><img src="assets/hero-bg.png" alt="A markilux awning shading a residential terrace" /></div>
+  <span class="mark" aria-hidden="true"></span>
+  <div class="wrap">
+    <span class="kick rv">By private invitation · Reservations open Fall 2026</span>
+    <h1 class="rv" style="--d:120ms;"><span>The Atlanta</span><span>Private Sale.</span></h1>
+    <p class="rv" style="--d:240ms;">A curated direct collection from markilux, engineered in Germany and delivered to select Atlanta communities by sealed ocean container. Reservations are by invitation. The collection is curated. This is not a retail launch; this is an introduction.</p>
+    <div class="row rv" style="--d:360ms;">
+      <button type="button" class="btn btn-red" data-reserve>Reserve a configuration</button>
+      <a href="#process" class="btn btn-ghost" style="text-decoration:none; display:inline-block;">See how it works</a>
+    </div>
+  </div>
+  <span class="scroll-cue" aria-hidden="true"></span>
+</header>
+
+<div class="wrap">
+  <section class="stats" aria-label="markilux, by the numbers">
+    <div class="grid">
+      <div class="rv"><p class="stat-num red"><span data-count="300">0</span>ft²</p><p class="stat-label">Of cool shade at full extension</p></div>
+      <div class="rv" style="--d:100ms;"><p class="stat-num"><span data-count="20">0</span>ft</p><p class="stat-label">Of open-air living, widest configuration</p></div>
+      <div class="rv" style="--d:200ms;"><p class="stat-num"><span data-count="30">0</span>yr</p><p class="stat-label">Engineered service life</p></div>
+      <div class="rv" style="--d:300ms;"><p class="stat-num"><span data-count="50">0</span>yr</p><p class="stat-label">German manufacturing, all in-house</p></div>
+    </div>
+  </section>
+
+  <hr class="rule" />
+
+  <section class="section" id="collection">
+    <div class="sec-head">
+      <span class="kick rv">The collection</span>
+      <h2 class="sec-title rv">Three configurations.</h2>
+      <p class="sec-lead rv" style="--d:120ms;">Each configuration is built on the markilux 1600 platform, refined for residential application and curated to a single coherent collection of fabrics, finishes, and operations. Multi-configuration reservations receive 5% collection pricing on two units, 10% on three or more.</p>
+    </div>
+    <div class="configs">
+      <div class="config rv"><p class="w">10<small>ft</small></p><p class="n">The Patio</p><p class="d">markilux 1600 at 10 feet, delivered to your home.</p><div class="sp"></div><p class="p">$4,969</p><p class="m">Delivered price</p></div>
+      <div class="config rv" style="--d:120ms;"><span class="pop-tag">Most popular</span><p class="w">15<small>ft</small></p><p class="n">The Terrace</p><p class="d">markilux 1600 at 15 feet, delivered to your home.</p><div class="sp"></div><p class="p">$5,899</p><p class="m">Delivered price</p></div>
+      <div class="config rv" style="--d:240ms;"><p class="w">20<small>ft</small></p><p class="n">The Outdoor Room</p><p class="d">markilux 1600 at 20 feet, delivered to your home.</p><div class="sp"></div><p class="p">$6,999</p><p class="m">Delivered price</p></div>
+    </div>
+    <div class="film rv" data-yt="jxpzAPe5g_Q" role="button" tabindex="0" aria-label="Play: the markilux 1600 in use">
+      <img src="assets/awning-hero.png" alt="markilux 1600 awning in use" />
+      <span class="veil"><span class="play"><span></span></span></span>
+    </div>
+  </section>
+
+  <section class="section" aria-label="Specifications" style="padding-top: 0;">
+    <div class="specs">
+      <div class="spec rv">
+        <span class="kick">Standard across all configurations</span>
+        <p>Semi-cassette frame in four refined finishes. Curated fabric collection in three palettes designed to complement Atlanta architecture. Somfy RTS motorization with five-channel remote. Bionic tendon arm assembly. Vibrabox wind sensor.</p>
+      </div>
+      <div class="spec rv" style="--d:120ms;">
+        <span class="kick">Customizable</span>
+        <p>Width is selected by configuration. Fabric pattern is selected from the curated palette. Frame color is selected from the four collection finishes. Mounting accommodates wall, roof, or face-fixture installations.</p>
+      </div>
+    </div>
+  </section>
+
+  <hr class="rule" />
+
+  <section class="section" id="configure">
+    <div class="sec-head">
+      <span class="kick rv">Configure your awning</span>
+      <h2 class="sec-title rv">Build your reservation.</h2>
+      <p class="sec-lead rv" style="--d:120ms;">Choose your configuration, fabric, frame finish, shadeplus, mounting type, and motor side. Your selection is confirmed with your markilux advisor before production. Nothing is final until then.</p>
+    </div>
+
+
+
+    <div class="cfg-layout">
+      <div class="cfg-stick">
+    <figure class="cfg-preview rv" id="cfg-viewer">
+      <div id="cfg-3d">
+        <img id="cfg-fallback" src="assets/config-scene-1600.jpg" alt="markilux 1600 awning over a terrace" />
+      </div>
+      <div class="v3d-ui">
+        <button type="button" id="v3d-toggle">Retract</button>
+        <label class="v3d-time"><span>Time</span><input type="range" id="v3d-time" min="0" max="1" step="0.002" value="0.38" /></label>
+        <span class="v3d-hint">Drag to look around</span>
+      </div>
+      <figcaption><div style="display:flex;flex-direction:column;gap:5px;"><span class="cap-model">markilux 1600 · live 3D</span><span class="cap-sel" id="cap-sel">The Patio · 41488 · 5233 · Off-white</span></div><span class="cap-price" id="cap-price">$4,969</span></figcaption>
+    </figure>
+      </div>
+      <div class="cfg-right">
+      <div class="cfg-steps">
+        <div class="rv">
+          <div class="step-head"><span class="step-n">01</span><h3 class="step-title">Configuration &amp; width</h3></div>
+          <div class="opt-grid g-widths" role="group" aria-label="Configuration">
+            <button type="button" class="opt width" data-group="width" data-label="The Patio" data-detail="10 ft" data-price="4969" aria-pressed="true"><span class="ow">10<span>ft</span></span><span class="on">The Patio</span><span class="op">$4,969 delivered</span></button>
+            <button type="button" class="opt width" data-group="width" data-label="The Terrace" data-detail="15 ft" data-price="5899" aria-pressed="false"><span class="pop-tag">Most popular</span><span class="ow">15<span>ft</span></span><span class="on">The Terrace</span><span class="op">$5,899 delivered</span></button>
+            <button type="button" class="opt width" data-group="width" data-label="The Outdoor Room" data-detail="20 ft" data-price="6999" aria-pressed="false"><span class="ow">20<span>ft</span></span><span class="on">The Outdoor Room</span><span class="op">$6,999 delivered</span></button>
+          </div>
+        </div>
+        <div class="rv">
+          <div class="step-head"><span class="step-n">02</span><h3 class="step-title">Fabric</h3></div>
+          <div class="opt-grid g-fabrics" role="group" aria-label="Fabric">
+            <button type="button" class="opt chip" data-group="fabric" data-label="41488" aria-pressed="true"><img src="assets/fabrics/41488.jpg" alt="markilux fabric 41488" /><span class="cap">41488</span></button>
+            <button type="button" class="opt chip" data-group="fabric" data-label="41480" aria-pressed="false"><img src="assets/fabrics/41480.jpg" alt="markilux fabric 41480" /><span class="cap">41480</span></button>
+            <button type="button" class="opt chip" data-group="fabric" data-label="31009" aria-pressed="false"><img src="assets/fabrics/31009.jpg" alt="markilux fabric 31009" /><span class="cap">31009</span></button>
+            <button type="button" class="opt chip" data-group="fabric" data-label="30709" aria-pressed="false"><img src="assets/fabrics/30709.jpg" alt="markilux fabric 30709" /><span class="cap">30709</span></button>
+            <button type="button" class="opt chip" data-group="fabric" data-label="30927" aria-pressed="false"><img src="assets/fabrics/30927.jpg" alt="markilux fabric 30927" /><span class="cap">30927</span></button>
+            <button type="button" class="opt chip" data-group="fabric" data-label="30209" aria-pressed="false"><img src="assets/fabrics/30209.jpg" alt="markilux fabric 30209" /><span class="cap">30209</span></button>
+            <button type="button" class="opt chip" data-group="fabric" data-label="41415" aria-pressed="false"><img src="assets/fabrics/41415.jpg" alt="markilux fabric 41415" /><span class="cap">41415</span></button>
+            <button type="button" class="opt chip" data-group="fabric" data-label="31487" aria-pressed="false"><img src="assets/fabrics/31487.jpg" alt="markilux fabric 31487" /><span class="cap">31487</span></button>
+            <button type="button" class="opt chip" data-group="fabric" data-label="31595" aria-pressed="false"><img src="assets/fabrics/31595.jpg" alt="markilux fabric 31595" /><span class="cap">31595</span></button>
+            <button type="button" class="opt chip" data-group="fabric" data-label="31597" aria-pressed="false"><img src="assets/fabrics/31597.jpg" alt="markilux fabric 31597" /><span class="cap">31597</span></button>
+          </div>
+        </div>
+        <div class="rv">
+          <div class="step-head"><span class="step-n">03</span><h3 class="step-title">Frame finish</h3></div>
+          <div class="opt-grid g-frames" role="group" aria-label="Frame finish">
+            <button type="button" class="opt chip frame" data-group="frame" data-label="5233 · Off-white" aria-pressed="true"><img src="assets/frames/5233.jpg" alt="Frame finish 5233, off-white textured" /><span class="cap">5233<span class="sub">Off-white, textured</span></span></button>
+            <button type="button" class="opt chip frame" data-group="frame" data-label="RAL 9006 · Aluminium" aria-pressed="false"><img src="assets/frames/9006.jpg" alt="Frame finish RAL 9006, metallic aluminium" /><span class="cap">RAL 9006<span class="sub">Metallic aluminium</span></span></button>
+            <button type="button" class="opt chip frame" data-group="frame" data-label="5215 · Stone grey" aria-pressed="false"><img src="assets/frames/5215.jpg" alt="Frame finish 5215, stone grey metallic" /><span class="cap">5215<span class="sub">Stone grey, metallic</span></span></button>
+            <button type="button" class="opt chip frame" data-group="frame" data-label="5204 · Anthracite" aria-pressed="false"><img src="assets/frames/5204.jpg" alt="Frame finish 5204, anthracite metallic" /><span class="cap">5204<span class="sub">Anthracite, metallic</span></span></button>
+          </div>
+        </div>
+        <div class="rv">
+          <div class="step-head"><span class="step-n">04</span><h3 class="step-title">shadeplus</h3></div>
+          <div class="opt-grid g-pair" role="group" aria-label="shadeplus">
+            <button type="button" class="opt pill" data-group="shadeplus" data-label="With shadeplus" aria-pressed="false">Add shadeplus +$650</button>
+            <button type="button" class="opt pill" data-group="shadeplus" data-label="Without" aria-pressed="true">Without</button>
+          </div>
+          <p class="step-note">A manual vertical screen that drops from the front profile to block low, glaring sun rays.</p>
+        </div>
+        <div class="rv">
+          <div class="step-head"><span class="step-n">05</span><h3 class="step-title">Mounting type</h3></div>
+          <div class="opt-grid g-trio" role="group" aria-label="Mounting type">
+            <button type="button" class="opt pill" data-group="mount" data-label="Face fixture" aria-pressed="true">Face fixture</button>
+            <button type="button" class="opt pill" data-group="mount" data-label="Soffit fixture" aria-pressed="false">Soffit fixture</button>
+            <button type="button" class="opt pill" data-group="mount" data-label="Top/Roof fixture" aria-pressed="false">Top/Roof fixture</button>
+          </div>
+        </div>
+        <div class="rv">
+          <div class="step-head"><span class="step-n">06</span><h3 class="step-title">Motor side</h3></div>
+          <div class="opt-grid g-pair" role="group" aria-label="Motor side">
+            <button type="button" class="opt pill" data-group="motor" data-label="Left" aria-pressed="false">Left</button>
+            <button type="button" class="opt pill" data-group="motor" data-label="Right" aria-pressed="true">Right</button>
+          </div>
+        </div>
+        <div class="rv">
+          <div class="step-head"><span class="step-n">07</span><h3 class="step-title">Wind sensor</h3></div>
+          <div class="opt-grid g-trio" role="group" aria-label="Wind sensor">
+            <button type="button" class="opt pill" data-group="sensor" data-label="Vibrabox, white" aria-pressed="true">Vibrabox · White</button>
+            <button type="button" class="opt pill" data-group="sensor" data-label="Vibrabox, grey" aria-pressed="false">Vibrabox · Grey</button>
+            <button type="button" class="opt pill" data-group="sensor" data-label="None" aria-pressed="false">None</button>
+          </div>
+          <p class="step-note">The Somfy Vibrabox wind sensor automatically retracts the awning in high wind, protecting the fabric and frame.</p>
+        </div>
+        <div class="rv">
+          <div class="step-head"><span class="step-n">08</span><h3 class="step-title">Installation</h3></div>
+          <div class="opt-grid g-pair" role="group" aria-label="Installation">
+            <button type="button" class="opt pill" data-group="install" data-label="Certified install" aria-pressed="false">Certified install</button>
+            <button type="button" class="opt pill" data-group="install" data-label="DIY" aria-pressed="true">Self-install (DIY)</button>
+          </div>
+          <p class="step-note">Professional installation through a markilux-certified Atlanta partner runs $1,000–$1,500, quoted separately by the installer. Self-install includes full remote support.</p>
+        </div>
+      </div>
+
+      <aside class="cfg-summary rv" aria-label="Your reservation summary">
+        <span class="sk">Your reservation</span>
+        <dl style="margin:0;">
+          <div class="sum-row"><dt>Configuration</dt><dd id="sum-config">The Patio</dd></div>
+          <div class="sum-row"><dt>Width</dt><dd id="sum-width">10 ft</dd></div>
+          <div class="sum-row"><dt>Fabric</dt><dd id="sum-fabric">41488</dd></div>
+          <div class="sum-row"><dt>Frame</dt><dd id="sum-frame">5233 · Off-white</dd></div>
+          <div class="sum-row"><dt>shadeplus</dt><dd id="sum-shadeplus">Without</dd></div>
+          <div class="sum-row"><dt>Mounting</dt><dd id="sum-mount">Face fixture</dd></div>
+          <div class="sum-row"><dt>Motor side</dt><dd id="sum-motor">Right</dd></div>
+          <div class="sum-row"><dt>Wind sensor</dt><dd id="sum-sensor">Vibrabox, white</dd></div>
+          <div class="sum-row"><dt>Installation</dt><dd id="sum-install">Self-install (DIY)</dd></div>
+        </dl>
+        <p class="sum-price" id="sum-price">$4,969</p>
+        <p class="sum-meta">Delivered price · 50% refundable deposit · 12-year warranty</p>
+        <p class="sum-finance" id="sum-finance">or about $414/mo for 12 months</p>
+        <p class="sum-urgency">Inaugural Fall 2026 release · <strong>8 of 40</strong> reservations remaining in this community.</p>
+        <button type="button" class="btn btn-red btn-block" data-reserve>Reserve this configuration</button>
+        <div class="want-more">
+          <strong>Want more?</strong>
+          <p>markilux custom-makes awnings with bolder fabrics, custom frame finishes, integrated lighting, and other models.</p>
+          <a href="https://www.markilux.us" target="_blank" rel="noopener">Explore the full range →</a>
+        </div>
+      </aside>
+      </div>
+    </div>
+  </section>
+
+  <hr class="rule" />
+
+  <section class="section heritage" id="heritage">
+    <div class="sec-head">
+      <span class="kick rv">The heritage</span>
+      <h2 class="sec-title rv">Made in Emsdetten.</h2>
+      <p class="sec-lead rv" style="--d:120ms;">Every markilux system is vertically integrated. The fabric is woven in our own mill, the frames extruded in our facility, the motors and bionic tendon arms engineered in our research laboratory. The result is a level of precision and consistency no assembled product can replicate: the quiet signature of well-considered homes for five decades.</p>
+    </div>
+    <video class="rv" controls playsinline preload="metadata" poster="assets/factory-poster.jpg"><source src="assets/factory.mp4" type="video/mp4" /></video>
+  </section>
+
+  <hr class="rule" />
+
+  <section class="section" id="pricing">
+    <div class="sec-head">
+      <span class="kick rv">Pricing transparency</span>
+      <h2 class="sec-title rv">What your investment includes.</h2>
+      <p class="sec-lead rv" style="--d:120ms;">Every price is a complete delivered price. No hidden surcharges, no freight pass-throughs, no customs adjustments billed after order. Below is exactly what your investment funds.</p>
+    </div>
+    <span class="kick rv">Included in every delivered price</span>
+    <ol class="tlh rv">
+      <li><span class="tlh-step">01</span>Vertically integrated German manufacturing in Emsdetten</li>
+      <li><span class="tlh-step">02</span>Sealed forty-foot container freight, Bremerhaven to Savannah</li>
+      <li><span class="tlh-step">03</span>US customs clearance and all import duties</li>
+      <li><span class="tlh-step">04</span>Currency-exchange exposure absorbed by markilux</li>
+      <li><span class="tlh-step">05</span>Last-mile Atlanta delivery, inside placement and unpacking</li>
+    </ol>
+    <div class="rv" style="margin-top: calc(1.8 * var(--leading));">
+      <span class="kick">Not included</span>
+      <ul class="notinc">
+        <li>A new outdoor electrical outlet, if none is present</li>
+        <li>HOA application fees, if charged by your community</li>
+        <li>Georgia state sales tax, per state law</li>
+        <li>Optional professional installation, $1,000–$1,500</li>
+      </ul>
+    </div>
+  </section>
+
+  <hr class="rule" />
+
+  <section class="section" id="market">
+    <div class="sec-head">
+      <span class="kick rv">Market context</span>
+      <h2 class="sec-title rv">Where this sits in the category.</h2>
+      <p class="sec-lead rv" style="--d:120ms;">Retractable outdoor shading is offered across three distinct tiers in the American market. The differences are not subtle. Below is the honest landscape.</p>
+    </div>
+    <div class="tiers">
+      <div class="tier rv"><p class="tier-name">Entry awnings</p><p class="tier-price">$3–6K installed</p><p class="tier-copy">Typically US-assembled from imported components. Woven acrylic fabric, lateral arm construction without integrated tendon arms. Three-to-ten-year functional life.</p></div>
+      <div class="tier rv" style="--d:120ms;"><p class="tier-name">Premium systems</p><p class="tier-price">$6–9K installed</p><p class="tier-copy">US-manufactured with European motor components. Sunbrella fabric upgrades and heavier-gauge frames with optional semi-cassette protection. Ten-to-fifteen-year service life.</p></div>
+      <div class="tier rv" style="--d:240ms;"><p class="tier-name">European architectural</p><p class="tier-price">$7–15K installed</p><p class="tier-copy">Vertically integrated European manufacture with manufacturer-owned fabric mills and engineered bionic tendon arms. Twenty-to-thirty-year life, specified by architects.</p></div>
+      <div class="tier-here rv"><p class="tier-name">Where markilux sits</p><p class="tier-price" style="color:#fff;">From $4,969</p><p class="tier-copy">The European architectural category at the most accessible price we have offered in this market. The engineering is included in the product, not a premium added on top.</p></div>
+    </div>
+  </section>
+
+  <hr class="rule" />
+
+  <section class="stats" aria-label="Estimated timeline">
+    <span class="kick rv">Estimated timeline</span>
+    <div class="grid" style="margin-top: var(--leading);">
+      <div class="rv"><p class="stat-num">4–6</p><p class="stat-label">Weeks, reservation window</p></div>
+      <div class="rv" style="--d:100ms;"><p class="stat-num">6–8</p><p class="stat-label">Weeks, production in Germany</p></div>
+      <div class="rv" style="--d:200ms;"><p class="stat-num">3–4</p><p class="stat-label">Weeks, ocean transit &amp; customs</p></div>
+      <div class="rv" style="--d:300ms;"><p class="stat-num">13–18</p><p class="stat-label">Weeks, reservation to home delivery</p></div>
+    </div>
+  </section>
+
+  <hr class="rule" />
+
+  <section class="section" id="process">
+    <div class="sec-head solo">
+      <span class="kick rv">How the private sale works</span>
+      <h2 class="sec-title rv">The reservation process.</h2>
+    </div>
+    <div class="flow">
+      <div class="step rv"><span class="sn">01</span><h3 class="st">Architectural approval</h3><p class="sc">markilux clears HOA architectural review; your community window opens.</p></div>
+      <div class="step rv" style="--d:80ms;"><span class="sn">02</span><h3 class="st">Reservation</h3><p class="sc">Choose a configuration and place a 50% deposit, refundable until production begins.</p></div>
+      <div class="step rv" style="--d:160ms;"><span class="sn">03</span><h3 class="st">German production</h3><p class="sc">Your unit is built in Emsdetten, six to eight weeks.</p></div>
+      <div class="step rv"><span class="sn">04</span><h3 class="st">Ocean container</h3><p class="sc">Sealed forty-foot container, Germany to Savannah, roughly three weeks.</p></div>
+      <div class="step rv" style="--d:80ms;"><span class="sn">05</span><h3 class="st">Customs &amp; delivery</h3><p class="sc">Units clear US customs and arrive at your Atlanta home; balance due before last-mile delivery is scheduled.</p></div>
+      <div class="step rv" style="--d:160ms;"><span class="sn">06</span><h3 class="st">Installation</h3><p class="sc">Self-install with remote support, or a certified Atlanta partner.</p></div>
+    </div>
+  </section>
+
+  <hr class="rule" />
+
+  <section class="section" id="communities">
+    <div class="sec-head">
+      <span class="kick rv">Where the program operates</span>
+      <h2 class="sec-title rv">Participating communities.</h2>
+      <p class="sec-lead rv" style="--d:120ms;">Available exclusively to homeowners in communities where markilux has completed architectural review. Communities are added in sequence as approvals are secured.</p>
+    </div>
+    <div class="phases">
+      <div class="phase rv"><span class="phase-k">Phase one</span><ul><li>Buckhead</li><li>Brookhaven</li><li>Dunwoody</li><li>Vinings</li><li>Sandy Springs</li><li>Cobb County enclaves</li></ul></div>
+      <div class="phase rv" style="--d:120ms;"><span class="phase-k">Phase two</span><ul><li>Alpharetta</li><li>Cumming</li><li>Roswell</li><li>Milton</li><li>Duluth</li><li>North Fulton</li></ul></div>
+      <div class="phase rv" style="--d:240ms;"><span class="phase-k">Phase three</span><ul><li>Lake Oconee</li><li>The Landings, Savannah</li><li>Lake Lanier</li><li>Ford Plantation</li><li>Sea Island</li><li>Coastal Georgia</li></ul></div>
+    </div>
+    <p class="inquiry rv">Communities outside the published phases may apply for inclusion through their HOA architectural review board. markilux welcomes new community partnerships.</p>
+  </section>
+</div>
+
+<section class="close" id="reserve">
+  <div class="wrap">
+    <span class="kick rv">To reserve</span>
+    <h3 class="rv"><span>Begin your</span><span>private sale.</span></h3>
+    <p class="sub rv" style="--d:120ms;">Reservations for the inaugural Atlanta Private Sale open in Fall 2026. To be added to your community's invitation list, or to bring the Private Sale to your community, contact markilux USA directly.</p>
+    <div class="row rv" style="--d:240ms;">
+      <button type="button" class="btn btn-ghost" data-reserve>Reserve a configuration</button>
+    </div>
+    <div class="contact rv" style="--d:320ms;">
+      <span>Private sale inquiries · <a href="mailto:privatesales@markilux.us">privatesales@markilux.us</a></span>
+      <span>markilux USA · 200 Lexington Avenue, Suite 407, New York</span>
+    </div>
+  </div>
+</section>
+
+<div class="wrap">
+  <footer>
+    <span>Made in Germany. Delivered in Atlanta.</span>
+    <span>By private invitation only.</span>
+  </footer>
+</div>
+
+<div id="pay-backdrop" role="dialog" aria-modal="true" aria-label="Reserve your configuration">
+  <div class="pay-dialog">
+    <div class="pay-head"><h3>Reserve your markilux 1600</h3><button type="button" class="pay-close" id="pay-close" aria-label="Close">×</button></div>
+    <div class="pay-body">
+      <div class="pay-left">
+        <span class="kick">Before you install</span>
+        <video controls playsinline preload="metadata" poster="assets/factory-poster.jpg"><source src="assets/factory.mp4" type="video/mp4" /></video>
+        <p class="pay-note">Every reservation includes a step-by-step installation walkthrough, full markilux remote support, and a 12-year warranty. Prefer a professional? Choose certified installation in the configurator.</p>
+        <dl class="pay-sum" id="pay-sum"></dl>
+      </div>
+      <div class="pay-right" id="pay-right">
+        <span class="kick">Secure deposit</span>
+        <p class="pay-deposit" id="pay-deposit-amt">$0</p>
+        <p class="pay-meta">50% refundable deposit · balance due before delivery</p>
+        <form id="pay-form">
+          <label class="pay-field">Name on card <input class="pay-input" type="text" autocomplete="cc-name" required /></label>
+          <label class="pay-field">Card number <input class="pay-input" type="text" inputmode="numeric" autocomplete="cc-number" placeholder="0000 0000 0000 0000" required /></label>
+          <div class="pay-row2">
+            <label class="pay-field">Expiry <input class="pay-input" type="text" inputmode="numeric" autocomplete="cc-exp" placeholder="MM / YY" required /></label>
+            <label class="pay-field">CVC <input class="pay-input" type="text" inputmode="numeric" autocomplete="cc-csc" placeholder="123" required /></label>
+          </div>
+          <button type="submit" class="btn btn-red btn-block" id="pay-submit" style="margin-top: var(--leading);">Pay deposit</button>
+          <p class="pay-fine">You are charged the deposit today. The balance is due before last-mile delivery is scheduled. Deposits are fully refundable until production begins.</p>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+(() => {
+  // progress bar + nav state
+  const bar = document.getElementById('progress'), nav = document.getElementById('nav');
+  addEventListener('scroll', () => {
+    const h = document.documentElement;
+    bar.style.width = (h.scrollTop / (h.scrollHeight - h.clientHeight) * 100) + '%';
+    nav.classList.toggle('scrolled', h.scrollTop > 40);
+  }, { passive: true });
+
+  // reveal
+  const io = new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } }), { threshold: 0.12 });
+  document.querySelectorAll('.rv').forEach((el) => io.observe(el));
+
+  // count-up stats
+  const cio = new IntersectionObserver((es) => es.forEach((e) => {
+    if (!e.isIntersecting) return; cio.unobserve(e.target);
+    const el = e.target, end = parseInt(el.dataset.count, 10), t0 = performance.now();
+    const step = (t) => { const k = Math.min(1, (t - t0) / 1100); el.textContent = Math.round(end * (1 - Math.pow(1 - k, 3))); if (k < 1) requestAnimationFrame(step); };
+    requestAnimationFrame(step);
+  }), { threshold: 0.5 });
+  document.querySelectorAll('[data-count]').forEach((el) => cio.observe(el));
+
+  // video facades
+  document.querySelectorAll('[data-yt]').forEach((el) => {
+    const play = () => { el.innerHTML = '<iframe src="https://www.youtube.com/embed/' + el.dataset.yt + '?autoplay=1&rel=0" title="markilux film" allow="autoplay; encrypted-media" allowfullscreen></iframe>'; };
+    el.addEventListener('click', play);
+    el.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); play(); } });
+  });
+
+  // configurator
+  const state = { width: null, fabric: null, frame: null, shadeplus: null, mount: null, motor: null, sensor: null, install: null };
+  const out = {};
+  ['config','width','fabric','frame','shadeplus','mount','motor','sensor','install','price','finance'].forEach((k) => out[k] = document.getElementById('sum-' + k));
+  const capSel = document.getElementById('cap-sel');
+  const fmt = (n) => '$' + n.toLocaleString('en-US');
+  let lastTotal = 0;
+  function render() {
+    if (state.width) {
+      out.config.textContent = state.width.dataset.label;
+      out.width.textContent = state.width.dataset.detail;
+      let total = parseInt(state.width.dataset.price, 10) || 0;
+      if (state.shadeplus && state.shadeplus.dataset.label === 'With shadeplus') total += 650;
+      out.price.textContent = fmt(total);
+      out.finance.textContent = 'or about ' + fmt(Math.round(total / 12)) + '/mo for 12 months';
+      const cp = document.getElementById('cap-price'); if (cp) cp.textContent = fmt(total);
+      if (total !== lastTotal) { out.price.classList.add('tick'); setTimeout(() => out.price.classList.remove('tick'), 350); lastTotal = total; }
+    }
+    ['fabric','frame','shadeplus','mount','motor','sensor','install'].forEach((k) => { if (state[k] && out[k]) out[k].textContent = state[k].dataset.label; });
+    if (capSel) capSel.textContent = [state.width && state.width.dataset.label, state.fabric && state.fabric.dataset.label, state.frame && state.frame.dataset.label].filter(Boolean).join(' · ');
+    document.dispatchEvent(new Event('cfg:change'));
+  }
+  document.querySelectorAll('.opt').forEach((btn) => {
+    const g = btn.dataset.group;
+    if (btn.getAttribute('aria-pressed') === 'true') state[g] = btn;
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.opt[data-group="' + g + '"]').forEach((o) => o.setAttribute('aria-pressed', 'false'));
+      btn.setAttribute('aria-pressed', 'true'); state[g] = btn; render();
+    });
+  });
+  render();
+
+  // payment modal
+  const backdrop = document.getElementById('pay-backdrop');
+  const paySum = document.getElementById('pay-sum');
+  const payRight = document.getElementById('pay-right');
+  const payRightHTML = payRight.innerHTML;
+  function openPay() {
+    const rows = [['Configuration','sum-config'],['Width','sum-width'],['Fabric','sum-fabric'],['Frame','sum-frame'],['shadeplus','sum-shadeplus'],['Mounting','sum-mount'],['Motor side','sum-motor'],['Wind sensor','sum-sensor'],['Installation','sum-install']];
+    let html = '';
+    rows.forEach(([label, id]) => { const v = document.getElementById(id); if (v) html += '<div class="psum-row"><dt>' + label + '</dt><dd>' + v.textContent + '</dd></div>'; });
+    const total = parseInt((out.price.textContent || '').replace(/[^0-9]/g, ''), 10) || 0;
+    const deposit = Math.round(total / 2);
+    html += '<div class="psum-row total"><dt>Delivered price</dt><dd>' + fmt(total) + '</dd></div>';
+    html += '<div class="psum-row"><dt>Balance before delivery</dt><dd>' + fmt(total - deposit) + '</dd></div>';
+    paySum.innerHTML = html;
+    payRight.innerHTML = payRightHTML;
+    document.getElementById('pay-deposit-amt').textContent = fmt(deposit);
+    document.getElementById('pay-submit').textContent = 'Pay deposit ' + fmt(deposit);
+    document.getElementById('pay-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      payRight.innerHTML = '<div class="pay-confirm"><span class="kick">Reservation confirmed</span><div class="pc-mark">\u2713</div><h4>You\u2019re reserved.</h4><p class="pay-note">Your ' + fmt(deposit) + ' deposit is received. A markilux advisor will confirm your selections and production slot by email. The balance of ' + fmt(total - deposit) + ' is due before last-mile delivery is scheduled.</p></div>';
+    });
+    backdrop.classList.add('open'); document.body.style.overflow = 'hidden';
+  }
+  function closePay() { backdrop.classList.remove('open'); document.body.style.overflow = ''; }
+  document.querySelectorAll('[data-reserve]').forEach((b) => b.addEventListener('click', openPay));
+  document.getElementById('pay-close').addEventListener('click', closePay);
+  backdrop.addEventListener('click', (e) => { if (e.target === backdrop) closePay(); });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closePay(); });
+})();
+</script>
+<script src="https://unpkg.com/three@0.158.0/build/three.min.js"></script>
+<script>
+(() => {
+  const host = document.getElementById('cfg-3d');
+  if (!host || !window.THREE) return;
+  let renderer;
+  try { renderer = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true }); } catch (e) { return; }
+  const fallback = document.getElementById('cfg-fallback');
+  if (fallback) fallback.style.display = 'none';
+  renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+  renderer.shadowMap.enabled = true; renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+  renderer.outputColorSpace = THREE.SRGBColorSpace;
+  renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 1.0;
+  renderer.domElement.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;display:block;cursor:grab;touch-action:none;';
+  host.appendChild(renderer.domElement);
+
+  const scene = new THREE.Scene();
+  const cam = new THREE.PerspectiveCamera(38, 4 / 3, 0.1, 200);
+
+  /* ---- procedural textures ---- */
+  function canv(w, hh) { const c = document.createElement('canvas'); c.width = w; c.height = hh; return c; }
+  function brickTexture() {
+    const c = canv(512, 512), x = c.getContext('2d');
+    x.fillStyle = '#cfc8bc'; x.fillRect(0, 0, 512, 512);
+    const bw = 64, bh = 26, gap = 5;
+    for (let row = 0; row < 512 / (bh + gap); row++) {
+      const off = (row % 2) * (bw / 2);
+      for (let col = -1; col < 9; col++) {
+        const px = col * (bw + gap) + off, py = row * (bh + gap);
+        const t = Math.random();
+        const r = 138 + t * 30, g = 82 + t * 22, b = 64 + t * 18;
+        x.fillStyle = 'rgb(' + (r|0) + ',' + (g|0) + ',' + (b|0) + ')';
+        x.fillRect(px, py, bw, bh);
+        x.fillStyle = 'rgba(0,0,0,0.' + (2 + (Math.random() * 2 | 0)) + ')';
+        for (let s = 0; s < 4; s++) x.fillRect(px + Math.random() * bw, py + Math.random() * bh, 6, 2);
+        x.fillStyle = 'rgba(255,255,255,0.05)'; x.fillRect(px, py, bw, 3);
+      }
+    }
+    const t = new THREE.CanvasTexture(c); t.wrapS = t.wrapT = THREE.RepeatWrapping; t.colorSpace = THREE.SRGBColorSpace; return t;
+  }
+  function woodTexture() {
+    const c = canv(512, 512), x = c.getContext('2d');
+    for (let i = 0; i < 8; i++) {
+      const t = Math.random() * 0.5;
+      x.fillStyle = 'rgb(' + (150 - t * 40 | 0) + ',' + (122 - t * 34 | 0) + ',' + (94 - t * 28 | 0) + ')';
+      x.fillRect(0, i * 64, 512, 62);
+      x.fillStyle = 'rgba(60,40,25,0.25)';
+      for (let s = 0; s < 26; s++) { const yy = i * 64 + Math.random() * 60; x.fillRect(Math.random() * 512, yy, 40 + Math.random() * 120, 1.4); }
+      x.fillStyle = '#8a7460'; x.fillRect(0, i * 64 + 62, 512, 2);
+    }
+    const t = new THREE.CanvasTexture(c); t.wrapS = t.wrapT = THREE.RepeatWrapping; t.colorSpace = THREE.SRGBColorSpace; return t;
+  }
+  const skyC = canv(512, 256), skyX = skyC.getContext('2d');
+  const envTex = new THREE.CanvasTexture(skyC);
+  envTex.mapping = THREE.EquirectangularReflectionMapping; envTex.colorSpace = THREE.SRGBColorSpace;
+  scene.environment = envTex; scene.background = envTex;
+  function flareTexture() {
+    const c = canv(256, 256), x = c.getContext('2d');
+    const g = x.createRadialGradient(128, 128, 0, 128, 128, 128);
+    g.addColorStop(0, 'rgba(255,246,225,0.95)'); g.addColorStop(0.25, 'rgba(255,230,180,0.45)'); g.addColorStop(1, 'rgba(255,220,160,0)');
+    x.fillStyle = g; x.fillRect(0, 0, 256, 256);
+    x.strokeStyle = 'rgba(255,240,210,0.5)'; x.lineWidth = 2;
+    for (let i = 0; i < 14; i++) { const a = i / 14 * Math.PI * 2; x.beginPath(); x.moveTo(128, 128); x.lineTo(128 + Math.cos(a) * 126, 128 + Math.sin(a) * 126); x.stroke(); }
+    const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; return t;
+  }
+
+  /* ---- lights ---- */
+  const hemi = new THREE.HemisphereLight(0xffffff, 0xb8b2a6, 1.0); scene.add(hemi);
+  const sun = new THREE.DirectionalLight(0xfff2dd, 2.0);
+  sun.castShadow = true; sun.shadow.mapSize.set(2048, 2048);
+  Object.assign(sun.shadow.camera, { left: -8, right: 8, top: 9, bottom: -2, near: 1, far: 60 });
+  sun.shadow.bias = -0.0004; scene.add(sun);
+  const flare = new THREE.Sprite(new THREE.SpriteMaterial({ map: flareTexture(), transparent: true, opacity: 0, blending: THREE.AdditiveBlending, depthWrite: false, depthTest: false }));
+  flare.scale.set(14, 14, 1); scene.add(flare);
+  scene.fog = new THREE.Fog(0xeef3f4, 26, 70);
+
+  /* ---- environment: brick home + patio ---- */
+  const chrome = new THREE.MeshStandardMaterial({ color: 0xffffff, metalness: 1, roughness: 0.07 });
+  const brickMat = new THREE.MeshStandardMaterial({ map: brickTexture(), roughness: 0.92 });
+  brickMat.map.repeat.set(14, 7.2);
+  const wall = new THREE.Mesh(new THREE.PlaneGeometry(22, 8.4), brickMat);
+  wall.position.set(0, 3.6, -0.06); wall.receiveShadow = true; scene.add(wall);
+  const woodMat = new THREE.MeshStandardMaterial({ map: woodTexture(), roughness: 0.82 });
+  woodMat.map.repeat.set(5, 6);
+  const deck = new THREE.Mesh(new THREE.PlaneGeometry(11, 6.2), woodMat);
+  deck.rotation.x = -Math.PI / 2; deck.position.set(0, 0.001, 2.6); deck.receiveShadow = true; scene.add(deck);
+  const grass = new THREE.Mesh(new THREE.PlaneGeometry(80, 50), new THREE.MeshStandardMaterial({ color: 0x6d8c56, roughness: 1 }));
+  grass.rotation.x = -Math.PI / 2; grass.position.set(0, -0.02, 12); grass.receiveShadow = true; scene.add(grass);
+
+  const white = new THREE.MeshStandardMaterial({ color: 0xf0ede6, roughness: 0.5 });
+  const glassMat = new THREE.MeshStandardMaterial({ color: 0x3a4756, metalness: 0.94, roughness: 0.04 });
+  const stone = new THREE.MeshStandardMaterial({ color: 0xd9d1c0, roughness: 0.8 });
+  function box(wd, hh, dd, mat, x, y, z, parent) { const m = new THREE.Mesh(new THREE.BoxGeometry(wd, hh, dd), mat); m.position.set(x, y, z); m.castShadow = true; m.receiveShadow = true; (parent || scene).add(m); return m; }
+  function windowAt(x, y, wdt, hgt) {
+    box(wdt + 0.16, hgt + 0.16, 0.07, white, x, y, 0.0);
+    const gl = box(wdt, hgt, 0.08, glassMat, x, y, 0.005); gl.castShadow = false;
+    box(0.045, hgt, 0.1, white, x, y, 0.01);
+    box(wdt, 0.045, 0.1, white, x, y, 0.01);
+    box(wdt + 0.3, 0.09, 0.16, stone, x, y - hgt / 2 - 0.12, 0.03);
+    box(wdt + 0.2, 0.14, 0.06, stone, x, y + hgt / 2 + 0.15, 0.02);
+  }
+  windowAt(-3.9, 2.1, 1.3, 1.7); windowAt(3.9, 2.1, 1.3, 1.7);
+  windowAt(-3.9, 5.6, 1.1, 1.4); windowAt(3.9, 5.6, 1.1, 1.4); windowAt(0, 5.6, 1.1, 1.4);
+  /* french doors under the awning */
+  const dgl = box(2.0, 2.24, 0.05, glassMat, 0, 1.14, -0.005); dgl.castShadow = false;
+  box(0.07, 2.34, 0.09, white, -1.02, 1.15, 0); box(0.07, 2.34, 0.09, white, 1.02, 1.15, 0);
+  box(0.06, 2.34, 0.09, white, 0, 1.15, 0.001);
+  box(2.1, 0.07, 0.09, white, 0, 2.29, 0); box(2.1, 0.1, 0.09, white, 0, 0.05, 0);
+  box(2.1, 0.05, 0.08, white, 0, 1.5, 0.001);
+  box(2.3, 0.12, 0.1, stone, 0, 2.36, 0.02);
+
+  /* furniture */
+  const wicker = new THREE.MeshStandardMaterial({ color: 0x3f3d38, roughness: 0.85 });
+  const cushion = new THREE.MeshStandardMaterial({ color: 0xc9c0ae, roughness: 0.95 });
+  const darkTop = new THREE.MeshStandardMaterial({ color: 0x2c2a27, roughness: 0.4, metalness: 0.3 });
+  const rug = new THREE.Mesh(new THREE.PlaneGeometry(3.0, 2.1), new THREE.MeshStandardMaterial({ color: 0xcbc2b0, roughness: 1 }));
+  rug.rotation.x = -Math.PI / 2; rug.position.set(0, 0.012, 2.3); rug.receiveShadow = true; scene.add(rug);
+  function sofa(x, z, ry, wdt) {
+    const gp = new THREE.Group(); gp.position.set(x, 0, z); gp.rotation.y = ry; scene.add(gp);
+    box(wdt, 0.34, 0.8, wicker, 0, 0.21, 0, gp);
+    box(wdt, 0.52, 0.16, wicker, 0, 0.56, -0.33, gp);
+    box(0.14, 0.5, 0.8, wicker, -wdt / 2 + 0.07, 0.5, 0, gp);
+    box(0.14, 0.5, 0.8, wicker, wdt / 2 - 0.07, 0.5, 0, gp);
+    const n = Math.max(1, Math.round(wdt / 0.8));
+    for (let i = 0; i < n; i++) { const cx = -wdt / 2 + (i + 0.5) * (wdt / n); box(wdt / n - 0.06, 0.13, 0.68, cushion, cx, 0.45, 0.03, gp); box(wdt / n - 0.08, 0.4, 0.12, cushion, cx, 0.75, -0.28, gp); }
+  }
+  sofa(-0.75, 2.05, 0.08, 1.85);
+  sofa(1.45, 2.5, -2.35, 0.95);
+  const tbl = new THREE.Group(); tbl.position.set(0.15, 0, 3.05); scene.add(tbl);
+  const top = new THREE.Mesh(new THREE.CylinderGeometry(0.42, 0.42, 0.05, 28), darkTop); top.position.y = 0.36; top.castShadow = true; tbl.add(top);
+  const stem = new THREE.Mesh(new THREE.CylinderGeometry(0.05, 0.05, 0.34, 12), darkTop); stem.position.y = 0.17; tbl.add(stem);
+  const foot = new THREE.Mesh(new THREE.CylinderGeometry(0.22, 0.22, 0.03, 20), darkTop); foot.position.y = 0.015; tbl.add(foot);
+  const leaf = new THREE.MeshStandardMaterial({ color: 0x546f3f, roughness: 0.95, flatShading: true });
+  function planter(x, z, s) {
+    const pot = new THREE.Mesh(new THREE.CylinderGeometry(0.26 * s, 0.2 * s, 0.5 * s, 16), wicker); pot.position.set(x, 0.25 * s, z); pot.castShadow = true; scene.add(pot);
+    [[0, 0.72, 0, 0.34], [0.16, 0.6, 0.1, 0.24], [-0.15, 0.62, -0.07, 0.22]].forEach((b) => {
+      const m = new THREE.Mesh(new THREE.IcosahedronGeometry(b[3] * s, 1), leaf); m.position.set(x + b[0] * s, b[1] * s, z + b[2] * s); m.castShadow = true; scene.add(m);
+    });
+  }
+  planter(-3.2, 1.0, 1.15); planter(3.15, 1.3, 1.0); planter(4.6, 3.6, 1.3);
+  const lanternGlow = new THREE.MeshStandardMaterial({ color: 0x2b2925, emissive: 0xffb35e, emissiveIntensity: 0, roughness: 0.6 });
+  box(0.16, 0.3, 0.16, lanternGlow, 2.55, 0.16, 3.6); box(0.13, 0.24, 0.13, lanternGlow, 2.85, 0.13, 3.75);
+
+  /* ---- the markilux 1600 ---- */
+  const frameMat = new THREE.MeshPhysicalMaterial({ color: 0xE7E2D8, roughness: 0.3, metalness: 0.6, clearcoat: 0.35, clearcoatRoughness: 0.25 });
+  const fabricMat = new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 0.94, metalness: 0, side: THREE.DoubleSide });
+  const shadeMat = new THREE.MeshStandardMaterial({ color: 0xf3f1ea, roughness: 0.95, transparent: true, opacity: 0.94, side: THREE.DoubleSide });
+  const g = new THREE.Group(); scene.add(g);
+  const mk = (geo, mat) => { const m = new THREE.Mesh(geo, mat); m.castShadow = true; m.receiveShadow = true; g.add(m); return m; };
+  const cyl = (r, seg) => new THREE.CylinderGeometry(r, r, 1, seg || 24);
+  /* rounded coverboard: open-bottom shell */
+  const hoodShape = new THREE.Shape();
+  hoodShape.moveTo(0, 0.118);
+  hoodShape.bezierCurveTo(0.10, 0.142, 0.175, 0.112, 0.205, 0.05);
+  hoodShape.bezierCurveTo(0.226, 0.004, 0.215, -0.056, 0.182, -0.078);
+  hoodShape.lineTo(0.162, -0.088);
+  hoodShape.lineTo(0.152, -0.064);
+  hoodShape.bezierCurveTo(0.19, -0.032, 0.198, 0.016, 0.176, 0.052);
+  hoodShape.bezierCurveTo(0.142, 0.102, 0.07, 0.116, 0, 0.098);
+  hoodShape.closePath();
+  let hood = null;
+  function buildHood(w) {
+    if (hood) { g.remove(hood); hood.geometry.dispose(); }
+    hood = new THREE.Mesh(new THREE.ExtrudeGeometry(hoodShape, { depth: w, bevelEnabled: false, curveSegments: 26 }), frameMat);
+    hood.castShadow = true; hood.receiveShadow = true; hood.rotation.y = -Math.PI / 2; g.add(hood);
+  }
+  buildHood(3.05);
+  const backrail = mk(new THREE.BoxGeometry(1, 0.2, 0.06), frameMat);
+  const roll = mk(cyl(0.088, 20), fabricMat); roll.rotation.z = Math.PI / 2;
+  /* sculpted end caps + chrome */
+  const capGeo = new THREE.SphereGeometry(0.165, 24, 18);
+  const caps = [0, 1].map(() => { const m = mk(capGeo, frameMat); m.scale.set(0.5, 1.04, 1.14); return m; });
+  const capChrome = [0, 1].map(() => { const m = mk(new THREE.SphereGeometry(0.052, 18, 14), chrome); return m; });
+  /* front profile: bar + rounded ends + chrome domes + badge */
+  const frontbar = mk(cyl(0.073, 26), frameMat); frontbar.rotation.z = Math.PI / 2;
+  const barEnds = [0, 1].map(() => mk(new THREE.SphereGeometry(0.073, 18, 14), frameMat));
+  const barChrome = [0, 1].map(() => { const m = mk(new THREE.SphereGeometry(0.056, 18, 14), chrome); return m; });
+  const badge = mk(new THREE.BoxGeometry(0.1, 0.028, 0.012), new THREE.MeshStandardMaterial({ color: 0xd8d8da, metalness: 0.85, roughness: 0.25 }));
+  const fabric = mk(new THREE.PlaneGeometry(1, 1, 8, 1), fabricMat);
+  const valance = mk(new THREE.PlaneGeometry(1, 0.16), fabricMat);
+  const shade = mk(new THREE.PlaneGeometry(1, 1), shadeMat);
+  const arms = [0, 1].map(() => [mk(new THREE.BoxGeometry(0.075, 1, 0.032), frameMat), mk(new THREE.BoxGeometry(0.062, 1, 0.027), frameMat)]);
+  const elbows = [0, 1].map(() => mk(new THREE.SphereGeometry(0.046, 14, 12), frameMat));
+  const shoulderChrome = [0, 1].map(() => { const m = mk(cyl(0.05, 18), chrome); m.rotation.z = Math.PI / 2; return m; });
+  const brackets = [0, 1].map(() => mk(new THREE.BoxGeometry(0.09, 0.24, 0.13), frameMat));
+  const capLobe = [0, 1].map(() => mk(new THREE.SphereGeometry(0.11, 20, 16), frameMat));
+  const elbowPin = [0, 1].map(() => mk(cyl(0.022, 12), chrome));
+  const lip = mk(cyl(0.028, 16), frameMat); lip.rotation.z = Math.PI / 2;
+  const torsion = mk(new THREE.BoxGeometry(1, 0.05, 0.05), frameMat);
+  const seamMat = new THREE.MeshStandardMaterial({ color: 0x1a1815, transparent: true, opacity: 0.14 });
+  const seams = []; for (let si = 0; si < 9; si++) { const m = mk(new THREE.BoxGeometry(0.014, 1, 0.004), seamMat); m.castShadow = false; seams.push(m); }
+  const aoC = canv(256, 256); { const ax2 = aoC.getContext('2d'); const ag = ax2.createRadialGradient(128, 128, 10, 128, 128, 128); ag.addColorStop(0, 'rgba(0,0,0,0.35)'); ag.addColorStop(1, 'rgba(0,0,0,0)'); ax2.fillStyle = ag; ax2.fillRect(0, 0, 256, 256); }
+  const ao = new THREE.Mesh(new THREE.PlaneGeometry(1, 1), new THREE.MeshBasicMaterial({ map: new THREE.CanvasTexture(aoC), transparent: true, depthWrite: false, opacity: 0.8 }));
+  ao.rotation.x = -Math.PI / 2; scene.add(ao);
+  const sealPlate = mk(new THREE.BoxGeometry(1, 0.05, 0.012), frameMat);
+  const sealFlash = mk(new THREE.BoxGeometry(1, 0.012, 0.085), frameMat);
+  sealFlash.rotation.x = THREE.MathUtils.degToRad(-14);
+  const slotMat = new THREE.MeshStandardMaterial({ color: 0x14120f, roughness: 1 });
+  const slot = mk(new THREE.BoxGeometry(1, 0.007, 0.02), slotMat); slot.castShadow = false;
+  const spBox = mk(new THREE.BoxGeometry(1, 0.052, 0.05), frameMat);
+  const plates = [0, 1].map(() => mk(new THREE.BoxGeometry(0.075, 0.24, 0.014), frameMat));
+  const wrists = [0, 1].map(() => mk(new THREE.BoxGeometry(0.05, 0.05, 0.04), frameMat));
+  const bolts = []; for (let bi = 0; bi < 8; bi++) { const b = mk(cyl(0.0085, 6), chrome); b.rotation.x = Math.PI / 2; b.castShadow = false; bolts.push(b); }
+  const screws = []; for (let sj = 0; sj < 5; sj++) { const s2 = mk(cyl(0.007, 6), chrome); s2.rotation.x = Math.PI / 2; s2.castShadow = false; screws.push(s2); }
+  const capBadge = mk(new THREE.BoxGeometry(0.008, 0.022, 0.055), new THREE.MeshStandardMaterial({ color: 0xd8d8da, metalness: 0.8, roughness: 0.3 }));
+
+  const yAxis = new THREE.Vector3(0, 1, 0);
+  function segm(mesh, a, b) {
+    const d = new THREE.Vector3().subVectors(b, a), len = Math.max(d.length(), 0.01);
+    mesh.scale.set(1, len, 1);
+    mesh.position.copy(a).addScaledVector(d, 0.5);
+    mesh.quaternion.setFromUnitVectors(yAxis, d.normalize());
+  }
+  const pitch = THREE.MathUtils.degToRad(18);
+  const y0 = 2.62, z0 = 0.17;
+  let W = 3.05, ext = 0.02, extT = 1, shadeAmt = 0, shadeT = 0, pendingW = null;
+  const Pmax = (w) => Math.min(3.3, 1.35 + w * 0.34);
+  function layout() {
+    const P = Math.max(0.02, Pmax(W) * ext);
+    const dy = P * Math.sin(pitch), dz = P * Math.cos(pitch);
+    hood.scale.set(1, W, 1); hood.position.set(0, y0, z0);
+    backrail.scale.set(W, 1, 1); backrail.position.set(0, y0, 0.03);
+    roll.scale.set(1, W - 0.16, 1); roll.position.set(0, y0 + 0.002, 0.105);
+    [-1, 1].forEach((sgn, i) => {
+      caps[i].scale.set(0.6, 1.05, 1.5); caps[i].position.set(sgn * (W / 2 + 0.012), y0 + 0.012, 0.105);
+      capLobe[i].scale.set(0.62, 0.82, 1.12); capLobe[i].position.set(sgn * (W / 2 + 0.055), y0 - 0.05, 0.118);
+      capChrome[i].position.set(sgn * (W / 2 + 0.055), y0 - 0.058, 0.208);
+    });
+    fabric.rotation.set(THREE.MathUtils.degToRad(90 + 18), 0, 0);
+    fabric.scale.set(W - 0.04, P, 1);
+    fabric.position.set(0, y0 + 0.045 - dy / 2, z0 + 0.03 + dz / 2);
+    frontbar.scale.set(1, W, 1); frontbar.position.set(0, y0 - dy, z0 + dz);
+    [-1, 1].forEach((sgn, i) => {
+      barEnds[i].position.set(sgn * (W / 2), y0 - dy, z0 + dz);
+      barChrome[i].position.set(sgn * (W / 2 + 0.035), y0 - dy, z0 + dz);
+    });
+    badge.position.set(0, y0 - dy - 0.01, z0 + dz + 0.062);
+    lip.scale.set(1, W, 1); lip.position.set(0, y0 - 0.082, 0.19);
+    torsion.scale.set(W - 0.2, 1, 1); torsion.position.set(0, y0 - 0.12, 0.055);
+    sealPlate.scale.set(W + 0.16, 1, 1); sealPlate.position.set(0, y0 + 0.158, 0.008);
+    sealFlash.scale.set(W + 0.16, 1, 1); sealFlash.position.set(0, y0 + 0.138, 0.048);
+    slot.scale.set(W - 0.02, 1, 1); slot.position.set(0, y0 - 0.092, 0.172);
+    spBox.scale.set(W - 0.18, 1, 1); spBox.position.set(0, y0 - dy - 0.055, z0 + dz - 0.012); spBox.visible = ext > 0.3;
+    capBadge.position.set(W / 2 + 0.088, y0 + 0.005, 0.1);
+    const bax = W / 2 - 0.3;
+    for (let bi = 0; bi < 8; bi++) {
+      const side = bi < 4 ? -1 : 1, k2 = bi % 4;
+      bolts[bi].scale.set(1, 0.014, 1);
+      bolts[bi].position.set(side * bax + (k2 % 2 ? 0.024 : -0.024), y0 + (k2 < 2 ? 0.085 : -0.115), 0.021);
+    }
+    for (let sj = 0; sj < 5; sj++) { screws[sj].scale.set(1, 0.012, 1); screws[sj].position.set(-W / 2 + (sj + 0.5) * (W / 5), y0 + 0.158, 0.017); }
+    const nSeam = Math.min(9, Math.max(1, Math.round(W / 0.62) - 1));
+    for (let si = 0; si < 9; si++) {
+      const on = si < nSeam && ext > 0.12;
+      seams[si].visible = on;
+      if (on) {
+        const sx = -W / 2 + (si + 1) * (W / (nSeam + 1));
+        seams[si].rotation.set(THREE.MathUtils.degToRad(108), 0, 0);
+        seams[si].scale.set(1, P, 1);
+        seams[si].position.set(sx, y0 + 0.049 - dy / 2, z0 + 0.034 + dz / 2);
+      }
+    }
+    ao.scale.set(W * 1.2, Math.max(0.05, P) * 1.25, 1);
+    ao.position.set(0, 0.016, z0 + dz * 0.55 + 0.3);
+    ao.material.opacity = 0.85 * ext;
+    valance.scale.set(W - 0.06, 1, 1); valance.position.set(0, y0 - dy - 0.145, z0 + dz + 0.012);
+    const sh = Math.max(0.001, 1.05 * shadeAmt);
+    shade.scale.set(W - 0.14, sh, 1);
+    shade.position.set(0, y0 - dy - 0.085 - sh / 2, z0 + dz - 0.012);
+    shade.visible = shadeAmt > 0.02 && ext > 0.5;
+    valance.visible = false;
+    const ax = W / 2 - 0.3, s = Pmax(W) * 0.53;
+    [-1, 1].forEach((sgn, i) => {
+      const shoulder = new THREE.Vector3(sgn * ax, y0 - 0.1, z0 + 0.1);
+      const wrist = new THREE.Vector3(sgn * ax, y0 - dy + 0.03, z0 + dz - 0.11);
+      const d = shoulder.distanceTo(wrist);
+      const b = Math.sqrt(Math.max(0.0004, s * s - (d / 2) * (d / 2)));
+      const elbow = shoulder.clone().add(wrist).multiplyScalar(0.5);
+      elbow.x -= sgn * Math.min(b, s * 0.96);
+      segm(arms[i][0], shoulder, elbow);
+      segm(arms[i][1], elbow, wrist);
+      elbows[i].position.copy(elbow);
+      elbowPin[i].scale.set(1, 0.1, 1); elbowPin[i].position.copy(elbow);
+      shoulderChrome[i].scale.set(1, 0.035, 1); shoulderChrome[i].position.copy(shoulder).x += sgn * 0.03;
+      brackets[i].position.set(sgn * ax, y0 - 0.02, 0.055);
+      plates[i].position.set(sgn * ax, y0 - 0.02, 0.01);
+      wrists[i].position.copy(wrist); wrists[i].position.z += 0.03;
+    });
+  }
+
+  /* ---- day cycle ---- */
+  let baseExp = 1, expMul = 1, zoomMul = 1;
+  const KEYS = [
+    { el: 11, az: -64, sun: 0xffb46b, si: 1.35, zen: [143, 165, 198], hor: [246, 201, 154], gnd: [122, 108, 92], hemi: 0.7, exp: 0.95 },
+    { el: 62, az: 8, sun: 0xfff3e0, si: 2.35, zen: [128, 178, 229], hor: [236, 242, 244], gnd: [138, 128, 112], hemi: 1.05, exp: 1.0 },
+    { el: 8, az: 68, sun: 0xff8f43, si: 1.4, zen: [82, 95, 138], hor: [244, 152, 96], gnd: [92, 80, 70], hemi: 0.42, exp: 0.78 }
+  ];
+  const mixN = (a, b, k) => a + (b - a) * k;
+  const mix3 = (a, b, k) => [mixN(a[0], b[0], k), mixN(a[1], b[1], k), mixN(a[2], b[2], k)];
+  const rgb = (v) => 'rgb(' + (v[0] | 0) + ',' + (v[1] | 0) + ',' + (v[2] | 0) + ')';
+  const sunDir = new THREE.Vector3(0, 1, 0);
+  let sunI = 2.35;
+  function updateSun(t) {
+    const a = t < 0.5 ? KEYS[0] : KEYS[1], b = t < 0.5 ? KEYS[1] : KEYS[2], k = t < 0.5 ? t * 2 : (t - 0.5) * 2;
+    const el = THREE.MathUtils.degToRad(mixN(a.el, b.el, k)), az = THREE.MathUtils.degToRad(mixN(a.az, b.az, k));
+    sunDir.set(Math.sin(az) * Math.cos(el), Math.sin(el), Math.cos(az) * Math.cos(el));
+    sun.position.copy(sunDir).multiplyScalar(22);
+    sun.color.lerpColors(new THREE.Color(a.sun), new THREE.Color(b.sun), k);
+    sunI = mixN(a.si, b.si, k); sun.intensity = sunI;
+    hemi.intensity = mixN(a.hemi, b.hemi, k);
+    baseExp = mixN(a.exp, b.exp, k);
+    const zen = mix3(a.zen, b.zen, k), hor = mix3(a.hor, b.hor, k), gnd = mix3(a.gnd, b.gnd, k);
+    const gr = skyX.createLinearGradient(0, 0, 0, 256);
+    gr.addColorStop(0, rgb(zen)); gr.addColorStop(0.52, rgb(hor)); gr.addColorStop(0.56, rgb(gnd)); gr.addColorStop(1, rgb(mix3(gnd, [40, 36, 32], 0.5)));
+    skyX.fillStyle = gr; skyX.fillRect(0, 0, 512, 256);
+    envTex.needsUpdate = true;
+    scene.fog.color.set(rgb(hor));
+    lanternGlow.emissiveIntensity = THREE.MathUtils.clamp(1.4 - sunDir.y * 3.2, 0, 1.4);
+    const warm = Math.abs(t - 0.5) * 2;
+    hemi.color.lerpColors(new THREE.Color(0xffffff), new THREE.Color(0xffd2a8), warm * 0.8);
+  }
+  const timeInput = document.getElementById('v3d-time');
+  updateSun(timeInput ? parseFloat(timeInput.value) : 0.38);
+  if (timeInput) timeInput.addEventListener('input', () => updateSun(parseFloat(timeInput.value)));
+
+  /* ---- camera orbit ---- */
+  let yaw = 0.55, pit = 0.14, yawT = 0.55, pitT = 0.14, dragging = false, px = 0, py = 0;
+  const center = new THREE.Vector3(0, 1.5, 1.5);
+  function placeCam() {
+    const R = (5.0 + W * 0.8) * zoomMul;
+    cam.position.set(center.x + R * Math.sin(yaw) * Math.cos(pit), center.y + R * Math.sin(pit), center.z + R * Math.cos(yaw) * Math.cos(pit));
+    cam.lookAt(center);
+  }
+  const el2 = renderer.domElement;
+  el2.addEventListener('pointerdown', (e) => { dragging = true; px = e.clientX; py = e.clientY; el2.style.cursor = 'grabbing'; el2.setPointerCapture(e.pointerId); });
+  el2.addEventListener('pointermove', (e) => { if (!dragging) return; yawT = THREE.MathUtils.clamp(yawT + (e.clientX - px) * 0.004, -1.15, 1.25); pitT = THREE.MathUtils.clamp(pitT - (e.clientY - py) * 0.003, 0.02, 0.5); px = e.clientX; py = e.clientY; });
+  ['pointerup', 'pointercancel', 'pointerleave'].forEach((t) => el2.addEventListener(t, () => { dragging = false; el2.style.cursor = 'grab'; }));
+
+  /* ---- selections ---- */
+  const loader = new THREE.TextureLoader(); const texCache = {};
+  function setFabric(code) {
+    if (!/^[0-9]{5}$/.test(code)) return;
+    const apply = (t) => { fabricMat.map = t; shadeMat.color.set(0xf3f1ea); fabricMat.color.set(0xffffff); fabricMat.needsUpdate = true; };
+    if (texCache[code]) return apply(texCache[code]);
+    loader.load('assets/fabrics/' + code + '.jpg', (t) => {
+      t.wrapS = t.wrapT = THREE.RepeatWrapping; t.colorSpace = THREE.SRGBColorSpace;
+      t.repeat.set(7, 4); t.anisotropy = 6; texCache[code] = t; apply(t);
+    });
+  }
+  const frameColors = { '5233': '#E7E2D8', 'RAL 9006': '#9DA1A4', '5215': '#7E827F', '5204': '#34373A' };
+  function readSel() {
+    const t = (id) => { const n = document.getElementById(id); return n ? n.textContent.trim() : ''; };
+    return { ft: parseInt(t('sum-width'), 10) || 10, fab: t('sum-fabric'), frame: t('sum-frame'), shade: t('sum-shadeplus') === 'With shadeplus' };
+  }
+  function sync() {
+    const s = readSel();
+    const w = s.ft * 0.3048;
+    if (Math.abs(w - W) > 0.01 && pendingW === null) { pendingW = w; extT = 0; }
+    setFabric(s.fab);
+    const key = Object.keys(frameColors).find((k) => s.frame.indexOf(k) === 0);
+    if (key) frameMat.color.set(frameColors[key]);
+    shadeT = s.shade ? 1 : 0;
+  }
+  document.addEventListener('cfg:change', sync);
+  const toggle = document.getElementById('v3d-toggle');
+  if (toggle) toggle.addEventListener('click', () => {
+    extT = extT > 0.5 ? 0 : 1;
+    toggle.textContent = extT > 0.5 ? 'Retract' : 'Extend';
+  });
+
+  function size() {
+    const w = host.clientWidth, hh = host.clientHeight || 1;
+    renderer.setSize(w, hh, false); cam.aspect = w / hh; cam.updateProjectionMatrix();
+  }
+  new ResizeObserver(size).observe(host); size();
+
+  /* scene tweaks */
+  const ui = document.createElement('div');
+  ui.style.cssText = 'position:absolute;left:14px;top:14px;z-index:3;display:flex;flex-direction:column;gap:6px;background:rgba(243,242,242,0.92);border:2px solid #201e1d;padding:10px 12px;font:600 10px "Open Sans",sans-serif;letter-spacing:.08em;text-transform:uppercase;color:#201e1d;';
+  ui.innerHTML = '<label style="display:flex;align-items:center;justify-content:space-between;gap:8px;">Light <input id="tw-exp" type="range" min="0.6" max="1.5" step="0.01" value="1" style="width:86px;accent-color:#E3000B;margin:0;"></label>'
+    + '<label style="display:flex;align-items:center;justify-content:space-between;gap:8px;">Zoom <input id="tw-zoom" type="range" min="0.7" max="1.5" step="0.01" value="1" style="width:86px;accent-color:#E3000B;margin:0;"></label>'
+    + '<label style="display:flex;align-items:center;justify-content:space-between;gap:8px;">Shadows <input id="tw-sh" type="checkbox" checked style="accent-color:#E3000B;margin:0;"></label>';
+  host.appendChild(ui);
+  ui.querySelector('#tw-exp').addEventListener('input', (e) => { expMul = +e.target.value; });
+  ui.querySelector('#tw-zoom').addEventListener('input', (e) => { zoomMul = +e.target.value; });
+  ui.querySelector('#tw-sh').addEventListener('change', (e) => { renderer.shadowMap.enabled = e.target.checked; scene.traverse((o) => { if (o.material) o.material.needsUpdate = true; }); });
+  const camDir = new THREE.Vector3();
+  (function loop() {
+    requestAnimationFrame(loop);
+    ext += (extT - ext) * 0.05;
+    if (pendingW !== null && ext < 0.06) { W = pendingW; pendingW = null; extT = 1; buildHood(W); }
+    shadeAmt += (shadeT - shadeAmt) * 0.07;
+    yaw += (yawT - yaw) * 0.08; pit += (pitT - pit) * 0.08;
+    layout(); placeCam();
+    cam.getWorldDirection(camDir);
+    flare.position.copy(cam.position).addScaledVector(sunDir, 40);
+    flare.material.opacity = THREE.MathUtils.clamp((camDir.dot(sunDir) - 0.3) / 0.7, 0, 1) * 0.9 * (sunI / 2.35);
+    renderer.toneMappingExposure = baseExp * expMul;
+    renderer.render(scene, cam);
+  })();
+  sync(); layout(); placeCam();
+})();
+</script>
+</body>
+</html>

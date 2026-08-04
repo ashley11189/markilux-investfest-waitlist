@@ -1,0 +1,1018 @@
+<!-- @template name="Landing" description="A one-page product landing in the system's own voice — an invented product (Takt: Swiss-clockwork timetables), a ruled hero, stat row, feature rows, a grayscale photograph and a red poster close" -->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>markilux: The Atlanta Private Sale</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap" />
+<link rel="stylesheet" href="_ds/modernist-d4da4840-ce89-4fdf-952d-c71f75c0b85a/styles.css" />
+<style>
+/* Template scaffolding — page layout and web-scale sizing only; every color,
+   font, radius and shadow comes from ../../styles.css. The voice is the
+   deck's, re-derived for a scrolling page: the grid SHOWS — 2px
+   rules draw the structure — red is spent as a mark, and its one field
+   moment is the poster close (the deck's divider logic: the red page sets
+   nothing small).
+
+   THE RHYTHM: a 28px leading unit (17px Archivo body at ~1.65), 14px
+   half-step; line-heights and block margins in unit multiples, heads
+   cap-trimmed, ?baselines/B to review. The deck's seat-pinning relaxes to
+   per-block discipline on a fluid page. The system's own interface
+   components (nav, buttons, inputs) keep their styles.css leading — the
+   rhythm governs the page's text, not the controls.
+
+   THE LANDING LAWS (shared by all six systems' landing templates):
+   #1 display headers break per sentence (.line spans); #2 the landing
+   advertises an invented product played straight — modernist's is Takt,
+   timetables that run like Switzerland; #3 spacing is cluster-scoped
+   (display leading ratio-governed ≈1.06 for Archivo's tight caps — the
+   display-block lattice exemption — tight single-unit gaps inside a text
+   cluster, the air between sections); #4 no hero eyebrow — the nav brand
+   names the product.
+
+   Optical left alignment: the deck's measured Archivo 800 value carries
+   verbatim (-0.058em where caps lead a display line; em-scaled). */
+:root {
+  --leading: 28px;
+  --half: 14px;
+  --edge: clamp(20px, 5vw, 72px);
+  --measure: 58ch;
+}
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+body { margin: 0; text-wrap: pretty; }
+.wrap { max-width: 1200px; margin: 0 auto; padding: 0 var(--edge); }
+/* the component demo pads the masthead with its own spacing; on the page the
+   masthead's contents take the page gutter and sit on the wrap's text axis
+   (padding-only — full-width paint such as a masthead rule is untouched) */
+.nav { padding-inline: max(var(--edge), calc((100% - 1200px) / 2 + var(--edge))); }
+.nav a { white-space: nowrap; }
+.nav a[aria-current='location'] { color: var(--color-accent); } /* in-page anchor, not
+   a page link — 'location' is the truthful value; carry the component's active ink */
+@media (max-width: 480px) { .nav a { display: none; } } /* phone width: the nav
+   keeps brand + the one action (layout-only — the component's look is
+   untouched); the full link row's min-content crosses narrow-phone widths */
+
+/* — drawn structure: the 2px rule is the section seam (the deck's header
+   band as page grammar; rules span the content column, solid — this system
+   does not fade its rules) — */
+.rule2 { height: 2px; border: 0; margin: 0; background: var(--color-divider); }
+:root { --color-accent: #E3000B; --color-accent-600: #CC000A; --color-accent-700: #B00009; }
+
+/* — kicker (deck grammar: uppercase, tabular, accent; no hanging dash —
+   modernist marks are squares, and they belong to lists, not labels) — */
+.kicker {
+  display: block; font-size: 13px; line-height: var(--half);
+  letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--color-accent-700); /* accent-colored SMALL text takes the deep step —
+     6.4:1, where the base accent measures 3.8:1 (a large-text value; the
+     deck's kickers are 24px, this one is 13px) */
+  font-feature-settings: "tnum" 1;
+  margin: 0 0 calc(var(--leading) - var(--half));
+}
+
+/* — hero — */
+.hero { padding: calc(4 * var(--leading)) 0 calc(3 * var(--leading)); }
+.display {
+  font-family: var(--font-heading); font-weight: var(--font-heading-weight);
+  font-size: clamp(42px, 6.2vw, 84px);
+  line-height: clamp(44.5px, 6.57vw, 89px); /* law #3: ratio-governed ≈1.06 —
+     Archivo's 800 sits tight and all-cap-height; the display-block lattice
+     exemption (no 14px step is both tighter than the old look and clear) */
+  letter-spacing: -0.02em; margin: 0;
+  margin-left: -0.058em; /* optical left alignment — the deck's measured Archivo 800 value */
+  text-box: trim-both cap alphabetic;
+}
+.display .line { display: block; } /* law #1: one sentence per line */
+.hero .sub { font-size: 17px; line-height: var(--leading); max-width: var(--measure);
+  margin: calc(1.5 * var(--leading) - 1cap) 0 0;
+  text-box: trim-both cap alphabetic; } /* 1.5 units: clears the display's descenders with cluster-tight air (law #3) */
+.hero .row { display: flex; gap: var(--space-3); flex-wrap: wrap; margin-top: var(--leading); }
+
+/* — stat row (in-grammar: red stays a MARK on the light ground — the stat
+   numerals take the accent at display size, ≥3:1 as large text per the
+   system's own accent rule; the red FIELD is reserved for the close) — */
+.stats { padding: calc(2.5 * var(--leading)) 0; }
+.stats .grid { display: grid; grid-template-columns: repeat(4, auto); justify-content: space-between; gap: calc(1.5 * var(--leading)) var(--leading); }
+.stat-num { font-family: var(--font-heading); font-weight: var(--font-heading-weight);
+  font-size: clamp(34px, 3.4vw, 48px); line-height: calc(2 * var(--leading));
+  color: var(--color-accent); /* display figures stay proportional — the deck's figure policy */
+  margin: 0; margin-left: -0.045em; /* digits lead — the deck's "0"-population value */
+  text-box: trim-both cap alphabetic; }
+.stat-label { font-size: 13px; line-height: var(--half); letter-spacing: 0.08em; text-transform: uppercase;
+  color: color-mix(in srgb, var(--color-text) 70%, transparent); /* small-text ink on the
+     light ground: 70% measures 5.8:1 (the deck's 55% furniture mix is a
+     24px large-text convention — at 13px the 4.5:1 bar applies, and 55%
+     measures only 3.7:1 here) */
+  margin: var(--half) 0 0; }
+
+/* — feature rows (the deck's ruled-toc grammar: 2px rules ON the seams,
+   red square marks hanging at the numbers — drawn structure, no cards) — */
+.features { padding: calc(3 * var(--leading)) 0 calc(2.5 * var(--leading)); }
+.feature { display: grid; grid-template-columns: minmax(64px, 160px) minmax(0, 420px) minmax(0, 1fr);
+  gap: var(--leading) clamp(24px, 4vw, 72px); align-items: baseline;
+  padding: calc(1.5 * var(--leading)) 0; }
+.feature + .feature { border-top: 2px solid var(--color-divider); } /* the ruled seam — solid, the system's weight */
+.f-num { position: relative; font-family: var(--font-heading); font-weight: var(--font-heading-weight);
+  font-size: 15px; line-height: var(--leading); color: var(--color-text);
+  font-feature-settings: "tnum" 1; margin: 0; text-box: trim-both cap alphabetic; }
+.f-num::before { content: ""; position: absolute; left: -24px; top: calc(0.5cap - 5px);
+  width: 10px; height: 10px; background: var(--color-accent); } /* the deck's 10px red square,
+     hanging left of the number's axis — at narrow widths the gutter folds it away */
+@media (max-width: 1280px) { .f-num::before { display: none; } }
+.f-title { font-family: var(--font-heading); font-weight: var(--font-heading-weight);
+  font-size: 24px; line-height: var(--leading); letter-spacing: -0.01em;
+  margin: 0; text-box: trim-both cap alphabetic; }
+.f-copy { font-size: 15.5px; line-height: var(--leading); margin: 0;
+  color: color-mix(in srgb, var(--color-text) 78%, transparent);
+  max-width: 52ch; text-box: trim-both cap alphabetic; }
+
+/* — imagery split (grayscale photograph — the system prints in black and
+   white; the box pins the bundled asset's 951×665 ratio so swaps
+   cover-crop into the same frame) — */
+.split { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+  gap: var(--leading) clamp(24px, 5vw, 96px); align-items: center;
+  padding: calc(2 * var(--leading)) 0 calc(3 * var(--leading)); }
+.split-title { font-family: var(--font-heading); font-weight: var(--font-heading-weight);
+  font-size: 32px; line-height: calc(1.5 * var(--leading)); letter-spacing: -0.015em;
+  margin: 0; text-box: trim-both cap alphabetic; }
+.split-copy .note { font-size: 15.5px; line-height: var(--leading);
+  color: color-mix(in srgb, var(--color-text) 78%, transparent);
+  margin: calc(var(--leading) - 1cap) 0 0; max-width: 48ch; text-box: trim-both cap alphabetic; }
+.split-figure { margin: 0; }
+.split-figure image-slot { width: 100%; aspect-ratio: 951 / 665; }
+
+/* — quote (hanging punctuation, the deck's measured Archivo advances) — */
+.quote { padding: calc(2.5 * var(--leading)) 0 calc(3.5 * var(--leading)); }
+.quote blockquote {
+  font-family: var(--font-heading); font-weight: var(--font-heading-weight);
+  font-size: clamp(24px, 2.6vw, 34px); line-height: calc(1.5 * var(--leading));
+  letter-spacing: -0.015em; max-width: 32ch; margin: 0;
+  text-indent: -0.496em; /* hang the opening “ (the deck's measured advance in the 800) */
+  text-box: trim-both cap alphabetic;
+}
+.quote figcaption { font-size: 15.5px; line-height: var(--leading);
+  color: color-mix(in srgb, var(--color-text) 70%, transparent); /* 5.8:1 — see .stat-label */
+  margin: calc(var(--leading) - 1cap) 0 0;
+  text-indent: -1.209em; /* hang the leading em-dash + space (measured in the Regular) */
+  text-box: trim-both cap alphabetic; }
+
+@media (max-width: 720px) {
+  /* the phone gutter (--edge bottoms out at 20px) is narrower than the hung
+     marks' measured advances, so a hung “ or em-dash would press into or past
+     the viewport edge — seat the quote flush below this width; the hang
+     returns with the wider gutter */
+  .quote blockquote, .quote figcaption { text-indent: 0; }
+}
+
+/* — the red poster close (the deck's divider logic: the accent's one field
+   moment, type reversed to the paper token). COPY on the red is
+   display-grade only — paper display type measures 3.8:1, the deck
+   dividers' own derivation. The one small element is the ghost button, a
+   CONTROL: paper-on-red measures the same 3.8:1, which meets the system's
+   documented interface-chrome bar (the readme tunes the accent pair to at
+   least 3:1 — "enough for icons, large text and interface chrome, not for
+   body copy") — the same bar the system's own accent-filled primary button
+   label rides everywhere. */
+.close { background: var(--color-accent); color: var(--color-bg); }
+.close .wrap { padding-top: calc(3 * var(--leading)); padding-bottom: calc(3 * var(--leading)); }
+.close h3 { font-family: var(--font-heading); font-weight: var(--font-heading-weight);
+  font-size: clamp(34px, 4.2vw, 56px); line-height: clamp(36px, 4.45vw, 59.4px); /* ≈1.06 —
+     display-grade, so it carries the display-block lattice exemption (the
+     rhythm probe excludes .display and .close h3 alike) */
+  letter-spacing: -0.015em; margin: 0; margin-left: -0.058em;
+  text-box: trim-both cap alphabetic; }
+.close h3 .line { display: block; }
+.close .row { display: flex; gap: var(--space-3); flex-wrap: wrap; margin-top: calc(1.5 * var(--leading)); }
+.close .btn-ghost { color: var(--color-bg); border-color: var(--color-bg); } /* paper outline on the red field */
+footer { padding: calc(2 * var(--leading)) 0; font-size: 13px; line-height: var(--leading);
+  color: color-mix(in srgb, var(--color-text) 70%, transparent); /* 5.8:1 — see .stat-label */ }
+
+/* — responsive collapse — */
+/* the feature grid's fixed-max columns (160 + 420 + gaps) crush the copy
+   column in the tablet band, so it collapses earlier than the page */
+@media (max-width: 880px) {
+  .feature { grid-template-columns: 1fr; gap: var(--half); }
+  .f-copy { max-width: var(--measure); }
+}
+@media (max-width: 720px) {
+  .hero { padding-top: calc(2.5 * var(--leading)); }
+  .stats .grid { grid-template-columns: repeat(2, 1fr); justify-content: start; }
+  .split { grid-template-columns: 1fr; }
+  .split-figure { order: -1; }
+}
+
+/* — generic section + section header (kicker + display-adjacent title) — */
+.section { padding: calc(2 * var(--leading)) 0; }
+/* readability: rag-balance headings, pretty-wrap body — never justify (flush-left system) */
+.display, .sec-title, .split-title, .config-name, .st, .tier-name, .close h3, .cfg-cap-sel { text-wrap: balance; }
+.hero .sub, .sec-lead, .note, .config-desc, .f-copy, .spec p, .tier-copy, .flow .sc, .tl li, .notinc li, .inquiry, .close .sub, .config-price + .config-meta { text-wrap: pretty; }
+.sec-head { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: var(--half) clamp(24px, 4vw, 72px); align-items: end; margin-bottom: var(--leading); }
+.sec-head .kicker { grid-column: 2; }
+.sec-title { font-family: var(--font-heading); font-weight: var(--font-heading-weight);
+  font-size: clamp(30px, 3.6vw, 48px); line-height: 1.06; letter-spacing: -0.02em;
+  margin: 0; margin-left: -0.05em; text-box: trim-both cap alphabetic; }
+.sec-title .line { display: block; }
+.sec-lead { font-size: 17px; line-height: var(--leading); max-width: 52ch;
+  color: color-mix(in srgb, var(--color-text) 82%, transparent);
+  margin: 0; text-box: trim-both cap alphabetic; }
+@media (max-width: 820px) { .sec-head { grid-template-columns: 1fr; } .sec-lead { margin-top: var(--half); } }
+
+/* — full-width grayscale photo band — */
+.band-figure { margin: 0; }
+.band-figure image-slot { width: 100%; aspect-ratio: 1264 / 842; display: block; }
+
+/* — configuration cells: bordered grid cells, the system's drawn-structure grammar — */
+.configs { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--leading); margin-top: calc(0.5 * var(--leading)); }
+.config { border: 2px solid var(--color-divider); padding: calc(1.5 * var(--leading)); display: flex; flex-direction: column; }
+.config-w { font-family: var(--font-heading); font-weight: var(--font-heading-weight);
+  font-size: clamp(40px, 4.4vw, 60px); line-height: 1; letter-spacing: -0.02em; margin: 0;
+  text-box: trim-both cap alphabetic; }
+.config-w span { font-size: 20px; letter-spacing: 0.02em; margin-left: 4px;
+  color: color-mix(in srgb, var(--color-text) 60%, transparent); }
+.config-name { font-family: var(--font-heading); font-weight: var(--font-heading-weight);
+  font-size: 22px; line-height: var(--leading); margin: var(--half) 0 0; text-box: trim-both cap alphabetic; }
+.config-desc { font-size: 15px; line-height: var(--leading); margin: var(--half) 0 0;
+  color: color-mix(in srgb, var(--color-text) 78%, transparent); }
+.config-spacer { flex: 1 1 auto; min-height: var(--leading); }
+.config-price { font-family: var(--font-heading); font-weight: var(--font-heading-weight);
+  font-size: 32px; line-height: 1; margin: 0; letter-spacing: -0.01em; text-box: trim-both cap alphabetic; }
+.config-meta { font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase;
+  color: color-mix(in srgb, var(--color-text) 60%, transparent); margin: var(--half) 0 0; }
+.config-note { font-size: 15px; line-height: var(--leading); max-width: var(--measure);
+  color: color-mix(in srgb, var(--color-text) 78%, transparent); margin: calc(1.5 * var(--leading)) 0 0; }
+
+/* — spec pair: standard / customizable, two ruled columns — */
+.specs { display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--leading) clamp(24px, 4vw, 72px); }
+.spec { border-top: 2px solid var(--color-text); padding-top: var(--half); }
+.spec p { font-size: 15.5px; line-height: var(--leading); margin: calc(var(--leading) - 1cap) 0 0;
+  color: color-mix(in srgb, var(--color-text) 82%, transparent); max-width: 48ch; }
+
+/* — swatch grids: fabric + frame selection (color shown for selection, not photography) — */
+.swatches { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: var(--leading); margin-top: calc(0.5 * var(--leading)); }
+.frames { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+.swatch { margin: 0; }
+.swatch image-slot, .swatch img { width: 100%; aspect-ratio: 4 / 5; display: block; border: 2px solid var(--color-divider); }
+.swatch img { object-fit: cover; }
+.frames .swatch image-slot { aspect-ratio: 16 / 9; }
+.swatch figcaption { font-size: 13px; line-height: var(--half); letter-spacing: 0.03em; margin: var(--half) 0 0; }
+.swatch .sub { color: color-mix(in srgb, var(--color-text) 60%, transparent); }
+
+/* — interactive configurator — */
+.cfg-layout { display: grid; grid-template-columns: minmax(0, 1fr) 340px; gap: clamp(24px, 4vw, 64px); align-items: start; }
+#cfg-preview { margin: 0 auto var(--leading); position: relative; overflow: hidden; max-width: 78%; }
+#cfg-preview img { display: block; width: 100%; aspect-ratio: 1600 / 1197; object-fit: cover; }
+#cfg-preview figcaption { position: absolute; left: 0; right: 0; bottom: 0; display: flex; flex-direction: column; gap: 6px;
+  padding: calc(2 * var(--leading)) clamp(20px, 3vw, 40px) clamp(20px, 2.4vw, 32px);
+  background: linear-gradient(to top, rgba(20,18,17,0.72) 0%, rgba(20,18,17,0.32) 55%, rgba(20,18,17,0) 100%); color: #fff; }
+.cfg-cap-model { font-family: var(--font-heading); font-weight: 500; font-size: 11px; letter-spacing: 0.32em; text-transform: uppercase; color: rgba(255,255,255,0.72); }
+.cfg-cap-sel { font-family: var(--font-heading); font-weight: 400; font-size: clamp(12.5px, 1.375vw, 17.5px); letter-spacing: 0.01em; line-height: 1.1; }
+.cfg-steps { display: grid; gap: calc(2 * var(--leading)); }
+.step-head { display: flex; align-items: baseline; gap: 12px; margin-bottom: var(--leading); }
+.step-n { font-family: var(--font-heading); font-weight: var(--font-heading-weight); font-size: 13px;
+  color: var(--color-accent-700); font-feature-settings: "tnum" 1; }
+.step-title { font-family: var(--font-heading); font-weight: var(--font-heading-weight); font-size: 20px;
+  line-height: var(--leading); margin: 0; text-box: trim-both cap alphabetic; }
+.step-title .req { color: color-mix(in srgb, var(--color-text) 55%, transparent); font-size: 13px; letter-spacing: 0.02em; }
+
+.opt-grid { display: grid; gap: var(--half); }
+.opt-grid.widths { grid-template-columns: repeat(3, 1fr); gap: var(--leading); }
+.opt-grid.fabrics { grid-template-columns: repeat(5, 1fr); }
+.opt-grid.frames { grid-template-columns: repeat(4, 1fr); }
+.opt-grid.motors { grid-template-columns: repeat(2, minmax(0, 160px)); }
+
+.opt { -webkit-appearance: none; appearance: none; font: inherit; color: inherit; text-align: left;
+  background: transparent; border: 2px solid var(--color-divider); padding: 0; margin: 0; cursor: pointer;
+  position: relative; display: block; transition: border-color .12s ease; }
+.opt:hover { border-color: color-mix(in srgb, var(--color-accent) 45%, var(--color-divider)); }
+.opt[aria-pressed="true"] { border-color: var(--color-accent); }
+.opt[aria-pressed="true"]::after { content: ""; position: absolute; top: 0; left: 0; width: 16px; height: 16px; background: var(--color-accent); }
+.opt:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 2px; }
+
+.opt.width { padding: var(--leading); display: flex; flex-direction: column; gap: var(--half); }
+.opt.width .ow { font-family: var(--font-heading); font-weight: var(--font-heading-weight); font-size: 36px; line-height: 1; text-box: trim-both cap alphabetic; }
+.opt.width .ow span { font-size: 16px; color: color-mix(in srgb, var(--color-text) 60%, transparent); margin-left: 3px; }
+.opt.width .on { font-family: var(--font-heading); font-weight: var(--font-heading-weight); font-size: 16px; }
+.opt.width .op { font-size: 14px; color: color-mix(in srgb, var(--color-text) 70%, transparent); }
+
+.opt.chip img { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; display: block; }
+.opt.frame img { aspect-ratio: 16 / 9; }
+.opt .cap { display: block; font-size: 12px; letter-spacing: 0.03em; padding: 8px 10px; line-height: 1.35; border-top: 2px solid var(--color-divider); }
+.opt[aria-pressed="true"] .cap { border-top-color: var(--color-accent); }
+.opt .cap .sub { display: block; color: color-mix(in srgb, var(--color-text) 60%, transparent); }
+
+.opt.motor { padding: 14px 16px; font-family: var(--font-heading); font-weight: var(--font-heading-weight); font-size: 16px; }
+.opt.motor[aria-pressed="true"] { background: var(--color-accent); color: var(--color-bg); }
+.opt.motor[aria-pressed="true"]::after { display: none; }
+
+.cfg-summary { position: sticky; top: 20px; border: 2px solid var(--color-text); padding: calc(1.5 * var(--leading)); }
+.cfg-summary .sk { display: block; font-size: 13px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--color-accent-700); margin-bottom: var(--leading); }
+.sum-row { display: flex; justify-content: space-between; gap: 16px; padding: var(--half) 0; border-top: 2px solid var(--color-divider); font-size: 14px; }
+.sum-row:first-of-type { border-top: 0; }
+.sum-row dt { color: color-mix(in srgb, var(--color-text) 60%, transparent); margin: 0; }
+.sum-row dd { margin: 0; font-family: var(--font-heading); font-weight: var(--font-heading-weight); text-align: right; }
+.sum-price { font-family: var(--font-heading); font-weight: var(--font-heading-weight); font-size: 40px; line-height: 1;
+  margin: var(--leading) 0 0; letter-spacing: -0.01em; text-box: trim-both cap alphabetic; }
+.sum-meta { font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: color-mix(in srgb, var(--color-text) 60%, transparent); margin: var(--half) 0 0; }
+.cfg-summary .btn { margin-top: calc(1.5 * var(--leading)); }
+.sum-finance { font-size: 13px; line-height: var(--leading); color: color-mix(in srgb, var(--color-text) 70%, transparent); margin: 6px 0 0; }
+.sum-urgency { font-size: 12.5px; line-height: var(--leading); margin: var(--leading) 0 0; padding: 10px 12px; border: 2px solid var(--color-accent); }
+.sum-urgency strong { color: var(--color-accent-700); font-family: var(--font-heading); font-weight: var(--font-heading-weight); }
+.pop-tag { position: absolute; top: 0; right: 0; z-index: 2; background: var(--color-accent); color: #fff; font-family: var(--font-heading); font-weight: var(--font-heading-weight); font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; padding: 4px 8px; }
+
+/* — reserve / payment modal — */
+#pay-backdrop { position: fixed; inset: 0; z-index: 1000; background: rgba(20,18,17,0.62); display: none; align-items: flex-start; justify-content: center; overflow: auto; padding: 40px 20px; }
+#pay-backdrop.open { display: flex; }
+.pay-dialog { background: var(--color-bg); border: 2px solid var(--color-text); width: 100%; max-width: 1000px; }
+.pay-head { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 18px 28px; border-bottom: 2px solid var(--color-text); }
+.pay-head h3 { font-family: var(--font-heading); font-weight: var(--font-heading-weight); font-size: 22px; margin: 0; letter-spacing: -0.01em; }
+.pay-close { -webkit-appearance: none; appearance: none; background: none; border: 0; font-size: 26px; line-height: 1; cursor: pointer; color: var(--color-text); padding: 4px 8px; }
+.pay-close:hover { color: var(--color-accent); }
+.pay-body { display: grid; grid-template-columns: 1fr 1fr; }
+.pay-left { padding: 28px; border-right: 2px solid var(--color-divider); }
+.pay-right { padding: 28px; }
+.pay-left video { width: 100%; aspect-ratio: 16 / 9; background: #000; display: block; margin-top: 12px; }
+.pay-note { font-size: 13.5px; line-height: var(--leading); color: color-mix(in srgb, var(--color-text) 78%, transparent); margin: var(--leading) 0 0; }
+.pay-sum { margin: var(--leading) 0 0; }
+.psum-row { display: flex; justify-content: space-between; gap: 16px; padding: 7px 0; border-top: 2px solid var(--color-divider); font-size: 13.5px; }
+.psum-row:first-child { border-top: 0; }
+.psum-row dt { color: color-mix(in srgb, var(--color-text) 60%, transparent); margin: 0; }
+.psum-row dd { margin: 0; font-family: var(--font-heading); font-weight: var(--font-heading-weight); text-align: right; }
+.psum-row.total { border-top: 2px solid var(--color-text); margin-top: 4px; font-size: 15px; }
+.pay-deposit { font-family: var(--font-heading); font-weight: var(--font-heading-weight); font-size: 44px; line-height: 1; margin: var(--half) 0 0; letter-spacing: -0.02em; }
+.pay-meta { font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase; color: color-mix(in srgb, var(--color-text) 60%, transparent); margin: var(--half) 0 0; }
+.pay-field { display: block; margin-top: 16px; font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase; color: color-mix(in srgb, var(--color-text) 65%, transparent); }
+.pay-input { display: block; width: 100%; margin-top: 6px; padding: 12px 14px; border: 2px solid var(--color-divider); background: #fff; font-family: 'Open Sans', sans-serif; font-size: 15px; color: var(--color-text); text-transform: none; letter-spacing: normal; box-sizing: border-box; }
+.pay-input:focus { outline: 2px solid var(--color-accent); outline-offset: 2px; border-color: var(--color-accent); }
+.pay-row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.pay-fine { font-size: 12px; line-height: var(--leading); color: color-mix(in srgb, var(--color-text) 58%, transparent); margin: var(--leading) 0 0; text-transform: none; letter-spacing: normal; }
+.pay-confirm { text-align: left; }
+.pay-confirm .pc-mark { width: 56px; height: 56px; background: var(--color-accent); display: flex; align-items: center; justify-content: center; color: #fff; font-family: var(--font-heading); font-weight: var(--font-heading-weight); font-size: 30px; }
+.pay-confirm h4 { font-family: var(--font-heading); font-weight: var(--font-heading-weight); font-size: 26px; margin: var(--leading) 0 0; letter-spacing: -0.01em; }
+@media (max-width: 760px) { .pay-body { grid-template-columns: 1fr; } .pay-left { border-right: 0; border-bottom: 2px solid var(--color-divider); } }
+
+@media (max-width: 980px) {
+  .cfg-layout { grid-template-columns: 1fr; }
+  .cfg-summary { position: static; }
+  .opt-grid.fabrics { grid-template-columns: repeat(4, 1fr); }
+}
+@media (max-width: 620px) {
+  .opt-grid.widths { grid-template-columns: 1fr; }
+  .opt-grid.fabrics { grid-template-columns: repeat(3, 1fr); }
+  .opt-grid.frames { grid-template-columns: repeat(2, 1fr); }
+}
+
+/* — market tiers: side-by-side category cells — */
+.tiers { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--leading) clamp(20px, 3vw, 48px); margin-top: calc(0.5 * var(--leading)); }
+.tier { display: block; border-top: 2px solid var(--color-text); padding: var(--half) 0 0; }
+.tier + .tier { border-top: 2px solid var(--color-text); }
+.tier-name { font-family: var(--font-heading); font-weight: var(--font-heading-weight);
+  font-size: 19px; line-height: var(--leading); margin: 0; text-box: trim-both cap alphabetic; }
+.tier-price { font-size: 13px; line-height: var(--leading); letter-spacing: 0.06em; text-transform: uppercase;
+  color: var(--color-accent-700); margin: var(--half) 0 0; white-space: nowrap; }
+.tier-copy { font-size: 15px; line-height: var(--leading); margin: var(--half) 0 0;
+  color: color-mix(in srgb, var(--color-text) 82%, transparent); max-width: none; }
+.tier.here { grid-column: 1 / -1; display: grid; grid-template-columns: minmax(0, 1.2fr) 140px minmax(0, 1.6fr);
+  gap: var(--half) clamp(20px, 3vw, 48px); align-items: baseline;
+  background: var(--color-accent); color: var(--color-bg); padding: calc(1.25 * var(--leading)) calc(1.5 * var(--leading)); margin-top: var(--leading); border-top: 0; }
+.tier.here .tier-name { margin: 0; }
+.tier.here .tier-price { color: var(--color-bg); margin: 0; }
+.tier.here .tier-copy { color: var(--color-bg); margin: 0; }
+@media (max-width: 720px) { .tiers { grid-template-columns: 1fr; } .tier.here { grid-template-columns: 1fr; } }
+
+/* — timeline: reuse the stat row grammar, numerals in ink — */
+.plainnums .stat-num { color: var(--color-text); }
+.flow { display: grid; grid-template-columns: repeat(3, 1fr); gap: calc(1.5 * var(--leading)) clamp(24px, 4vw, 72px); margin-top: calc(0.5 * var(--leading)); }
+.flow .step { border-top: 2px solid var(--color-text); padding-top: var(--half); }
+.flow .sn { font-family: var(--font-heading); font-weight: var(--font-heading-weight); font-size: 13px; color: var(--color-accent-700); }
+.flow .st { font-family: var(--font-heading); font-weight: var(--font-heading-weight); font-size: 17px; line-height: var(--leading); margin: var(--half) 0 0; }
+.flow .sc { font-size: 14px; line-height: var(--leading); margin: 6px 0 0; color: color-mix(in srgb, var(--color-text) 76%, transparent); }
+.tl { list-style: none; margin: calc(var(--leading) - 1cap) 0 0; padding: 0; }
+.tl li { position: relative; padding: 0 0 var(--leading) 30px; font-size: 15.5px; line-height: var(--leading); }
+.tl li:last-child { padding-bottom: 0; }
+.tl li::before { content: ""; position: absolute; left: 7px; top: 0; bottom: 0; width: 2px; background: var(--color-divider); }
+.tl li:first-child::before { top: 0.55em; }
+.tl li:last-child::before { bottom: auto; height: 0.55em; }
+.tl li::after { content: ""; position: absolute; left: 3px; top: calc(0.55em - 5px); width: 10px; height: 10px; background: var(--color-accent); }
+.tlh { list-style: none; margin: calc(0.5 * var(--leading)) 0 0; padding: 0; position: relative; display: grid; grid-template-columns: repeat(5, 1fr); gap: clamp(16px, 2vw, 32px); }
+.tlh::before { content: ""; position: absolute; top: 5px; left: 0; right: 0; height: 2px; background: var(--color-divider); }
+.tlh li { position: relative; padding-top: calc(var(--leading) + 4px); font-size: 14.5px; line-height: var(--leading); }
+.tlh li::before { content: ""; position: absolute; top: 0; left: 0; width: 12px; height: 12px; background: var(--color-accent); }
+.tlh-step { display: block; font-family: var(--font-heading); font-weight: var(--font-heading-weight); font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--color-accent-700); margin-bottom: 4px; font-feature-settings: "tnum" 1; }
+.notinc { list-style: none; margin: calc(0.5 * var(--leading)) 0 0; padding: 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--leading) clamp(20px, 3vw, 40px); }
+.notinc li { border-top: 2px solid var(--color-divider); padding-top: var(--half); font-size: 14.5px; line-height: var(--leading); color: color-mix(in srgb, var(--color-text) 72%, transparent); }
+@media (max-width: 880px) { .tlh { grid-template-columns: 1fr 1fr; } .tlh::before { display: none; } .notinc { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 880px) { .flow { grid-template-columns: 1fr; } }
+
+/* — communities phases — */
+.phases { display: grid; grid-template-columns: repeat(3, 1fr); gap: calc(1.5 * var(--leading)) clamp(24px, 4vw, 72px); margin-top: calc(0.5 * var(--leading)); }
+.phase { border-top: 2px solid var(--color-text); padding-top: var(--half); }
+.phase-k { display: block; font-size: 13px; line-height: var(--half); letter-spacing: 0.08em;
+  text-transform: uppercase; color: var(--color-accent-700); font-feature-settings: "tnum" 1; margin: var(--half) 0 0; }
+.phase ul { list-style: none; margin: var(--leading) 0 0; padding: 0; }
+.phase li { font-family: var(--font-heading); font-weight: var(--font-heading-weight);
+  font-size: 18px; line-height: calc(1.25 * var(--leading)); letter-spacing: -0.01em; }
+.inquiry { font-size: 15.5px; line-height: var(--leading); max-width: 60ch;
+  color: color-mix(in srgb, var(--color-text) 78%, transparent); margin: calc(1.5 * var(--leading)) 0 0; }
+
+/* — the close carries contact details on the red field (display-grade only) — */
+.close .sub { font-size: 17px; line-height: var(--leading); max-width: 44ch; margin: calc(1.5 * var(--leading)) 0 0;
+  text-box: trim-both cap alphabetic; }
+.close .contact { display: flex; flex-wrap: wrap; gap: var(--half) calc(2 * var(--leading)); margin-top: calc(1.5 * var(--leading));
+  font-size: 15px; line-height: var(--leading); }
+.close .contact a { color: var(--color-bg); text-decoration: underline; text-underline-offset: 3px; }
+.foot-wide { display: flex; flex-wrap: wrap; justify-content: space-between; gap: var(--half) var(--leading); }
+
+@media (max-width: 880px) {
+  .configs { grid-template-columns: 1fr; }
+  .specs, .phases { grid-template-columns: 1fr; }
+  .tier { grid-template-columns: 1fr; }
+}
+
+/* — full-bleed photographic hero — */
+.hero-bleed { position: relative; color: var(--color-bg); overflow: hidden;
+  padding: calc(5 * var(--leading)) 0 calc(3 * var(--leading)); min-height: 68vh; display: flex; align-items: flex-end; }
+.hero-bleed .hero-media { position: absolute; inset: 0; z-index: 0; }
+.hero-bleed .hero-media img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.hero-bleed .hero-media iframe { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 100vw; height: 56.25vw; min-height: 100%; min-width: 177.78vh; border: 0; pointer-events: none; }
+.hero-bleed::after { content: ""; position: absolute; inset: 0; z-index: 1; pointer-events: none;
+  background: linear-gradient(to top, rgba(20,18,17,0.85) 0%, rgba(20,18,17,0.55) 30%, rgba(20,18,17,0.15) 62%, rgba(20,18,17,0.05) 100%); }
+.hero-bleed .wrap { position: relative; z-index: 2; width: 100%; }
+.hero-bleed .display, .hero-bleed .sub, .hero-bleed .kicker { color: var(--color-bg); }
+.hero-bleed .sub { color: color-mix(in srgb, var(--color-bg) 90%, transparent); }
+.hero-bleed .btn-ghost { color: var(--color-bg); border-color: var(--color-bg); }
+
+/* Review aid: the 28px rhythm drawn as hairlines — debug chrome, toggled by
+   ?baselines or the B key, never part of the look. */
+body[data-baselines] { position: relative; }
+body[data-baselines]::after {
+  content: ""; position: absolute; inset: 0; pointer-events: none;
+  background:
+    repeating-linear-gradient(to bottom,
+      color-mix(in srgb, var(--color-accent) 35%, transparent) 0 1px,
+      transparent 1px var(--leading)),
+    repeating-linear-gradient(to bottom,
+      transparent 0 var(--half),
+      color-mix(in srgb, var(--color-accent) 16%, transparent) var(--half) calc(var(--half) + 1px),
+      transparent calc(var(--half) + 1px) var(--leading));
+}
+</style>
+</head>
+<body>
+<template id="__bundler_thumbnail">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 320">
+  <rect width="320" height="320" fill="#f3f2f2"/>
+  <rect x="96" y="150" width="128" height="20" fill="#E3000B"/>
+  <text x="160" y="120" font-family="Archivo, sans-serif" font-weight="800" font-size="30" fill="#201e1d" text-anchor="middle">markilux</text>
+  <text x="160" y="210" font-family="Archivo, sans-serif" font-size="14" letter-spacing="3" fill="#201e1d" text-anchor="middle">ATLANTA PRIVATE SALE</text>
+</svg>
+</template>
+<nav class="nav">
+  <span class="nav-brand"><img src="assets/markilux-wordmark.png" alt="markilux" style="height: 15px; width: auto; display: block;" /></span>
+  <a href="#collection">Collection</a>
+  <a href="#pricing">Pricing</a>
+  <a href="#process">Process</a>
+  <a href="#communities">Communities</a>
+  <button type="button" class="btn btn-primary" style="background-color: #E3000B;">Reserve a configuration</button>
+</nav>
+<section class="hero hero-bleed" id="top">
+  <div class="hero-media"><img src="assets/hero-bg.png" alt="A markilux awning shading a residential terrace" /></div>
+  <div class="wrap">
+    <span class="kicker" style="font-family: 'Open Sans', sans-serif; color: #fff;">By private invitation · Reservations open Fall 2026</span>
+    <h1 class="display"><span class="line">The Atlanta</span> <span class="line">Private Sale.</span></h1>
+    <p class="sub" style="font-family: 'Open Sans', sans-serif;">A curated direct collection from markilux, engineered in Germany and delivered to select Atlanta communities by sealed ocean container. Reservations are by invitation. The collection is curated. This is not a retail launch; this is an introduction.</p>
+    <div class="row">
+      <button type="button" class="btn btn-primary">Reserve a configuration</button>
+      <button type="button" class="btn btn-ghost">See how it works</button>
+    </div>
+  </div>
+</section>
+
+<div class="wrap">
+
+  <hr class="rule2" />
+
+  <section class="stats" aria-label="markilux, by the numbers">
+    <div class="grid">
+      <div><p class="stat-num" style="color: #E3000B;">300ft²</p><p class="stat-label">Of cool shade at full extension</p></div>
+      <div><p class="stat-num">20ft</p><p class="stat-label">Of open-air living, widest configuration</p></div>
+      <div><p class="stat-num">30yr</p><p class="stat-label">Engineered service life</p></div>
+      <div><p class="stat-num">50yr</p><p class="stat-label">German manufacturing, all in-house</p></div>
+    </div>
+  </section>
+
+  <hr class="rule2" />
+
+  <section class="section" id="collection">
+    <div class="sec-head">
+      <span class="kicker">The collection</span>
+      <h2 class="sec-title"><span class="line">Three configurations.</span></h2>
+      <p class="sec-lead">Each configuration is built on the markilux 1600 platform, refined for residential application and curated to a single coherent collection of fabrics, finishes, and operations. Multi-configuration reservations receive 5% collection pricing on two units, 10% on three or more.</p>
+    </div>
+    <div class="configs">
+      <div class="config">
+        <p class="config-w">10<span>ft</span></p>
+        <h3 class="config-name">The Patio</h3>
+        <p class="config-desc">markilux 1600 at 10 feet, delivered to your home.</p>
+        <div class="config-spacer"></div>
+        <p class="config-price">$4,969</p>
+        <p class="config-meta">Delivered price</p>
+      </div>
+      <div class="config">
+        <p class="config-w">15<span>ft</span></p>
+        <h3 class="config-name">The Terrace</h3>
+        <p class="config-desc">markilux 1600 at 15 feet, delivered to your home.</p>
+        <div class="config-spacer"></div>
+        <p class="config-price">$5,899</p>
+        <p class="config-meta">Delivered price</p>
+      </div>
+      <div class="config">
+        <p class="config-w">20<span>ft</span></p>
+        <h3 class="config-name">The Outdoor Room</h3>
+        <p class="config-desc">markilux 1600 at 20 feet, delivered to your home.</p>
+        <div class="config-spacer"></div>
+        <p class="config-price">$6,999</p>
+        <p class="config-meta">Delivered price</p>
+      </div>
+    </div>
+    <div data-yt="jxpzAPe5g_Q" style="position:relative; width:100%; aspect-ratio:16/9; border:2px solid var(--color-text); background:#000; margin-top:calc(1.5 * var(--leading)); cursor:pointer; overflow:hidden;">
+      <img src="assets/awning-hero.png" alt="markilux 1600 awning in use" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover;" />
+      <span aria-hidden="true" style="position:absolute; inset:0; display:flex; align-items:center; justify-content:center; background:rgba(20,18,17,0.28);">
+        <span style="width:78px; height:78px; background:var(--color-accent); display:flex; align-items:center; justify-content:center;">
+          <span style="width:0; height:0; border-left:24px solid #fff; border-top:15px solid transparent; border-bottom:15px solid transparent; margin-left:6px;"></span>
+        </span>
+      </span>
+    </div>
+  </section>
+
+  <section class="section" aria-label="Specifications">
+    <div class="specs">
+      <div class="spec">
+        <span class="kicker">Standard across all configurations</span>
+        <p>Semi-cassette frame in four refined finishes. Curated fabric collection in three palettes designed to complement Atlanta architecture. Somfy RTS motorization with five-channel remote. Bionic tendon arm assembly. Vibrabox wind sensor.</p>
+      </div>
+      <div class="spec">
+        <span class="kicker">Customizable</span>
+        <p>Width is selected by configuration. Fabric pattern is selected from the curated palette. Frame color is selected from the four collection finishes. Mounting accommodates wall, roof, or face-fixture installations.</p>
+      </div>
+    </div>
+  </section>
+
+  <hr class="rule2" />
+
+  <section class="section" id="fabrics">
+    <div class="sec-head">
+      <span class="kicker">Configure your awning</span>
+      <h2 class="sec-title"><span class="line">Build your reservation.</span></h2>
+      <p class="sec-lead">Choose your configuration, fabric, frame finish, mounting type, and motor side. Your selection is confirmed with your markilux advisor before production. Nothing is final until then.</p>
+    </div>
+
+    <figure id="cfg-preview">
+      <img id="cfg-preview-img" src="assets/config-scene-1600.jpg" alt="markilux 1600 awning over a terrace" />
+      <figcaption id="cfg-preview-cap"><span class="cfg-cap-model">markilux 1600</span><span class="cfg-cap-sel">The Patio · 41488 · 5233 Off-white</span></figcaption>
+    </figure>
+
+    <div class="cfg-layout">
+      <div class="cfg-steps">
+
+        <div class="cfg-step">
+          <div class="step-head"><span class="step-n">01</span><h3 class="step-title">Configuration &amp; width</h3></div>
+          <div class="opt-grid widths" role="group" aria-label="Configuration">
+            <button type="button" class="opt width" data-group="width" data-label="The Patio" data-detail="10 ft" data-price="4969" aria-pressed="true">
+              <span class="ow">10<span>ft</span></span><span class="on">The Patio</span><span class="op">$4,969 delivered</span>
+            </button>
+            <button type="button" class="opt width" data-group="width" data-label="The Terrace" data-detail="15 ft" data-price="5899" aria-pressed="false">
+              <span class="pop-tag">Most popular</span>
+              <span class="ow">15<span>ft</span></span><span class="on">The Terrace</span><span class="op">$5,899 delivered</span>
+            </button>
+            <button type="button" class="opt width" data-group="width" data-label="The Outdoor Room" data-detail="20 ft" data-price="6999" aria-pressed="false">
+              <span class="ow">20<span>ft</span></span><span class="on">The Outdoor Room</span><span class="op">$6,999 delivered</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="cfg-step">
+          <div class="step-head"><span class="step-n">02</span><h3 class="step-title">Fabric</h3></div>
+          <div class="opt-grid fabrics" role="group" aria-label="Fabric">
+            <button type="button" class="opt chip" data-group="fabric" data-label="41488" data-color="#b8b2a3" data-preview="assets/awning-render-cream.jpg" aria-pressed="true"><img src="assets/fabrics/41488.jpg" alt="markilux fabric 41488" /><span class="cap">41488</span></button>
+            <button type="button" class="opt chip" data-group="fabric" data-label="41480" data-color="#282727" data-preview="assets/awning-render-cream.jpg" aria-pressed="false"><img src="assets/fabrics/41480.jpg" alt="markilux fabric 41480" /><span class="cap">41480</span></button>
+            <button type="button" class="opt chip" data-group="fabric" data-label="31009" data-color="#f6f7f0" data-preview="assets/awning-render-cream.jpg" aria-pressed="false"><img src="assets/fabrics/31009.jpg" alt="markilux fabric 31009" /><span class="cap">31009</span></button>
+            <button type="button" class="opt chip" data-group="fabric" data-label="30709" data-color="#aeaba6" data-preview="assets/awning-hero.png" aria-pressed="false"><img src="assets/fabrics/30709.jpg" alt="markilux fabric 30709" /><span class="cap">30709</span></button>
+            <button type="button" class="opt chip" data-group="fabric" data-label="30927" data-color="#cececc" data-preview="assets/awning-hero.png" aria-pressed="false"><img src="assets/fabrics/30927.jpg" alt="markilux fabric 30927" /><span class="cap">30927</span></button>
+            <button type="button" class="opt chip" data-group="fabric" data-label="30209" data-color="#b8b6b5" data-preview="assets/awning-hero.png" aria-pressed="false"><img src="assets/fabrics/30209.jpg" alt="markilux fabric 30209" /><span class="cap">30209</span></button>
+            <button type="button" class="opt chip" data-group="fabric" data-label="41415" data-color="#dbceb9" data-preview="assets/awning-render-cream.jpg" aria-pressed="false"><img src="assets/fabrics/41415.jpg" alt="markilux fabric 41415" /><span class="cap">41415</span></button>
+            <button type="button" class="opt chip" data-group="fabric" data-label="31487" data-color="#a09986" data-preview="assets/awning-hero.png" aria-pressed="false"><img src="assets/fabrics/31487.jpg" alt="markilux fabric 31487" /><span class="cap">31487</span></button>
+            <button type="button" class="opt chip" data-group="fabric" data-label="31595" data-color="#8f8e8a" data-preview="assets/awning-hero.png" aria-pressed="false"><img src="assets/fabrics/31595.jpg" alt="markilux fabric 31595" /><span class="cap">31595</span></button>
+            <button type="button" class="opt chip" data-group="fabric" data-label="31597" data-color="#4d4d4d" data-preview="assets/awning-hero.png" aria-pressed="false"><img src="assets/fabrics/31597.jpg" alt="markilux fabric 31597" /><span class="cap">31597</span></button>
+          </div>
+        </div>
+
+        <div class="cfg-step">
+          <div class="step-head"><span class="step-n">03</span><h3 class="step-title">Frame finish</h3></div>
+          <div class="opt-grid frames" role="group" aria-label="Frame finish">
+            <button type="button" class="opt chip frame" data-group="frame" data-label="5233 · Off-white" data-color="#E7E2D8" aria-pressed="true"><img src="assets/frames/5233.jpg" alt="Frame finish 5233, off-white textured" /><span class="cap">5233<span class="sub">Off-white, textured</span></span></button>
+            <button type="button" class="opt chip frame" data-group="frame" data-label="RAL 9006 · Aluminium" data-color="#9DA1A4" aria-pressed="false"><img src="assets/frames/9006.jpg" alt="Frame finish RAL 9006, metallic aluminium" /><span class="cap">RAL 9006<span class="sub">Metallic aluminium</span></span></button>
+            <button type="button" class="opt chip frame" data-group="frame" data-label="5215 · Stone grey" data-color="#7E827F" aria-pressed="false"><img src="assets/frames/5215.jpg" alt="Frame finish 5215, stone grey metallic" /><span class="cap">5215<span class="sub">Stone grey, metallic</span></span></button>
+            <button type="button" class="opt chip frame" data-group="frame" data-label="5204 · Anthracite" data-color="#34373A" aria-pressed="false"><img src="assets/frames/5204.jpg" alt="Frame finish 5204, anthracite metallic" /><span class="cap">5204<span class="sub">Anthracite, metallic</span></span></button>
+          </div>
+        </div>
+
+        <div class="cfg-step">
+          <div class="step-head"><span class="step-n">04</span><h3 class="step-title">shadeplus</h3></div>
+          <div class="opt-grid motors" role="group" aria-label="shadeplus" style="grid-template-columns: repeat(2, minmax(0, 200px));">
+            <button type="button" class="opt motor" data-group="shadeplus" data-label="With shadeplus" aria-pressed="false">Add shadeplus +$650</button>
+            <button type="button" class="opt motor" data-group="shadeplus" data-label="Without" aria-pressed="true">Without</button>
+          </div>
+          <p style="font-size:13px; line-height:var(--leading); margin:var(--half) 0 0; color: color-mix(in srgb, var(--color-text) 65%, transparent);">A manual vertical screen that drops from the front profile to block low, glaring sun rays.</p>
+        </div>
+
+        <div class="cfg-step">
+          <div class="step-head"><span class="step-n">05</span><h3 class="step-title">Mounting type</h3></div>
+          <div class="opt-grid motors" role="group" aria-label="Mounting type" style="grid-template-columns: repeat(3, minmax(0, 1fr));">
+            <button type="button" class="opt motor" data-group="mount" data-label="Face fixture" aria-pressed="true">Face fixture</button>
+            <button type="button" class="opt motor" data-group="mount" data-label="Soffit fixture" aria-pressed="false">Soffit fixture</button>
+            <button type="button" class="opt motor" data-group="mount" data-label="Top/Roof fixture" aria-pressed="false">Top/Roof fixture</button>
+          </div>
+        </div>
+
+        <div class="cfg-step">
+          <div class="step-head"><span class="step-n">06</span><h3 class="step-title">Motor side</h3></div>
+          <div class="opt-grid motors" role="group" aria-label="Motor side">
+            <button type="button" class="opt motor" data-group="motor" data-label="Left" aria-pressed="false">Left</button>
+            <button type="button" class="opt motor" data-group="motor" data-label="Right" aria-pressed="true" style="background-color: #E3000B;">Right</button>
+          </div>
+        </div>
+
+        <div class="cfg-step">
+          <div class="step-head"><span class="step-n">07</span><h3 class="step-title">Wind sensor</h3></div>
+          <div class="opt-grid motors" role="group" aria-label="Wind sensor" style="grid-template-columns: repeat(3, minmax(0, 1fr));">
+            <button type="button" class="opt motor" data-group="sensor" data-label="Vibrabox, white" aria-pressed="true">Vibrabox · White</button>
+            <button type="button" class="opt motor" data-group="sensor" data-label="Vibrabox, grey" aria-pressed="false">Vibrabox · Grey</button>
+            <button type="button" class="opt motor" data-group="sensor" data-label="None" aria-pressed="false">None</button>
+          </div>
+          <p style="font-size:13px; line-height:var(--leading); margin:var(--half) 0 0; color: color-mix(in srgb, var(--color-text) 65%, transparent);">The Somfy Vibrabox wind sensor automatically retracts the awning in high wind, protecting the fabric and frame.</p>
+        </div>
+
+        <div class="cfg-step">
+          <div class="step-head"><span class="step-n">08</span><h3 class="step-title">Installation</h3></div>
+          <div class="opt-grid motors" role="group" aria-label="Installation" style="grid-template-columns: repeat(2, minmax(0, 200px));">
+            <button type="button" class="opt motor" data-group="install" data-label="Certified install" aria-pressed="false">Certified install</button>
+            <button type="button" class="opt motor" data-group="install" data-label="DIY" aria-pressed="true">Self-install (DIY)</button>
+          </div>
+          <p style="font-size:13px; line-height:var(--leading); margin:var(--half) 0 0; color: color-mix(in srgb, var(--color-text) 65%, transparent);">Professional installation through a markilux-certified Atlanta partner runs $1,000–$1,500, quoted separately by the installer. Self-install includes full remote support.</p>
+        </div>
+
+      </div>
+
+      <aside class="cfg-summary" aria-label="Your reservation summary">
+        <span class="sk">Your reservation</span>
+        <dl style="margin:0;">
+          <div class="sum-row"><dt>Configuration</dt><dd id="sum-config">The Patio</dd></div>
+          <div class="sum-row"><dt>Width</dt><dd id="sum-width">10 ft</dd></div>
+          <div class="sum-row"><dt>Fabric</dt><dd id="sum-fabric">41488</dd></div>
+          <div class="sum-row"><dt>Frame</dt><dd id="sum-frame">5233 · Off-white</dd></div>
+          <div class="sum-row"><dt>shadeplus</dt><dd id="sum-shadeplus">Without</dd></div>
+          <div class="sum-row"><dt>Mounting</dt><dd id="sum-mount">Face fixture</dd></div>
+          <div class="sum-row"><dt>Motor side</dt><dd id="sum-motor">Right</dd></div>
+          <div class="sum-row"><dt>Wind sensor</dt><dd id="sum-sensor">Vibrabox, white</dd></div>
+          <div class="sum-row"><dt>Installation</dt><dd id="sum-install">Self-install (DIY)</dd></div>
+        </dl>
+        <p class="sum-price" id="sum-price">$4,969</p>
+        <p class="sum-meta">Delivered price · 50% refundable deposit · 12-year warranty</p>
+        <p class="sum-finance" id="sum-finance">or about $414/mo for 12 months</p>
+        <p class="sum-urgency">Inaugural Fall 2026 release · <strong>8 of 40</strong> reservations remaining in this community.</p>
+        <button type="button" class="btn btn-primary btn-block" id="reserve-btn">Reserve this configuration</button>
+        <div style="margin:var(--leading) 0 0; padding:calc(1.5 * var(--leading)); background:var(--color-accent); color:var(--color-bg);">
+          <strong style="font-family:var(--font-heading); font-weight:var(--font-heading-weight); display:block; font-size:28px; line-height:1.02; letter-spacing:-0.01em; text-transform:uppercase;">Want more?</strong>
+          <p style="font-size:15px; line-height:var(--leading); margin:var(--half) 0 0; color:var(--color-bg);">markilux custom-makes awnings with bolder fabrics, custom frame finishes, integrated lighting, and other models.</p>
+          <a href="https://www.markilux.us" target="_blank" rel="noopener" style="display:block; margin-top:var(--leading); padding:14px 16px; background:var(--color-bg); color:var(--color-accent); font-family:var(--font-heading); font-weight:var(--font-heading-weight); font-size:16px; text-transform:uppercase; letter-spacing:0.02em; text-decoration:none;">Explore the full range at markilux.us →</a>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <hr class="rule2" />
+
+  <section class="section" id="heritage">
+    <div class="sec-head">
+      <span class="kicker">The heritage</span>
+      <h2 class="sec-title"><span class="line">Made in Emsdetten.</span></h2>
+      <p class="sec-lead">Every markilux system is vertically integrated. The fabric is woven in our own mill, the frames extruded in our facility, the motors and bionic tendon arms engineered in our research laboratory. The result is a level of precision and consistency no assembled product can replicate: the quiet signature of well-considered homes for five decades.</p>
+    </div>
+    <video controls playsinline preload="metadata" poster="assets/factory-poster.jpg" style="display:block; width:100%; aspect-ratio:16/9; object-fit:cover; background:#000; margin-top:calc(0.5 * var(--leading));">
+      <source src="assets/factory.mp4" type="video/mp4" />
+    </video>
+  </section>
+
+  <hr class="rule2" />
+
+  <section class="section" id="pricing">
+    <div class="sec-head">
+      <span class="kicker">Pricing transparency</span>
+      <h2 class="sec-title"><span class="line">What your investment</span> <span class="line">includes.</span></h2>
+      <p class="sec-lead">Every price is a complete delivered price. No hidden surcharges, no freight pass-throughs, no customs adjustments billed after order. Below is exactly what your investment funds.</p>
+    </div>
+    <div class="price-included">
+      <span class="kicker">Included in every delivered price</span>
+      <ol class="tlh">
+        <li><span class="tlh-step">01</span>Vertically integrated German manufacturing in Emsdetten</li>
+        <li><span class="tlh-step">02</span>Sealed forty-foot container freight, Bremerhaven to Savannah</li>
+        <li><span class="tlh-step">03</span>US customs clearance and all import duties</li>
+        <li><span class="tlh-step">04</span>Currency-exchange exposure absorbed by markilux</li>
+        <li><span class="tlh-step">05</span>Last-mile Atlanta delivery, inside placement and unpacking</li>
+      </ol>
+    </div>
+    <div style="margin-top: calc(2 * var(--leading));">
+      <span class="kicker">Not included</span>
+      <ul class="notinc">
+        <li>A new outdoor electrical outlet, if none is present</li>
+        <li>HOA application fees, if charged by your community</li>
+        <li>Georgia state sales tax, per state law</li>
+        <li>Optional professional installation, $1,000–$1,500</li>
+      </ul>
+    </div>
+  </section>
+
+  <hr class="rule2" />
+
+  <section class="section" id="market">
+    <div class="sec-head">
+      <span class="kicker">Market context</span>
+      <h2 class="sec-title"><span class="line">Where this sits</span> <span class="line">in the category.</span></h2>
+      <p class="sec-lead">Retractable outdoor shading is offered across three distinct tiers in the American market. The differences are not subtle. Below is the honest landscape.</p>
+    </div>
+    <div class="tiers">
+      <div class="tier">
+        <p class="tier-name">Entry awnings</p>
+        <p class="tier-price">$3–6K installed</p>
+        <p class="tier-copy">Typically US-assembled from imported components. Woven acrylic fabric, lateral arm construction without integrated tendon arms. Three-to-ten-year functional life.</p>
+      </div>
+      <div class="tier">
+        <p class="tier-name">Premium systems</p>
+        <p class="tier-price">$6–9K installed</p>
+        <p class="tier-copy">US-manufactured with European motor components. Sunbrella fabric upgrades and heavier-gauge frames with optional semi-cassette protection. Ten-to-fifteen-year service life.</p>
+      </div>
+      <div class="tier">
+        <p class="tier-name">European architectural</p>
+        <p class="tier-price">$7–15K installed</p>
+        <p class="tier-copy">Vertically integrated European manufacture with manufacturer-owned fabric mills and engineered bionic tendon arms. Twenty-to-thirty-year life, specified by architects.</p>
+      </div>
+    </div>
+    <div class="tier here" style="background-color: #E3000B;">
+      <p class="tier-name">Where markilux sits</p>
+      <p class="tier-price">From $4,969</p>
+      <p class="tier-copy">The European architectural category at the most accessible price we have offered in this market. The engineering is included in the product, not a premium added on top.</p>
+    </div>
+  </section>
+
+  <hr class="rule2" />
+
+  <section class="stats plainnums" aria-label="Estimated timeline">
+    <span class="kicker">Estimated timeline</span>
+    <div class="grid" style="margin-top: var(--leading);">
+      <div><p class="stat-num">4–6</p><p class="stat-label">Weeks, reservation window</p></div>
+      <div><p class="stat-num">6–8</p><p class="stat-label">Weeks, production in Germany</p></div>
+      <div><p class="stat-num">3–4</p><p class="stat-label">Weeks, ocean transit &amp; customs</p></div>
+      <div><p class="stat-num">13–18</p><p class="stat-label">Weeks, reservation to home delivery</p></div>
+    </div>
+  </section>
+
+  <hr class="rule2" />
+
+  <section class="section" id="process">
+    <div class="sec-head">
+      <span class="kicker" style="grid-column: 1;">How the private sale works</span>
+      <h2 class="sec-title"><span class="line">The reservation process.</span></h2>
+    </div>
+    <div class="flow">
+      <div class="step"><span class="sn">01</span><h3 class="st">Architectural approval</h3><p class="sc">markilux clears HOA architectural review; your community window opens.</p></div>
+      <div class="step"><span class="sn">02</span><h3 class="st">Reservation</h3><p class="sc">Choose a configuration and place a 50% deposit, refundable until production begins.</p></div>
+      <div class="step"><span class="sn">03</span><h3 class="st">German production</h3><p class="sc">Your unit is built in Emsdetten, six to eight weeks.</p></div>
+      <div class="step"><span class="sn">04</span><h3 class="st">Ocean container</h3><p class="sc">Sealed forty-foot container, Germany to Savannah, roughly three weeks.</p></div>
+      <div class="step"><span class="sn">05</span><h3 class="st">Customs &amp; delivery</h3><p class="sc">Units clear US customs and arrive at your Atlanta home; balance due on arrival.</p></div>
+      <div class="step"><span class="sn">06</span><h3 class="st">Installation</h3><p class="sc">Self-install with remote support, or a certified Atlanta partner.</p></div>
+    </div>
+  </section>
+
+  <hr class="rule2" />
+
+  <section class="section" id="communities">
+    <div class="sec-head">
+      <span class="kicker">Where the program operates</span>
+      <h2 class="sec-title"><span class="line">Participating communities.</span></h2>
+      <p class="sec-lead">Available exclusively to homeowners in communities where markilux has completed architectural review. Communities are added in sequence as approvals are secured.</p>
+    </div>
+    <div class="phases">
+      <div class="phase">
+        <span class="phase-k">Phase one</span>
+        <ul>
+          <li>Buckhead</li>
+          <li>Brookhaven</li>
+          <li>Dunwoody</li>
+          <li>Vinings</li>
+          <li>Sandy Springs</li>
+          <li>Cobb County enclaves</li>
+        </ul>
+      </div>
+      <div class="phase">
+        <span class="phase-k">Phase two</span>
+        <ul>
+          <li>Alpharetta</li>
+          <li>Cumming</li>
+          <li>Roswell</li>
+          <li>Milton</li>
+          <li>Duluth</li>
+          <li>North Fulton communities</li>
+        </ul>
+      </div>
+      <div class="phase">
+        <span class="phase-k">Phase three</span>
+        <ul>
+          <li>Lake Oconee</li>
+          <li>The Landings, Savannah</li>
+          <li>Lake Lanier</li>
+          <li>Ford Plantation</li>
+          <li>Sea Island</li>
+          <li>Coastal Georgia</li>
+        </ul>
+      </div>
+    </div>
+    <p class="inquiry">Communities outside the published phases may apply for inclusion through their HOA architectural review board. markilux welcomes new community partnerships.</p>
+  </section>
+
+</div>
+
+<section class="close" id="reserve">
+  <div class="wrap">
+    <span class="kicker" style="color: var(--color-bg);">To reserve</span>
+    <h3><span class="line">Begin your</span> <span class="line">private sale.</span></h3>
+    <p class="sub">Reservations for the inaugural Atlanta Private Sale open in Fall 2026. To be added to your community's invitation list, or to bring the Private Sale to your community, contact markilux USA directly.</p>
+    <div class="row">
+      <button type="button" class="btn btn-ghost">Reserve a configuration</button>
+    </div>
+    <div class="contact">
+      <span>Private sale inquiries · <a href="mailto:privatesales@markilux.us">privatesales@markilux.us</a></span>
+      <span>markilux USA · 200 Lexington Avenue, Suite 407, New York</span>
+    </div>
+  </div>
+</section>
+
+<div class="wrap">
+  <footer>
+    <div class="foot-wide">
+      <span>Made in Germany. Delivered in Atlanta.</span>
+      <span>By private invitation only.</span>
+    </div>
+  </footer>
+</div>
+<div id="pay-backdrop" role="dialog" aria-modal="true" aria-label="Reserve your configuration">
+  <div class="pay-dialog">
+    <div class="pay-head"><h3>Reserve your markilux 1600</h3><button type="button" class="pay-close" id="pay-close" aria-label="Close">×</button></div>
+    <div class="pay-body">
+      <div class="pay-left">
+        <span class="kicker">Before you install</span>
+        <video controls playsinline preload="metadata" poster="assets/factory-poster.jpg"><source src="assets/factory.mp4" type="video/mp4" /></video>
+        <p class="pay-note">Every reservation includes a step-by-step installation walkthrough, full markilux remote support, and a 12-year warranty. Prefer a professional? Choose certified installation in the configurator.</p>
+        <dl class="pay-sum" id="pay-sum"></dl>
+      </div>
+      <div class="pay-right" id="pay-right">
+        <span class="kicker">Secure deposit</span>
+        <p class="pay-deposit" id="pay-deposit-amt">$0</p>
+        <p class="pay-meta">50% refundable deposit · balance due before delivery</p>
+        <form id="pay-form">
+          <label class="pay-field">Name on card <input class="pay-input" type="text" autocomplete="cc-name" required /></label>
+          <label class="pay-field">Card number <input class="pay-input" type="text" inputmode="numeric" autocomplete="cc-number" placeholder="0000 0000 0000 0000" required /></label>
+          <div class="pay-row2">
+            <label class="pay-field">Expiry <input class="pay-input" type="text" inputmode="numeric" autocomplete="cc-exp" placeholder="MM / YY" required /></label>
+            <label class="pay-field">CVC <input class="pay-input" type="text" inputmode="numeric" autocomplete="cc-csc" placeholder="123" required /></label>
+          </div>
+          <button type="submit" class="btn btn-primary btn-block" id="pay-submit" style="margin-top: var(--leading);">Pay deposit</button>
+          <p class="pay-fine">You are charged the deposit today. The balance is due before last-mile delivery is scheduled. Deposits are fully refundable until production begins.</p>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="image-slot.js"></script>
+<script>
+// Reservation configurator — selectable options + live summary.
+(() => {
+  const state = { width: null, fabric: null, frame: null, shadeplus: null, mount: null, motor: null, sensor: null, install: null };
+  const price = { value: 0 };
+  const out = {
+    config: document.getElementById('sum-config'),
+    width: document.getElementById('sum-width'),
+    fabric: document.getElementById('sum-fabric'),
+    frame: document.getElementById('sum-frame'),
+    shadeplus: document.getElementById('sum-shadeplus'),
+    mount: document.getElementById('sum-mount'),
+    motor: document.getElementById('sum-motor'),
+    sensor: document.getElementById('sum-sensor'),
+    install: document.getElementById('sum-install'),
+    price: document.getElementById('sum-price'),
+    finance: document.getElementById('sum-finance'),
+  };
+  const fmt = (n) => '$' + n.toLocaleString('en-US');
+  const previewCap = document.getElementById('cfg-preview-cap');
+  const capSel = previewCap ? previewCap.querySelector('.cfg-cap-sel') : null;
+
+  function render() {
+    if (state.width) {
+      out.config.textContent = state.width.dataset.label;
+      out.width.textContent = state.width.dataset.detail;
+      let total = parseInt(state.width.dataset.price, 10) || 0;
+      if (state.shadeplus && state.shadeplus.dataset.label === 'With shadeplus') total += 650;
+      price.value = total;
+      out.price.textContent = fmt(total);
+      if (out.finance) out.finance.textContent = 'or about ' + fmt(Math.round(total / 12)) + '/mo for 12 months';
+    }
+    if (state.fabric) out.fabric.textContent = state.fabric.dataset.label;
+    if (state.frame) out.frame.textContent = state.frame.dataset.label;
+    if (state.shadeplus) out.shadeplus.textContent = state.shadeplus.dataset.label;
+    if (state.mount) out.mount.textContent = state.mount.dataset.label;
+    if (state.motor) out.motor.textContent = state.motor.dataset.label;
+    if (state.sensor) out.sensor.textContent = state.sensor.dataset.label;
+    if (capSel) {
+      const w = state.width ? state.width.dataset.label : '';
+      const fb = state.fabric ? state.fabric.dataset.label : '';
+      const fr = state.frame ? state.frame.dataset.label : '';
+      capSel.textContent = [w, fb, fr].filter(Boolean).join(' · ');
+    }
+    if (state.install) out.install.textContent = state.install.dataset.label;
+  }
+
+  document.querySelectorAll('.opt').forEach((btn) => {
+    const group = btn.dataset.group;
+    if (btn.getAttribute('aria-pressed') === 'true') state[group] = btn;
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.opt[data-group="' + group + '"]').forEach((o) => o.setAttribute('aria-pressed', 'false'));
+      btn.setAttribute('aria-pressed', 'true');
+      state[group] = btn;
+      render();
+    });
+  });
+
+  const reserve = document.getElementById('reserve-btn');
+
+  // Reserve -> payment modal
+  const backdrop = document.getElementById('pay-backdrop');
+  const paySum = document.getElementById('pay-sum');
+  const payRight = document.getElementById('pay-right');
+  const payRightHTML = payRight ? payRight.innerHTML : '';
+  const money = (n) => '$' + n.toLocaleString('en-US');
+  function openPay() {
+    const rows = [['Configuration','sum-config'],['Width','sum-width'],['Fabric','sum-fabric'],['Frame','sum-frame'],['shadeplus','sum-shadeplus'],['Mounting','sum-mount'],['Motor side','sum-motor'],['Wind sensor','sum-sensor'],['Installation','sum-install']];
+    let html = '';
+    rows.forEach(([label, id]) => { const v = document.getElementById(id); if (v) html += '<div class="psum-row"><dt>' + label + '</dt><dd>' + v.textContent + '</dd></div>'; });
+    const total = parseInt((document.getElementById('sum-price').textContent || '').replace(/[^0-9]/g, ''), 10) || 0;
+    const deposit = Math.round(total / 2);
+    html += '<div class="psum-row total"><dt>Delivered price</dt><dd>' + money(total) + '</dd></div>';
+    html += '<div class="psum-row"><dt>Balance before delivery</dt><dd>' + money(total - deposit) + '</dd></div>';
+    if (paySum) paySum.innerHTML = html;
+    if (payRight) payRight.innerHTML = payRightHTML;
+    const amt = document.getElementById('pay-deposit-amt');
+    if (amt) amt.textContent = money(deposit);
+    const sub = document.getElementById('pay-submit');
+    if (sub) sub.textContent = 'Pay deposit ' + money(deposit);
+    const form = document.getElementById('pay-form');
+    if (form) form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      payRight.innerHTML = '<div class="pay-confirm"><span class="kicker">Reservation confirmed</span><div class="pc-mark">\u2713</div><h4>You\u2019re reserved.</h4><p class="pay-note">Your ' + money(deposit) + ' deposit is received. A markilux advisor will confirm your selections and production slot by email. Balance of ' + money(total - deposit) + ' is due before last-mile delivery is scheduled.</p></div>';
+    });
+    backdrop.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closePay() { backdrop.classList.remove('open'); document.body.style.overflow = ''; }
+  if (backdrop) {
+    document.querySelectorAll('button').forEach((b) => { if (/^Reserve /.test((b.textContent || '').trim())) b.addEventListener('click', openPay); });
+    const pc = document.getElementById('pay-close');
+    if (pc) pc.addEventListener('click', closePay);
+    backdrop.addEventListener('click', (e) => { if (e.target === backdrop) closePay(); });
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closePay(); });
+  }
+
+  render();
+})();
+</script>
+<script>
+// Review aid: baseline-grid overlay — add ?baselines to the URL, or press B to toggle.
+(() => {
+  if (new URLSearchParams(location.search).has('baselines')) document.body.setAttribute('data-baselines', '');
+  addEventListener('keydown', (e) => {
+    const t = e.target;
+    if (t && (t.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName))) return;
+    if ((e.key === 'b' || e.key === 'B') && !e.metaKey && !e.ctrlKey && !e.altKey) document.body.toggleAttribute('data-baselines');
+  });
+})();
+</script>
+<script>
+document.querySelectorAll('[data-yt]').forEach((el) => {
+  el.addEventListener('click', () => {
+    el.innerHTML = '<iframe style="position:absolute;inset:0;width:100%;height:100%;border:0;" src="https://www.youtube.com/embed/' + el.dataset.yt + '?autoplay=1&rel=0" title="markilux film" allow="autoplay; encrypted-media" allowfullscreen></iframe>';
+  });
+});
+</script>
+</body>
+</html>

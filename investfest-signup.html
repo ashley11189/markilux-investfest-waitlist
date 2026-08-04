@@ -1,0 +1,953 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>markilux — Private Sale List · InvestFest 2026</title>
+  <link rel="stylesheet" href="_ds/modernist-d4da4840-ce89-4fdf-952d-c71f75c0b85a/styles.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <style>
+    :root {
+      --mxred: #E3000B;
+      --mxred-d: #B00009;
+      --ink: var(--color-text);
+      --leading: 28px;
+      --half: 14px;
+      --div: var(--color-divider);
+    }
+
+    :root {
+      --color-accent: #E3000B;
+      --color-accent-600: #CC000A;
+      --color-accent-700: #B00009;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: var(--color-bg);
+      color: var(--ink);
+      text-wrap: pretty;
+    }
+
+    a {
+      color: var(--mxred-d);
+    }
+
+    a:hover {
+      color: var(--mxred);
+    }
+
+    .shell {
+      max-width: 620px;
+      margin: 0 auto;
+      padding: 26px 22px 44px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand img {
+      height: 15px;
+      width: auto;
+      display: block;
+    }
+
+    .brand span {
+      font-family: 'Open Sans', sans-serif;
+      font-size: 10px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: color-mix(in srgb, var(--ink) 55%, transparent);
+      font-weight: 600;
+    }
+
+    .kick {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-family: 'Open Sans', sans-serif;
+      font-size: 11px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--mxred);
+      font-weight: 600;
+      margin: calc(1.4 * var(--leading)) 0 var(--half);
+    }
+
+    .kick::after {
+      content: "";
+      flex: 1;
+      height: 2px;
+      background: var(--div);
+    }
+
+    h1 {
+      font-family: var(--font-heading);
+      font-weight: var(--font-heading-weight);
+      font-size: clamp(34px, 8vw, 50px);
+      line-height: 1.0;
+      letter-spacing: -0.03em;
+      margin: 0 0 var(--half) -0.05em;
+    }
+
+    .lede {
+      font-family: 'Open Sans', sans-serif;
+      font-size: 15.5px;
+      line-height: 1.65;
+      margin: 0 0 var(--leading);
+      color: color-mix(in srgb, var(--ink) 82%, transparent);
+    }
+
+    .hero-media {
+      position: relative;
+      overflow: hidden;
+      margin-bottom: var(--leading);
+    }
+
+    .hero-media img {
+      display: block;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      object-fit: cover;
+    }
+
+    .legend {
+      font-family: 'Open Sans', sans-serif;
+      font-size: 11px;
+      letter-spacing: 0.13em;
+      text-transform: uppercase;
+      color: color-mix(in srgb, var(--ink) 58%, transparent);
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin: calc(1.5 * var(--leading)) 0 var(--leading);
+    }
+
+    .legend::after {
+      content: "";
+      flex: 1;
+      height: 2px;
+      background: var(--div);
+    }
+
+    .field {
+      margin-bottom: var(--leading);
+    }
+
+    .row2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--half);
+    }
+
+    @media (max-width: 540px) {
+      .row2 {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .lbl {
+      display: block;
+      font-family: 'Open Sans', sans-serif;
+      font-size: 11px;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      font-weight: 600;
+      color: color-mix(in srgb, var(--ink) 62%, transparent);
+      margin-bottom: 7px;
+    }
+
+    .lbl i {
+      color: var(--mxred);
+      font-style: normal;
+      margin-left: 3px;
+    }
+
+    .inp {
+      width: 100%;
+      font-family: 'Open Sans', sans-serif;
+      font-size: 16px;
+      color: var(--ink);
+      background: #fff;
+      border: 2px solid var(--div);
+      padding: 13px 14px;
+      appearance: none;
+      transition: border-color .16s ease;
+    }
+
+    .inp:hover {
+      border-color: color-mix(in srgb, var(--mxred) 40%, var(--div));
+    }
+
+    .inp:focus {
+      outline: 2px solid var(--mxred);
+      outline-offset: 2px;
+      border-color: var(--mxred);
+    }
+
+    .inp::placeholder {
+      color: color-mix(in srgb, var(--ink) 38%, transparent);
+    }
+
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .chip {
+      position: relative;
+      display: inline-flex;
+    }
+
+    .chip input {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      cursor: pointer;
+    }
+
+    .chip span {
+      display: inline-flex;
+      align-items: center;
+      min-height: 46px;
+      padding: 0 16px;
+      background: #fff;
+      font-family: var(--font-heading);
+      font-weight: var(--font-heading-weight);
+      font-size: 14.5px;
+      color: var(--ink);
+      border: 2px solid var(--div);
+      transition: border-color .16s ease, background .16s ease, color .16s ease;
+    }
+
+    .chip:hover span {
+      border-color: color-mix(in srgb, var(--mxred) 55%, var(--div));
+    }
+
+    .chip input:checked+span {
+      background: var(--mxred);
+      border-color: var(--mxred);
+      color: #fff;
+    }
+
+    .chip input:focus-visible+span {
+      outline: 2px solid var(--mxred);
+      outline-offset: 2px;
+    }
+
+    .consent {
+      display: flex;
+      gap: 13px;
+      align-items: flex-start;
+      font-family: 'Open Sans', sans-serif;
+      font-size: 14px;
+      line-height: 1.55;
+      color: color-mix(in srgb, var(--ink) 82%, transparent);
+      margin: var(--leading) 0;
+      cursor: pointer;
+    }
+
+    .consent input {
+      margin: 1px 0 0;
+      width: 22px;
+      height: 22px;
+      flex: none;
+      accent-color: var(--mxred);
+    }
+
+    .btn {
+      font-family: var(--font-heading);
+      font-weight: var(--font-heading-weight);
+      font-size: 15px;
+      letter-spacing: 0.03em;
+      text-align: left;
+      padding: 16px 22px;
+      border: 2px solid var(--mxred);
+      background: var(--mxred);
+      color: #fff;
+      cursor: pointer;
+      width: 100%;
+      transition: background .16s ease, border-color .16s ease, transform .12s ease;
+    }
+
+    .btn:hover {
+      background: var(--mxred-d);
+      border-color: var(--mxred-d);
+    }
+
+    .btn:active {
+      transform: translateY(1px);
+    }
+
+    .btn:focus-visible {
+      outline: 2px solid var(--ink);
+      outline-offset: 3px;
+    }
+
+    .btn[disabled] {
+      opacity: 0.5;
+      cursor: progress;
+    }
+
+    .btn.ghost {
+      background: transparent;
+      color: var(--ink);
+      border-color: var(--ink);
+      width: auto;
+      padding: 10px 15px;
+      font-size: 12.5px;
+    }
+
+    .btn.ghost:hover {
+      background: transparent;
+      border-color: var(--mxred);
+      color: var(--mxred-d);
+    }
+
+    .err {
+      font-family: 'Open Sans', sans-serif;
+      font-size: 13px;
+      line-height: 1.5;
+      color: var(--mxred-d);
+      font-weight: 600;
+      border-left: 4px solid var(--mxred);
+      padding: 10px 0 10px 14px;
+      margin-bottom: var(--leading);
+      display: none;
+    }
+
+    .err.on {
+      display: block;
+    }
+
+    .hide {
+      display: none !important;
+    }
+
+    .center {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: flex-start;
+      max-width: 620px;
+      margin: 0 auto;
+      padding: 40px 22px;
+    }
+
+    .center h2 {
+      font-family: var(--font-heading);
+      font-weight: var(--font-heading-weight);
+      font-size: clamp(36px, 9vw, 56px);
+      line-height: 1.0;
+      letter-spacing: -0.03em;
+      margin: var(--leading) 0 var(--half) -0.05em;
+    }
+
+    .center p {
+      font-family: 'Open Sans', sans-serif;
+      font-size: 16px;
+      line-height: 1.65;
+      max-width: 46ch;
+      color: color-mix(in srgb, var(--ink) 82%, transparent);
+      margin: 0 0 var(--leading);
+    }
+
+    .mark {
+      width: 54px;
+      height: 54px;
+      background: var(--mxred);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-heading);
+      font-weight: var(--font-heading-weight);
+      font-size: 28px;
+    }
+
+    .ticket {
+      font-family: 'Open Sans', sans-serif;
+      font-size: 11.5px;
+      letter-spacing: 0.11em;
+      font-weight: 600;
+      color: color-mix(in srgb, var(--ink) 60%, transparent);
+      border: 2px solid var(--div);
+      padding: 11px 15px;
+      display: inline-block;
+    }
+
+    .tap {
+      font-family: 'Open Sans', sans-serif;
+      font-size: 11px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: color-mix(in srgb, var(--ink) 50%, transparent);
+      margin-top: calc(1.4 * var(--leading));
+      font-weight: 600;
+    }
+
+    .foot {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 14px;
+      margin-top: calc(1.6 * var(--leading));
+      padding-top: var(--leading);
+      border-top: 2px solid var(--div);
+      font-family: 'Open Sans', sans-serif;
+      font-size: 10.5px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: color-mix(in srgb, var(--ink) 52%, transparent);
+      font-weight: 600;
+    }
+
+    .foot button {
+      font: inherit;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      background: none;
+      border: 0;
+      color: inherit;
+      cursor: pointer;
+      padding: 6px;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+
+    .foot button:hover {
+      color: var(--mxred-d);
+    }
+
+    .admin {
+      position: fixed;
+      inset: 0;
+      background: rgba(16, 14, 13, 0.66);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 18px;
+      z-index: 60;
+    }
+
+    .admin.on {
+      display: flex;
+    }
+
+    .admin-card {
+      background: var(--color-bg);
+      border: 2px solid var(--ink);
+      width: min(1020px, 100%);
+      max-height: 92vh;
+      display: flex;
+      flex-direction: column;
+      padding: 24px;
+    }
+
+    .admin-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 14px;
+      flex-wrap: wrap;
+      margin-bottom: var(--leading);
+    }
+
+    .admin-head h3 {
+      font-family: var(--font-heading);
+      font-weight: var(--font-heading-weight);
+      font-size: 20px;
+      margin: 0;
+    }
+
+    .admin-head h3 em {
+      font-style: normal;
+      color: color-mix(in srgb, var(--ink) 50%, transparent);
+      font-weight: 400;
+    }
+
+    .tools {
+      display: flex;
+      gap: 9px;
+      flex-wrap: wrap;
+    }
+
+    .tabs {
+      display: flex;
+      gap: 22px;
+      border-bottom: 2px solid var(--div);
+      margin-bottom: var(--leading);
+    }
+
+    .tab {
+      font-family: 'Open Sans', sans-serif;
+      font-size: 11px;
+      letter-spacing: 0.13em;
+      text-transform: uppercase;
+      font-weight: 600;
+      background: none;
+      border: 0;
+      border-bottom: 3px solid transparent;
+      padding: 9px 0;
+      margin-bottom: -2px;
+      color: color-mix(in srgb, var(--ink) 55%, transparent);
+      cursor: pointer;
+    }
+
+    .tab.on {
+      color: var(--ink);
+      border-bottom-color: var(--mxred);
+    }
+
+    .pane {
+      overflow: auto;
+      flex: 1;
+    }
+
+    table.tbl {
+      border-collapse: collapse;
+      width: 100%;
+      font-family: 'Open Sans', sans-serif;
+      font-size: 12.5px;
+    }
+
+    .tbl th {
+      font-size: 10px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: color-mix(in srgb, var(--ink) 55%, transparent);
+      text-align: left;
+      padding: 10px 14px 10px 0;
+      white-space: nowrap;
+      border-bottom: 2px solid var(--ink);
+      position: sticky;
+      top: 0;
+      background: var(--color-bg);
+      font-weight: 600;
+    }
+
+    .tbl td {
+      padding: 11px 14px 11px 0;
+      border-bottom: 2px solid var(--div);
+      vertical-align: top;
+      color: color-mix(in srgb, var(--ink) 84%, transparent);
+    }
+
+    .note {
+      font-family: 'Open Sans', sans-serif;
+      font-size: 13px;
+      line-height: 1.6;
+      color: color-mix(in srgb, var(--ink) 62%, transparent);
+    }
+
+    .pending {
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: var(--mxred);
+      color: #fff;
+      z-index: 50;
+      font-family: 'Open Sans', sans-serif;
+      font-size: 12px;
+      letter-spacing: 0.06em;
+      font-weight: 600;
+      padding: 11px 16px;
+      text-align: center;
+      display: none;
+    }
+
+    .pending.on {
+      display: block;
+    }
+
+    .pill {
+      display: inline-block;
+      font-family: 'Open Sans', sans-serif;
+      font-size: 10px;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+      font-weight: 600;
+      padding: 3px 7px;
+      border: 2px solid var(--div);
+      color: color-mix(in srgb, var(--ink) 55%, transparent);
+      white-space: nowrap;
+    }
+
+    .pill.ok {
+      border-color: var(--ink);
+      color: var(--ink);
+    }
+
+    .pill.wait {
+      border-color: var(--mxred);
+      color: var(--mxred-d);
+    }
+
+    #qrBox {
+      display: flex;
+      justify-content: center;
+      padding: var(--leading) 0;
+    }
+
+    #qrBox img,
+    #qrBox canvas {
+      display: block;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="center hide" id="welcome">
+    <span class="brand"><img src="assets/markilux-wordmark.png" alt="markilux" /><span>USA</span></span>
+    <h2>Private sale.<br />By invitation.</h2>
+    <p>German engineered shading at private sale pricing, released to our list before it opens to the market. Add your
+      name and we will send you first access.</p>
+    <button class="btn" id="start" type="button" style="width:auto; padding:19px 40px;">Start</button>
+    <p class="tap">markilux USA · InvestFest 2026 · Booth</p>
+  </div>
+
+  <div class="shell" id="main">
+    <span class="brand"><img src="assets/markilux-wordmark.png" alt="markilux" /><span>USA</span></span>
+
+    <div class="hero-media" style="margin-top: var(--leading);">
+      <img src="assets/awning-hero.png" alt="A markilux awning shading a residential terrace" />
+    </div>
+
+    <p class="kick">Private sale list · InvestFest 2026</p>
+    <h1>Get first access before it opens.</h1>
+    <p class="lede">We are releasing a limited allocation of markilux systems at private sale pricing. List members hear
+      pricing and dates first, ahead of the public Fall 2026 opening.</p>
+
+    <div class="err" id="err"></div>
+
+    <div id="form">
+      <div class="field">
+        <label class="lbl" for="f-name">Name<i>*</i></label>
+        <input class="inp" id="f-name" type="text" autocomplete="name" placeholder="First and last" />
+      </div>
+      <div class="field">
+        <label class="lbl" for="f-email">Email<i>*</i></label>
+        <input class="inp" id="f-email" type="email" inputmode="email" autocomplete="email" autocapitalize="off"
+          placeholder="you@email.com" />
+      </div>
+      <div class="row2">
+        <div class="field">
+          <label class="lbl" for="f-phone">Phone</label>
+          <input class="inp" id="f-phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="(404) 555 0148" />
+        </div>
+        <div class="field">
+          <label class="lbl" for="f-location">City and state</label>
+          <input class="inp" id="f-location" type="text" placeholder="Atlanta, GA" />
+        </div>
+      </div>
+
+      <p class="legend">Tell us where you fit</p>
+
+      <div class="field">
+        <span class="lbl">You are<i>*</i></span>
+        <div class="chips" id="f-role">
+          <label class="chip"><input type="radio" name="role" value="Property owner" /><span>Property
+              owner</span></label>
+          <label class="chip"><input type="radio" name="role" value="Contractor or builder" /><span>Contractor or
+              builder</span></label>
+          <label class="chip"><input type="radio" name="role" value="Designer or architect" /><span>Designer or
+              architect</span></label>
+        </div>
+      </div>
+
+      <div class="field">
+        <span class="lbl">Would you be interested in</span>
+        <div class="chips" id="f-interest">
+          <label class="chip"><input type="checkbox" value="markilux 1600" /><span>The markilux 1600</span></label>
+          <label class="chip"><input type="checkbox" value="Other product lines" /><span>Our other product
+              lines</span></label>
+        </div>
+      </div>
+
+      <div class="field">
+        <span class="lbl">Timeline</span>
+        <div class="chips" id="f-timeline">
+          <label class="chip"><input type="radio" name="timeline" value="Ready now" /><span>Ready now</span></label>
+          <label class="chip"><input type="radio" name="timeline" value="Next 90 days" /><span>Next 90
+              days</span></label>
+          <label class="chip"><input type="radio" name="timeline" value="Later this year" /><span>Later this
+              year</span></label>
+        </div>
+      </div>
+
+      <div class="field">
+        <label class="lbl" for="f-notes">Notes</label>
+        <input class="inp" id="f-notes" type="text" placeholder="Optional. What you talked about at the booth." />
+      </div>
+
+      <label class="consent">
+        <input type="checkbox" id="f-consent" />
+        <span>Send me private sale pricing and dates by email. I can unsubscribe any time.</span>
+      </label>
+
+      <button class="btn" id="submit" type="button">Join the list</button>
+    </div>
+
+    <div class="foot">
+      <span>markilux USA · InvestFest 2026</span>
+      <button type="button" id="adminOpen">Organizer</button>
+    </div>
+  </div>
+
+  <div class="center hide" id="done">
+    <span class="brand"><img src="assets/markilux-wordmark.png" alt="markilux" /><span>USA</span></span>
+    <div class="mark" style="margin-top: var(--leading);">✓</div>
+    <h2 id="doneName">You are on the list.</h2>
+    <p>Pricing, allocation, and the opening date go out by email before the sale is announced. Watch for a message from
+      markilux USA.</p>
+    <div class="ticket" id="ticket"></div>
+    <p class="tap" id="tapNext">Tap anywhere for the next person</p>
+  </div>
+
+  <div class="pending" id="pending"></div>
+
+  <div class="admin" id="admin">
+    <div class="admin-card">
+      <div class="admin-head">
+        <h3>Private sale list <em id="count"></em></h3>
+        <div class="tools">
+          <button class="btn ghost" id="kioskBtn" type="button">Kiosk mode off</button>
+          <button class="btn ghost" id="csvBtn" type="button">Download CSV</button>
+          <button class="btn ghost" id="copyBtn" type="button">Copy</button>
+          <button class="btn ghost" id="refreshBtn" type="button">Refresh</button>
+          <button class="btn ghost" id="adminClose" type="button">Close</button>
+        </div>
+      </div>
+      <div class="tabs">
+        <button class="tab on" data-pane="list" type="button">Sign ups</button>
+        <button class="tab" data-pane="qr" type="button">QR code</button>
+        <button class="tab" data-pane="cfg" type="button">Backend</button>
+      </div>
+      <div class="pane" id="paneList"></div>
+      <div class="pane hide" id="paneQr">
+        <p class="note">Paste this page's share link, then print or display the code at the booth so people can sign up
+          on their own phone.</p>
+        <div class="field" style="margin-top: var(--half);">
+          <input class="inp" id="f-url" type="url" placeholder="https://..." />
+        </div>
+        <button class="btn ghost" id="makeQr" type="button">Make QR code</button>
+        <div id="qrBox"></div>
+      </div>
+      <div class="pane hide" id="paneCfg">
+        <p class="note">Paste the Google Apps Script Web App URL. Every sign up posts a row to your Sheet in real time.
+          If the connection drops, sign ups queue on this device and sync automatically.</p>
+        <div class="field" style="margin-top: var(--half);">
+          <label class="lbl" for="f-endpoint">Web App URL</label>
+          <input class="inp" id="f-endpoint" type="url" placeholder="https://script.google.com/macros/s/..../exec" />
+        </div>
+        <div class="tools">
+          <button class="btn ghost" id="saveCfg" type="button">Save</button>
+          <button class="btn ghost" id="testCfg" type="button">Send test row</button>
+          <button class="btn ghost" id="syncNow" type="button">Sync pending now</button>
+        </div>
+        <p class="note" id="cfgMsg" style="margin-top: var(--leading);"></p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (() => {
+      const ORGANIZER_CODE = 'MKX-2026';
+      const EVENT_NAME = 'InvestFest 2026';
+      const KEY = 'mkx.investfest.signups';
+      const EKEY = 'mkx.investfest.endpoint';
+
+      const $ = (id) => document.getElementById(id);
+      const welcome = $('welcome'), main = $('main'), done = $('done'), err = $('err'), admin = $('admin');
+      let kiosk = false, rows = [];
+      const endpoint = () => { try { return localStorage.getItem(EKEY) || ''; } catch (e) { return ''; } };
+
+      const load = () => { try { return JSON.parse(localStorage.getItem(KEY) || '[]'); } catch (e) { return []; } };
+      const save = (list) => { try { localStorage.setItem(KEY, JSON.stringify(list)); return true; } catch (e) { return false; } };
+
+      function updatePending() {
+        const n = load().filter((r) => !r.synced).length;
+        const bar = $('pending');
+        bar.textContent = n + ' sign up' + (n > 1 ? 's' : '') + ' waiting to sync. Keep this tab open.';
+        bar.classList.toggle('on', n > 0);
+        return n;
+      }
+      async function post(entry) {
+        const url = endpoint();
+        if (!url) return false;
+        try {
+          const res = await fetch(url, { method: 'POST', body: JSON.stringify(entry), redirect: 'follow' });
+          return res.ok;
+        } catch (e) {
+          try { await fetch(url, { method: 'POST', mode: 'no-cors', body: JSON.stringify(entry) }); } catch (e2) { }
+          return false;
+        }
+      }
+      async function flush() {
+        const list = load();
+        const waiting = list.filter((r) => !r.synced);
+        if (!waiting.length || !endpoint()) { updatePending(); return 0; }
+        let sent = 0;
+        for (const r of waiting) { if (await post(r)) { r.synced = true; sent++; } }
+        save(list);
+        updatePending();
+        return sent;
+      }
+      setInterval(flush, 20000);
+      window.addEventListener('online', flush);
+
+      const showError = (m) => { err.textContent = m; err.classList.add('on'); };
+      const clearError = () => err.classList.remove('on');
+      const val = (id) => ($(id) ? $(id).value.trim() : '');
+      const picked = (sel) => [...document.querySelectorAll(sel)].filter((i) => i.checked).map((i) => i.value);
+      const esc = (s) => String(s).replace(/[<>&]/g, (m) => ({ '<': '&lt;', '>': '&gt;', '&': '&amp;' }[m]));
+
+      function resetForm() {
+        ['f-name', 'f-email', 'f-phone', 'f-location', 'f-notes'].forEach((id) => { $(id).value = ''; });
+        document.querySelectorAll('#form input[type=radio], #form input[type=checkbox]').forEach((i) => { i.checked = false; });
+        clearError();
+      }
+      function goto(screen) {
+        [welcome, main, done].forEach((s) => s.classList.add('hide'));
+        screen.classList.remove('hide');
+        window.scrollTo(0, 0);
+      }
+
+      $('start').addEventListener('click', () => { resetForm(); goto(main); });
+
+      $('submit').addEventListener('click', function () {
+        const name = val('f-name'), email = val('f-email'), role = picked('#f-role input');
+        if (!name) return showError('Add a name to continue.');
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) return showError('Check the email address.');
+        if (!role.length) return showError('Pick the one that fits best.');
+        if (!$('f-consent').checked) return showError('Check the box so we can send the private sale details.');
+        clearError();
+        this.disabled = true; this.textContent = 'Saving';
+
+        const now = new Date();
+        const id = now.toISOString().replace(/[:.]/g, '-') + '-' + Math.random().toString(36).slice(2, 7);
+        const entry = {
+          id, submitted: now.toISOString(), event: EVENT_NAME, name, email,
+          phone: val('f-phone'), location: val('f-location'), role: role[0],
+          interests: picked('#f-interest input').join('; '), timeline: picked('#f-timeline input')[0] || '', notes: val('f-notes')
+        };
+
+        entry.synced = false;
+        const list = load(); list.push(entry); save(list);
+        post(entry).then((ok) => { if (ok) { const l = load(); const t = l.find((x) => x.id === entry.id); if (t) { t.synced = true; save(l); } } updatePending(); });
+
+        $('doneName').textContent = name.split(' ')[0] + ', you are on the list.';
+        $('ticket').textContent = 'CONFIRMATION ' + id.slice(0, 10).toUpperCase();
+        this.disabled = false; this.textContent = 'Join the list';
+        goto(done);
+        if (kiosk) setTimeout(() => { if (!done.classList.contains('hide')) { resetForm(); goto(welcome); } }, 7000);
+      });
+
+      done.addEventListener('click', () => { resetForm(); goto(kiosk ? welcome : main); });
+
+      const COLS = [['submitted', 'Signed up'], ['name', 'Name'], ['email', 'Email'], ['phone', 'Phone'],
+      ['role', 'Role'], ['interests', 'Interested in'], ['timeline', 'Timeline'], ['location', 'Location'],
+      ['notes', 'Notes'], ['event', 'Event']];
+
+      function render() {
+        rows = load().sort((a, b) => (a.submitted < b.submitted ? 1 : -1));
+        $('count').textContent = rows.length ? '(' + rows.length + ')' : '';
+        if (!rows.length) { $('paneList').innerHTML = '<p class="note">No sign ups yet. They will show up here as people join.</p>'; return; }
+        let h = '<table class="tbl"><thead><tr><th>Sync</th>' + COLS.map((c) => '<th>' + c[1] + '</th>').join('') + '</tr></thead><tbody>';
+        rows.forEach((r) => {
+          h += '<tr><td><span class="pill ' + (r.synced ? 'ok">Sent' : 'wait">Queued') + '</span></td>' + COLS.map((c) => {
+            let v = r[c[0]] || '';
+            if (c[0] === 'submitted' && v) { const d = new Date(v); v = d.toLocaleDateString() + ' ' + d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }); }
+            return '<td>' + esc(v) + '</td>';
+          }).join('') + '</tr>';
+        });
+        $('paneList').innerHTML = h + '</tbody></table>';
+      }
+
+      $('adminOpen').addEventListener('click', () => {
+        const code = window.prompt('Organizer code');
+        if (code === null) return;
+        if (code.trim().toUpperCase() !== ORGANIZER_CODE) return showError('That code is not right.');
+        clearError(); admin.classList.add('on'); $('f-endpoint').value = endpoint(); render(); updatePending();
+      });
+      $('adminClose').addEventListener('click', () => admin.classList.remove('on'));
+      $('refreshBtn').addEventListener('click', render);
+
+      $('kioskBtn').addEventListener('click', function () {
+        kiosk = !kiosk;
+        this.textContent = kiosk ? 'Kiosk mode on' : 'Kiosk mode off';
+        document.querySelector('.foot').style.display = kiosk ? 'none' : '';
+        admin.classList.remove('on'); resetForm(); goto(kiosk ? welcome : main);
+      });
+
+      document.querySelectorAll('.tab').forEach((t) => t.addEventListener('click', () => {
+        document.querySelectorAll('.tab').forEach((x) => x.classList.remove('on'));
+        t.classList.add('on');
+        $('paneList').classList.toggle('hide', t.dataset.pane !== 'list');
+        $('paneQr').classList.toggle('hide', t.dataset.pane !== 'qr');
+        $('paneCfg').classList.toggle('hide', t.dataset.pane !== 'cfg');
+      }));
+
+      const toCsv = () => [COLS.map((c) => c[1]).join(',')]
+        .concat(rows.map((r) => COLS.map((c) => '"' + String(r[c[0]] || '').replace(/"/g, '""') + '"').join(','))).join('\n');
+
+      $('csvBtn').addEventListener('click', () => {
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(new Blob([toCsv()], { type: 'text/csv' }));
+        a.download = 'markilux-investfest-list.csv'; a.click(); URL.revokeObjectURL(a.href);
+      });
+      $('copyBtn').addEventListener('click', function () {
+        const b = this;
+        navigator.clipboard.writeText(toCsv()).then(() => { b.textContent = 'Copied'; setTimeout(() => { b.textContent = 'Copy'; }, 1600); });
+      });
+      $('saveCfg').addEventListener('click', () => {
+        const u = $('f-endpoint').value.trim();
+        try { localStorage.setItem(EKEY, u); } catch (e) { }
+        $('cfgMsg').textContent = u ? 'Saved. Sign ups will post to your Sheet.' : 'Cleared. Sign ups save on this device only.';
+        flush();
+      });
+      $('testCfg').addEventListener('click', async function () {
+        if (!endpoint()) { $('cfgMsg').textContent = 'Save a Web App URL first.'; return; }
+        this.disabled = true; $('cfgMsg').textContent = 'Sending test row.';
+        const ok = await post({
+          id: 'test-' + Date.now(), submitted: new Date().toISOString(), event: EVENT_NAME,
+          name: 'Test row', email: 'test@markilux.us', phone: '', location: '', role: '', interests: '', timeline: '', notes: 'Connection test'
+        });
+        $('cfgMsg').textContent = ok ? 'Test row sent. Check the Sheet.' : 'Could not confirm. Check the Sheet, and that the deployment is set to Anyone.';
+        this.disabled = false;
+      });
+      $('syncNow').addEventListener('click', async function () {
+        this.disabled = true;
+        const n = await flush();
+        $('cfgMsg').textContent = n ? n + ' sign up' + (n > 1 ? 's' : '') + ' synced.' : 'Nothing pending to sync.';
+        render(); this.disabled = false;
+      });
+
+      $('makeQr').addEventListener('click', () => {
+        const box = $('qrBox'), url = $('f-url').value.trim();
+        box.innerHTML = '';
+        if (!url) { box.innerHTML = '<p class="note">Paste the link first.</p>'; return; }
+        if (typeof QRCode === 'undefined') { box.innerHTML = '<p class="note">The code generator did not load. Any free QR site will work with the same link.</p>'; return; }
+        new QRCode(box, { text: url, width: 260, height: 260, colorDark: '#201e1d', colorLight: '#F3F2F2' });
+      });
+      updatePending();
+    })();
+  </script>
+</body>
+
+</html>
