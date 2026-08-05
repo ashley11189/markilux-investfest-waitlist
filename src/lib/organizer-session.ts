@@ -21,8 +21,22 @@ import { safeEqual } from "@/lib/request";
 export const ORGANIZER_COOKIE = "mkx_organizer";
 const TTL_SECONDS = 60 * 60 * 12; // one long event day
 
+/**
+ * The signing key binds the session secret to the current passcode.
+ *
+ * Without the passcode in the key, rotating ORGANIZER_PASSCODE revokes
+ * nothing: every cookie already issued stays valid for its full 12 hours.
+ * That matters because the documented end-of-event step is "rotate the
+ * passcode", and because the booth iPad is a shared device in a public venue —
+ * anyone who copied the cookie would keep reading the lead list straight
+ * through the rotation. Deriving the key here makes a rotation a mass sign-out.
+ */
+function signingKey(): string {
+  return `${serverEnv.organizerSessionSecret}:${serverEnv.organizerPasscode}`;
+}
+
 function sign(payload: string): string {
-  return createHmac("sha256", serverEnv.organizerSessionSecret)
+  return createHmac("sha256", signingKey())
     .update(payload)
     .digest("base64url");
 }
@@ -32,8 +46,14 @@ function token(expiresAt: number): string {
   return `${payload}.${sign(payload)}`;
 }
 
+/** Longest passcode worth comparing; beyond this it is not a typo, it is a probe. */
+const MAX_PASSCODE_LENGTH = 256;
+
 export function verifyPasscode(candidate: string): boolean {
-  return safeEqual(candidate.trim(), serverEnv.organizerPasscode);
+  return safeEqual(
+    candidate.trim().slice(0, MAX_PASSCODE_LENGTH),
+    serverEnv.organizerPasscode,
+  );
 }
 
 export async function grantOrganizerSession(): Promise<void> {

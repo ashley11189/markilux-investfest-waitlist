@@ -13,8 +13,27 @@ import { clientIp, hashIp, confirmationCode } from "@/lib/request";
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
-/** Postgres unique-violation. Here it means "already on the list". */
+/** Postgres unique-violation. The table has TWO unique constraints. */
 const UNIQUE_VIOLATION = "23505";
+
+/**
+ * Which constraint a 23505 came from.
+ *
+ * signups has a unique index on (event_id, lower(email)) AND a global unique
+ * on confirmation. Treating every 23505 as "already on the list" loses a real
+ * signup whenever a confirmation code happens to collide: the visitor is told
+ * they are already registered, no row is written, and nobody is notified.
+ */
+function isEmailCollision(error: { message?: string; details?: string }): boolean {
+  const text = `${error.details ?? ""} ${error.message ?? ""}`;
+  if (text.includes("signups_confirmation_key") || /\(confirmation\)/.test(text)) {
+    return false;
+  }
+  return true;
+}
+
+/** How many fresh codes to try before giving up on a collision. */
+const CONFIRMATION_ATTEMPTS = 5;
 
 /**
  * Per-IP rate limit.
@@ -62,7 +81,13 @@ export async function POST(request: Request) {
 
   // ── 3. Spam gates ─────────────────────────────────────────────────────────
   // Honeypot: a hidden field a person can't see and won't fill.
-  if (data.company !== "") {
+  if (data.mkxRef !== "") {
+    // Logged, because this path silently discards a signup. If autofill or an
+    // accessibility tool ever starts tripping it again, this is the only way
+    // anyone finds out — the visitor is shown a success either way.
+    console.warn("[signup] honeypot tripped; submission discarded", {
+      email: data.email,
+    });
     // Answer as though it worked. A bot that learns it was caught adapts.
     return NextResponse.json({
       ok: true,
@@ -98,7 +123,15 @@ export async function POST(request: Request) {
   }
 
   // ── 5. Rate limit by hashed IP ────────────────────────────────────────────
-  const ipHash = hashIp(clientIp(request.headers));
+  // A blank SIGNUP_IP_SALT makes hashIp throw. That is a deploy mistake, but
+  // it must not take every signup at the booth down with it — the limiter is
+  // already allowed to fail open a few lines below, so it fails open here too.
+  let ipHash: string | null = null;
+  try {
+    ipHash = hashIp(clientIp(request.headers));
+  } catch (error) {
+    console.error("[signup] could not hash client IP; rate limiting is off", error);
+  }
   if (ipHash) {
     const { data: exceeded, error: rateError } = await db.rpc(
       "signup_rate_exceeded",
@@ -122,44 +155,60 @@ export async function POST(request: Request) {
   }
 
   // ── 6. Insert ─────────────────────────────────────────────────────────────
-  const confirmation = confirmationCode();
   const source = request.headers.get("x-mkx-kiosk") === "1" ? "kiosk" : "web";
-  const { error: insertError } = await db.from("signups").insert({
-    event_id: event.id,
-    name: data.name,
-    email: data.email,
-    phone: data.phone,
-    location: data.location,
-    notes: data.notes,
-    role: data.role,
-    timeline: data.timeline,
-    interests: data.interests,
-    consent: true,
-    ip_hash: ipHash,
-    user_agent: request.headers.get("user-agent")?.slice(0, 500) ?? null,
-    source,
-    confirmation,
-  });
+  const userAgent = request.headers.get("user-agent")?.slice(0, 500) ?? null;
+
+  let confirmation = confirmationCode();
+  let insertError: { code?: string; message?: string; details?: string } | null =
+    null;
+
+  // Retry only a confirmation collision. The code space is large but shared
+  // across every event forever, so a clash is rare rather than impossible —
+  // and a fresh code is all it takes to recover.
+  for (let attempt = 0; attempt < CONFIRMATION_ATTEMPTS; attempt += 1) {
+    const { error } = await db.from("signups").insert({
+      event_id: event.id,
+      name: data.name,
+      email: data.email,
+      phone: data.phone,
+      location: data.location,
+      notes: data.notes,
+      role: data.role,
+      timeline: data.timeline,
+      interests: data.interests,
+      consent: true,
+      ip_hash: ipHash,
+      user_agent: userAgent,
+      source,
+      confirmation,
+    });
+
+    insertError = error;
+    if (!error) break;
+    if (error.code === UNIQUE_VIOLATION && !isEmailCollision(error)) {
+      console.warn("[signup] confirmation collision, retrying", { attempt });
+      confirmation = confirmationCode();
+      continue;
+    }
+    break;
+  }
 
   if (insertError) {
     // The unique index on (event_id, lower(email)) is what actually prevents
     // duplicates — checking first would race. Treat it as a friendly success.
-    if (insertError.code === UNIQUE_VIOLATION) {
-      // eq, not ilike: the schema lower-cases every email on the way in, and
-      // an underscore in an address is a single-character LIKE wildcard that
-      // could otherwise match somebody else's row.
-      const { data: existing } = await db
-        .from("signups")
-        .select("confirmation")
-        .eq("event_id", event.id)
-        .eq("email", data.email)
-        .maybeSingle();
-
+    if (insertError.code === UNIQUE_VIOLATION && isEmailCollision(insertError)) {
+      // Deliberately NOT returning the stored confirmation code.
+      //
+      // This endpoint is unauthenticated, so echoing it back turns a signup
+      // into an oracle: anyone can POST a competitor's address and learn both
+      // that they are on the private-sale list and what their code is. The
+      // duplicate flag alone is enough for the screen the visitor sees, and
+      // a genuine returning visitor already had their code emailed to them.
       return NextResponse.json({
         ok: true,
         duplicate: true,
         name: data.name,
-        confirmation: existing?.confirmation ?? null,
+        confirmation: null,
       });
     }
 

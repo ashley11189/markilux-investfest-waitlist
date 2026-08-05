@@ -16,6 +16,15 @@ const TOKEN_URL = "https://oauth2.googleapis.com/token";
 const SEND_URL =
   "https://gmail.googleapis.com/gmail/v1/users/me/messages/send";
 
+/**
+ * Timeouts must sum to less than the route's maxDuration in vercel.json
+ * (10s), including the database work that already happened before after()
+ * runs. If they exceed it the platform kills the function mid-send and the
+ * notification vanishes with no error logged anywhere.
+ */
+const TOKEN_TIMEOUT_MS = 3000;
+const SEND_TIMEOUT_MS = 4000;
+
 /** Cached across invocations on a warm function; refreshed a minute early. */
 let cachedToken: { value: string; expiresAt: number } | null = null;
 
@@ -33,7 +42,7 @@ async function accessToken(config: GmailConfig): Promise<string> {
       refresh_token: config.refreshToken,
       grant_type: "refresh_token",
     }),
-    signal: AbortSignal.timeout(8000),
+    signal: AbortSignal.timeout(TOKEN_TIMEOUT_MS),
   });
 
   const body = (await response.json()) as {
@@ -63,17 +72,39 @@ const base64url = (input: string) =>
     .replace(/\//g, "_")
     .replace(/=+$/, "");
 
+const encodedWord = (value: string) =>
+  `=?UTF-8?B?${Buffer.from(value, "utf8").toString("base64")}?=`;
+
 /**
- * RFC 2047 for anything outside ASCII. A name like "José" in a Subject or a
- * display name is otherwise mangled by the receiving client.
+ * RFC 2047 for anything outside printable ASCII. A name like "José" in a
+ * Subject is otherwise mangled by the receiving client.
+ *
+ * Encoding anything non-printable is also what stops CR/LF header injection:
+ * a name containing a newline fails this test and is base64'd. Do not widen
+ * the accepted range without re-checking that.
  */
 function encodeHeader(value: string): string {
   if (/^[\x20-\x7E]*$/.test(value)) return value;
-  return `=?UTF-8?B?${Buffer.from(value, "utf8").toString("base64")}?=`;
+  return encodedWord(value);
+}
+
+/**
+ * A display name in an address header.
+ *
+ * Stricter than encodeHeader on purpose. `<`, `>`, `,`, `;`, `:` and `"` are
+ * all printable ASCII, so encodeHeader passes them through — and a visitor
+ * calling themselves `Bob <ops@attacker.tld>, X` then turns
+ *   Reply-To: <name> <visitor@example.com>
+ * into a two-recipient header. Staff hitting Reply would send the private-sale
+ * details, and the quoted lead, to the attacker. Anything outside a plain
+ * name alphabet is encoded, which makes it a single opaque token.
+ */
+function phrase(value: string): string {
+  return /^[A-Za-z0-9 .'\-()]*$/.test(value) ? value : encodedWord(value);
 }
 
 function address(name: string, email: string): string {
-  return `${encodeHeader(name)} <${email}>`;
+  return `${phrase(name)} <${email}>`;
 }
 
 export interface GmailMessage {
@@ -137,7 +168,7 @@ export async function sendViaGmail(message: GmailMessage): Promise<void> {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({ raw: base64url(buildMime(config, message)) }),
-    signal: AbortSignal.timeout(10000),
+    signal: AbortSignal.timeout(SEND_TIMEOUT_MS),
   });
 
   if (!response.ok) {

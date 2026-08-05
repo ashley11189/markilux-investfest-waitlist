@@ -6,7 +6,6 @@ import {
   hasOrganizerSession,
 } from "@/lib/organizer-session";
 import { clientIp, hashIp } from "@/lib/request";
-import { supabaseAdmin } from "@/lib/supabase/admin";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -49,7 +48,15 @@ export async function POST(request: Request) {
     );
   }
 
-  const key = hashIp(clientIp(request.headers)) ?? "unknown";
+  // A blank SIGNUP_IP_SALT makes hashIp throw; fall back to a shared bucket
+  // rather than 500-ing the only way into the back office.
+  let key = "unknown";
+  try {
+    key = hashIp(clientIp(request.headers)) ?? "unknown";
+  } catch (error) {
+    console.error("[organizer] could not hash client IP", error);
+  }
+
   if (tooManyAttempts(key)) {
     return NextResponse.json(
       { ok: false, message: "Too many attempts. Wait a few minutes." },
@@ -66,9 +73,10 @@ export async function POST(request: Request) {
 
   await grantOrganizerSession();
 
-  // Warm the connection so the first leads fetch feels instant at the booth.
-  void supabaseAdmin();
-
+  // Nothing is warmed here on purpose. supabaseAdmin() is synchronous and
+  // opens no connection, but it does read the service-role env vars — so a
+  // misconfigured deploy threw away this response, cookie and all, and the
+  // browser reported it as "could not reach the server".
   return NextResponse.json({ ok: true });
 }
 

@@ -50,12 +50,15 @@ export const signupSchema = z.object({
     .min(1, "Add a name to continue.")
     .max(120, "That name is too long."),
 
+  // toLowerCase BEFORE max: lower-casing can lengthen a string (U+0130 becomes
+  // two code points), so checking the limit first can emit a value that the
+  // database's own length constraint then rejects with a 500.
   email: z
     .string({ message: "Check the email address." })
     .trim()
+    .toLowerCase()
     .min(1, "Check the email address.")
     .max(254, "That email address is too long.")
-    .toLowerCase()
     .regex(/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/, "Check the email address."),
 
   phone: optionalText(40),
@@ -64,7 +67,13 @@ export const signupSchema = z.object({
 
   role: z.enum(ROLES, { message: "Pick the one that fits best." }),
 
-  interests: z.array(z.enum(INTERESTS)).max(INTERESTS.length).default([]),
+  // Deduplicated: the checkbox UI cannot produce a repeat, but a crafted
+  // payload can, and it would render twice in the email and the lead list.
+  interests: z
+    .array(z.enum(INTERESTS))
+    .max(INTERESTS.length)
+    .default([])
+    .transform((values) => [...new Set(values)]),
 
   timeline: z.enum(TIMELINES).nullable().default(null),
 
@@ -73,13 +82,21 @@ export const signupSchema = z.object({
   }),
 
   /**
-   * Bot trap. A real browser never fills this — it is off-screen and unlabeled.
+   * Bot trap. A real person never fills this — it is off-screen.
+   *
+   * NOT named "company". Password managers and iOS/Chrome contact autofill map
+   * a field called company/organization to the saved employer and write to it
+   * regardless of autocomplete="off" — so a real visitor with an employer on
+   * their contact card tripped the trap and had their signup silently binned.
+   * Contractors and architects, the most valuable leads here, are the most
+   * likely to have one. The name has to be meaningless to autofill heuristics.
    *
    * Deliberately unconstrained: rejecting a filled honeypot here would return a
    * 400 naming the field, which tells a bot exactly which input to leave alone.
    * The API route accepts it and answers with a plausible success instead.
    */
-  company: z.string().max(200).optional().default(""),
+  // Trimmed: a stray space would otherwise read as a bot.
+  mkxRef: z.string().max(200).trim().optional().default(""),
 
   /** Milliseconds the form was on screen before submit. Humans take a while. */
   elapsedMs: z.number().int().nonnegative().optional(),

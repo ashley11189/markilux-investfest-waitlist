@@ -110,7 +110,13 @@ h3[tabindex="-1"]:focus-visible {
   min-height: 100svh;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  /* `safe` matters: plain `center` splits overflow across BOTH ends, and the
+     part above the container start cannot be scrolled to — scrolling begins at
+     zero. In landscape, or at 200% text zoom, that silently clipped the
+     wordmark, the tick, and the first line of the confirmation heading. `safe`
+     falls back to flex-start once the content no longer fits. */
+  justify-content: center; /* fallback for engines without `safe` */
+  justify-content: safe center;
   align-items: flex-start;
   max-width: 620px;
   margin: 0 auto;
@@ -593,6 +599,20 @@ h3[tabindex="-1"]:focus-visible {
 .pane {
   overflow: auto;
   flex: 1;
+}
+
+/* The lead table scrolls inside its own box rather than with the page, which
+   is what makes the sticky header actually stick: `position: sticky` resolves
+   against the nearest scrolling ancestor, and without a height limit .pane
+   grows to fit the table and never scrolls vertically. Keyboard-focusable so
+   the horizontal scroll is reachable without a pointer. */
+.pane-scroll {
+  max-height: min(70svh, 760px);
+}
+
+.pane-scroll:focus-visible {
+  outline: 2px solid var(--mxred);
+  outline-offset: 2px;
 }
 
 table.tbl {

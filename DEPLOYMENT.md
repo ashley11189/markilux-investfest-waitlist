@@ -257,7 +257,10 @@ timestamp in `consent` and `consent_at`.
 ## After the event
 
 1. Export the leads.
-2. Rotate `ORGANIZER_PASSCODE`.
+2. Rotate `ORGANIZER_PASSCODE`. The session cookie is signed with a key derived
+   from the passcode, so changing it signs every device out immediately —
+   including a booth iPad someone walked off with. Redeploy for it to take
+   effect.
 3. Consider rotating `SUPABASE_SERVICE_ROLE_KEY` if it was ever handled loosely.
 4. If the page stays up between shows, point `NEXT_PUBLIC_EVENT_SLUG` at the
    next event so stray signups don't land in the InvestFest list.

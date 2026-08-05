@@ -39,11 +39,13 @@ function smtpTransport(): Transporter | null {
     port: config.port,
     secure: config.secure,
     auth: { user: config.user, pass: config.password },
-    // A conference network is the wrong place to hang a request on a slow
-    // handshake; give up quickly and let the signup finish regardless.
-    connectionTimeout: 5000,
-    greetingTimeout: 5000,
-    socketTimeout: 8000,
+    // These must sum to less than the route's maxDuration in vercel.json
+    // (10s) or the platform kills the function mid-send and the notification
+    // disappears without an error. A conference network is also the wrong
+    // place to hang on a slow handshake.
+    connectionTimeout: 2500,
+    greetingTimeout: 2500,
+    socketTimeout: 4000,
   });
 
   return cached;
@@ -65,8 +67,11 @@ async function deliver(message: GmailMessage): Promise<void> {
   await mailer.sendMail({
     from: config.from,
     to: message.to,
+    // Object form, not a hand-built "Name <addr>" string: nodemailer escapes
+    // the display name itself. Interpolating it let a visitor called
+    // `Bob <ops@attacker.tld>, X` add themselves as a second reply recipient.
     replyTo: message.replyToEmail
-      ? `${message.replyToName ?? ""} <${message.replyToEmail}>`.trim()
+      ? { name: message.replyToName ?? "", address: message.replyToEmail }
       : undefined,
     subject: message.subject,
     text: message.text,

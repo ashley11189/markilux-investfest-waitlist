@@ -25,6 +25,22 @@ const EXPORT_COLUMNS: [keyof LeadRow, string][] = [
   ["confirmation", "Confirmation"],
 ];
 
+/**
+ * One CSV cell.
+ *
+ * Every value here was typed by a member of the public, and this file gets
+ * opened in Excel or Sheets. A cell starting with = + - @ (or a tab/CR, which
+ * those apps strip before parsing) is executed as a formula, so a visitor
+ * could put =HYPERLINK(...) in the name box and produce a convincing phishing
+ * link inside our own lead list. Prefixing with an apostrophe is the standard
+ * defence: spreadsheets treat the rest as literal text and hide the marker.
+ */
+function csvCell(value: string): string {
+  const risky = /^[=+\-@\t\r]/.test(value);
+  const escaped = (risky ? `'${value}` : value).replace(/"/g, '""');
+  return `"${escaped}"`;
+}
+
 export function BackOffice() {
   const [authenticated, setAuthenticated] = useState<boolean | null>(null);
   const [passcode, setPasscode] = useState("");
@@ -48,6 +64,7 @@ export function BackOffice() {
       });
       if (response.status === 401) {
         setAuthenticated(false);
+        setLeads([]);
         return;
       }
       const body = (await response.json()) as {
@@ -123,31 +140,68 @@ export function BackOffice() {
     setLeads([]);
   }
 
-  /** Optimistic: the row updates immediately and rolls back if the save fails. */
+  /**
+   * Optimistic: the row updates immediately and rolls back if the save fails.
+   *
+   * Both the update and the rollback touch only the row being edited. Restoring
+   * a whole snapshot of the list would silently discard any other edit that
+   * happened while this request was in flight — easy to do at a booth where
+   * someone is working down the list quickly.
+   */
   const saveLead = useCallback(
     async (id: string, patch: { status?: LeadStatus; staff_notes?: string | null }) => {
-      const previous = leads;
-      setLeads((rows) =>
-        rows.map((row) => (row.id === id ? { ...row, ...patch } : row)),
-      );
+      // Snapshot ONLY the fields this call is changing. Restoring both would
+      // revert a different field that saved successfully moments earlier —
+      // leaving the screen asserting a state the database disagrees with.
+      const before = leads.find((row) => row.id === id);
+      const restore: Partial<LeadRow> = {};
+      if (before) {
+        for (const key of Object.keys(patch) as (keyof typeof patch)[]) {
+          restore[key] = before[key] as never;
+        }
+      }
+
+      const applyToRow = (values: Partial<LeadRow>) =>
+        setLeads((rows) =>
+          rows.map((row) => (row.id === id ? { ...row, ...values } : row)),
+        );
+
+      applyToRow(patch);
+
       try {
         const response = await fetch(`/api/organizer/leads/${id}`, {
           method: "PATCH",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(patch),
         });
+
+        // An expired session must send staff back to the passcode screen
+        // rather than silently failing every edit for the rest of the day.
+        if (response.status === 401) {
+          setAuthenticated(false);
+          setLeads([]);
+          setMessage("Your session expired. Sign in again.");
+          return;
+        }
+
         const body = (await response.json()) as {
           ok?: boolean;
           message?: string;
+          lead?: Pick<LeadRow, "status" | "staff_notes" | "updated_at">;
         };
+
         if (!body.ok) {
-          setLeads(previous);
+          if (before) applyToRow(restore);
           setMessage(body.message ?? "Could not save that change.");
-        } else {
-          setMessage(null);
+          return;
         }
+
+        // Trust what the server stored over what we guessed, so a Refresh
+        // that raced this request cannot leave the row showing a stale value.
+        if (body.lead) applyToRow(body.lead);
+        setMessage(null);
       } catch {
-        setLeads(previous);
+        if (before) applyToRow(restore);
         setMessage("Could not save that change. Check the connection.");
       }
     },
@@ -189,22 +243,32 @@ export function BackOffice() {
           EXPORT_COLUMNS.map(([key]) => {
             const raw = lead[key];
             const value = Array.isArray(raw) ? raw.join("; ") : (raw ?? "");
-            return `"${String(value).replace(/"/g, '""')}"`;
+            return csvCell(String(value));
           }).join(","),
         ),
       )
-      .join("\n");
+      .join("\r\n");
 
   function downloadCsv() {
-    const blob = new Blob([toCsv(visible)], {
+    // BOM so Excel reads the UTF-8 accents in names correctly.
+    const blob = new Blob(["﻿", toCsv(visible)], {
       type: "text/csv;charset=utf-8",
     });
     const url = URL.createObjectURL(blob);
     const anchor = document.createElement("a");
     anchor.href = url;
     anchor.download = "markilux-investfest-list.csv";
+    // Appended to the document and revoked on a later tick: iOS Safari — the
+    // booth device, and the one that exports the event's leads — ignores a
+    // click on a detached anchor, and revoking in the same tick pulls the blob
+    // out from under the download before it has started.
+    anchor.style.display = "none";
+    document.body.appendChild(anchor);
     anchor.click();
-    URL.revokeObjectURL(url);
+    setTimeout(() => {
+      document.body.removeChild(anchor);
+      URL.revokeObjectURL(url);
+    }, 5000);
   }
 
   async function copyCsv() {
@@ -363,7 +427,12 @@ export function BackOffice() {
           ) : visible.length === 0 ? (
             <p className="note">Nothing matches that filter.</p>
           ) : (
-            <div className="pane">
+            <div
+              className="pane pane-scroll"
+              tabIndex={0}
+              role="region"
+              aria-label="Sign ups"
+            >
               <table className="tbl">
                 <thead>
                   <tr>
@@ -418,11 +487,13 @@ function LeadRowView({
   const [draft, setDraft] = useState(saved);
   const [syncedTo, setSyncedTo] = useState(saved);
 
-  // A Refresh replaces the row, so the box has to pick up what came back.
-  // Adjusting during render rather than in an effect: React re-runs this
-  // component immediately with the new value instead of painting the stale
-  // one first, and it does not clobber what someone is mid-way through typing.
-  if (syncedTo !== saved) {
+  // A Refresh replaces the row, so the box has to pick up what came back —
+  // but only when this textarea is clean. `draft !== syncedTo` means someone
+  // is part-way through a note, and overwriting that would destroy typing
+  // with no undo (React replaces a controlled value outright). Their text
+  // stays until they blur, which saves it.
+  const dirty = draft !== syncedTo;
+  if (syncedTo !== saved && !dirty) {
     setSyncedTo(saved);
     setDraft(saved);
   }
@@ -577,7 +648,7 @@ function SettingsPane({
         className="btn ghost"
         type="button"
         onClick={sendTest}
-        disabled={sending || email?.enabled === false}
+        disabled={sending || !email?.enabled}
       >
         {sending ? "Sending…" : "Send a test email"}
       </button>

@@ -93,7 +93,7 @@ export function SignupForm({ kiosk, onSuccess }: Props) {
       interests,
       timeline,
       consent,
-      company: honeypot,
+      mkxRef: honeypot,
       elapsedMs:
         mountedAt.current === null ? undefined : Date.now() - mountedAt.current,
     };
@@ -144,6 +144,9 @@ export function SignupForm({ kiosk, onSuccess }: Props) {
       setInterests([]);
       setTimeline(null);
       setConsent(false);
+      // Also cleared: if anything ever does populate the trap, leaving it set
+      // would silently discard every later signup from this device too.
+      setHoneypot("");
       mountedAt.current = Date.now();
     } catch {
       // Network failure. Unlike the export, we never claim success we can't
@@ -340,15 +343,22 @@ export function SignupForm({ kiosk, onSuccess }: Props) {
         />
       </div>
 
-      {/* Honeypot. Hidden from people and from screen readers; bots fill it. */}
+      {/* Honeypot. Hidden from people and from screen readers; bots fill it.
+          The name is deliberately meaningless: called "company" it was being
+          filled by iOS/Chrome contact autofill and by password managers, which
+          silently discarded real signups. data-1p-ignore / data-lpignore ask
+          1Password and LastPass to skip it as well. */}
       <div className="hp" aria-hidden="true">
-        <label htmlFor={fid("company")}>Company</label>
+        <label htmlFor={fid("mkxRef")}>Leave this field empty</label>
         <input
-          id={fid("company")}
-          name="company"
+          id={fid("mkxRef")}
+          name="mkxRef"
           type="text"
           tabIndex={-1}
           autoComplete="off"
+          data-1p-ignore="true"
+          data-lpignore="true"
+          data-form-type="other"
           value={honeypot}
           onChange={(e) => setHoneypot(e.target.value)}
         />
