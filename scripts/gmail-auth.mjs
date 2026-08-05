@@ -11,13 +11,17 @@
  * Prerequisites, all in the Google Cloud console for the project that owns
  * the mailbox:
  *   1. APIs & Services → Library → enable "Gmail API"
- *   2. APIs & Services → Credentials → Create credentials →
- *      OAuth client ID → Application type: "Desktop app"
+ *   2. APIs & Services → Credentials → Create credentials → OAuth client ID
  *   3. Put the client id and secret in .env.local as GMAIL_CLIENT_ID and
  *      GMAIL_CLIENT_SECRET (or export them before running this).
  *
- * Uses a loopback redirect, which is what Google recommends for desktop
- * clients and which avoids pasting codes between windows.
+ * Uses a loopback redirect so no code has to be pasted between windows.
+ *
+ * A "Desktop app" client accepts loopback automatically. A "Web application"
+ * client does NOT — you must add the exact redirect URI this script prints to
+ * the client's "Authorized redirect URIs" list, or Google answers
+ * redirect_uri_mismatch. Override the port with GMAIL_REDIRECT_PORT if 53682
+ * is taken.
  */
 
 import { createServer } from "node:http";
@@ -30,7 +34,7 @@ const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 
 /** Only the ability to send. Not read, not modify, not delete. */
 const SCOPE = "https://www.googleapis.com/auth/gmail.send";
-const PORT = 53682;
+const PORT = Number(process.env.GMAIL_REDIRECT_PORT || 53682);
 const REDIRECT = `http://127.0.0.1:${PORT}`;
 
 function fromEnvFile(key) {
@@ -94,6 +98,14 @@ const server = createServer(async (req, res) => {
     res.writeHead(400, { "Content-Type": "text/html" });
     res.end(page("Authorisation failed", error ?? "No code was returned."));
     console.error(`\nAuthorisation failed: ${error ?? "no code returned"}\n`);
+    if (error === "redirect_uri_mismatch") {
+      console.error(
+        "This client does not accept the loopback redirect. In the Google\n" +
+          "Cloud console open the OAuth client and add EXACTLY this under\n" +
+          `"Authorized redirect URIs":\n\n    ${REDIRECT}\n\n` +
+          "Save, wait a few seconds, then run this again.\n",
+      );
+    }
     server.close();
     process.exit(1);
   }
@@ -170,7 +182,12 @@ const server = createServer(async (req, res) => {
 });
 
 server.listen(PORT, "127.0.0.1", () => {
-  console.log("\nAuthorise the app by opening this URL:\n");
+  console.log(
+    `\nIf this is a "Web application" client, it must already list\n` +
+      `    ${REDIRECT}\n` +
+      `under "Authorized redirect URIs". Desktop clients need nothing.\n`,
+  );
+  console.log("Authorise the app by opening this URL:\n");
   console.log(authUrl);
   console.log(
     `\nSign in as the mailbox that should SEND the notifications.` +
