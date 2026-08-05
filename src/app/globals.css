@@ -85,6 +85,15 @@ img {
   outline-offset: 2px;
 }
 
+/* Headings take focus on every screen change so screen readers land on the new
+   title. They are not operable controls, so the ring marks a position nobody
+   can act on — the announcement is the point, not the outline. */
+h1[tabindex="-1"]:focus-visible,
+h2[tabindex="-1"]:focus-visible,
+h3[tabindex="-1"]:focus-visible {
+  outline: none;
+}
+
 ::selection {
   background: color-mix(in srgb, var(--mxred) 30%, transparent);
 }
