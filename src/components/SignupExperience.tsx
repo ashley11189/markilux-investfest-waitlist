@@ -8,8 +8,22 @@ import { useKioskMode } from "@/lib/use-kiosk-mode";
 
 type Screen = "welcome" | "form" | "done";
 
-/** How long the confirmation lingers before the kiosk resets for the next person. */
-const KIOSK_RESET_MS = 7000;
+/**
+ * How long the confirmation lingers before the kiosk resets for the next
+ * person.
+ *
+ * Was 7s, which is a WCAG 2.2.1 failure: a hard time limit on content with no
+ * way to extend it. Seven seconds is measured from when the screen appears,
+ * not from when the visitor finishes reading, so someone reaching for their
+ * phone to photograph their confirmation code could simply lose it — as could
+ * anyone reading English as a second language, or a screen-reader user still
+ * being read the paragraph above it.
+ *
+ * 20s, and any touch or key press restarts the clock, which is the "extend"
+ * mechanism 2.2.1 asks for. It still clears on its own so the next visitor
+ * never sees the previous person's name.
+ */
+const KIOSK_RESET_MS = 20000;
 
 export function SignupExperience() {
   // Kiosk mode is set in the back office; this page only reads it.
@@ -29,15 +43,30 @@ export function SignupExperience() {
   }, []);
 
   // Auto-return to the welcome screen so the next visitor never sees the last
-  // person's name sitting on the iPad.
+  // person's name sitting on the iPad. Touching the screen or pressing a key
+  // restarts the countdown, so nobody loses their confirmation code mid-read.
   useEffect(() => {
     if (current !== "done" || !kiosk) return;
-    const timer = setTimeout(() => {
+
+    let timer: ReturnType<typeof setTimeout>;
+    const reset = () => {
       setResult(null);
       setScreen("welcome");
       window.scrollTo(0, 0);
-    }, KIOSK_RESET_MS);
-    return () => clearTimeout(timer);
+    };
+    const restart = () => {
+      clearTimeout(timer);
+      timer = setTimeout(reset, KIOSK_RESET_MS);
+    };
+
+    restart();
+    window.addEventListener("pointerdown", restart);
+    window.addEventListener("keydown", restart);
+    return () => {
+      clearTimeout(timer);
+      window.removeEventListener("pointerdown", restart);
+      window.removeEventListener("keydown", restart);
+    };
   }, [current, kiosk]);
 
   // Send focus to the new heading on every screen change, so a screen-reader
@@ -116,7 +145,11 @@ export function SignupExperience() {
         >
           {kiosk ? "Next person" : "Back to the form"}
         </button>
-        {kiosk && <p className="tap">Returning to the start shortly</p>}
+        {kiosk && (
+          <p className="tap">
+            Returning to the start shortly — touch the screen to keep it open
+          </p>
+        )}
       </main>
     );
   }
