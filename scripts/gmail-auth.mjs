@@ -25,7 +25,7 @@
  */
 
 import { createServer } from "node:http";
-import { readFileSync } from "node:fs";
+import { readFileSync, writeFileSync } from "node:fs";
 import { randomBytes } from "node:crypto";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
@@ -36,6 +36,31 @@ const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const SCOPE = "https://www.googleapis.com/auth/gmail.send";
 const PORT = Number(process.env.GMAIL_REDIRECT_PORT || 53682);
 const REDIRECT = `http://127.0.0.1:${PORT}`;
+
+/**
+ * Write the minted values straight into .env.local. Printing them and asking
+ * for a copy/paste is where this process goes wrong — a truncated refresh
+ * token fails much later, at send time, with an opaque error.
+ */
+function writeEnvFile(values) {
+  const path = join(ROOT, ".env.local");
+  let text = "";
+  try {
+    text = readFileSync(path, "utf8");
+  } catch {
+    /* first run; create it */
+  }
+
+  for (const [key, value] of Object.entries(values)) {
+    if (!value) continue;
+    const line = `${key}=${value}`;
+    const pattern = new RegExp(`^${key}=.*$`, "m");
+    text = pattern.test(text) ? text.replace(pattern, line) : `${text.trimEnd()}\n${line}`;
+  }
+
+  writeFileSync(path, `${text.trimEnd()}\n`, { mode: 0o600 });
+  return path;
+}
 
 function fromEnvFile(key) {
   try {
@@ -162,14 +187,20 @@ const server = createServer(async (req, res) => {
       ),
     );
 
+    const written = writeEnvFile({
+      GMAIL_REFRESH_TOKEN: body.refresh_token,
+      GMAIL_SENDER: sender,
+    });
+
     console.log("\n─────────────────────────────────────────────────────────");
-    console.log("Add these to .env.local and to Vercel:\n");
-    console.log(`GMAIL_REFRESH_TOKEN=${body.refresh_token}`);
-    if (sender) console.log(`GMAIL_SENDER=${sender}`);
+    console.log(`Saved to ${written}:\n`);
+    console.log(`  GMAIL_REFRESH_TOKEN  (${body.refresh_token.length} chars)`);
+    if (sender) console.log(`  GMAIL_SENDER         ${sender}`);
     console.log("─────────────────────────────────────────────────────────");
     console.log(
-      "\nKeep the refresh token secret — it can send mail as that mailbox\n" +
-        "until you revoke it at myaccount.google.com/permissions.\n",
+      "\nThe refresh token is secret — it can send mail as that mailbox\n" +
+        "until you revoke it at myaccount.google.com/permissions.\n" +
+        "Copy both to Vercel next; see DEPLOYMENT.md.\n",
     );
 
     server.close();
