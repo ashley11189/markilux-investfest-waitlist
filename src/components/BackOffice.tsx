@@ -506,15 +506,25 @@ function SettingsPane({
   kiosk: boolean;
   onToggleKiosk: () => void;
 }) {
-  const [emailEnabled, setEmailEnabled] = useState<boolean | null>(null);
+  const [email, setEmail] = useState<{
+    enabled: boolean;
+    transport: string;
+    to: string[];
+  } | null>(null);
   const [sending, setSending] = useState(false);
   const [result, setResult] = useState<string | null>(null);
 
   useEffect(() => {
     fetch("/api/organizer/test-email", { cache: "no-store" })
       .then((r) => r.json())
-      .then((body: { enabled?: boolean }) => setEmailEnabled(Boolean(body.enabled)))
-      .catch(() => setEmailEnabled(false));
+      .then((body: { enabled?: boolean; transport?: string; to?: string[] }) =>
+        setEmail({
+          enabled: Boolean(body.enabled),
+          transport: body.transport ?? "none",
+          to: body.to ?? [],
+        }),
+      )
+      .catch(() => setEmail({ enabled: false, transport: "none", to: [] }));
   }, []);
 
   async function sendTest() {
@@ -548,17 +558,26 @@ function SettingsPane({
 
       <h2 className="sub">Email notifications</h2>
       <p className="note">
-        {emailEnabled === null
-          ? "Checking…"
-          : emailEnabled
-            ? "Configured. Every new signup is emailed to the notification address."
-            : "Not configured. Signups are still saved — you just will not be emailed. Set SMTP_HOST, SMTP_USER, SMTP_PASSWORD and SIGNUP_NOTIFY_TO."}
+        {email === null ? (
+          "Checking…"
+        ) : email.enabled ? (
+          <>
+            Sending via{" "}
+            <strong>
+              {email.transport === "gmail" ? "the Gmail API" : "SMTP"}
+            </strong>{" "}
+            to <strong>{email.to.join(", ")}</strong>. Every new signup is
+            emailed there.
+          </>
+        ) : (
+          "Not configured. Signups are still saved — you just will not be emailed. Set the GMAIL_* variables (or the SMTP_* ones) together with SIGNUP_NOTIFY_TO."
+        )}
       </p>
       <button
         className="btn ghost"
         type="button"
         onClick={sendTest}
-        disabled={sending || emailEnabled === false}
+        disabled={sending || email?.enabled === false}
       >
         {sending ? "Sending…" : "Send a test email"}
       </button>

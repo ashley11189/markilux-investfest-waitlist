@@ -9,7 +9,8 @@
     "start": "next start",
     "lint": "eslint",
     "typecheck": "tsc --noEmit",
-    "optimize:images": "node scripts/optimize-images.mjs"
+    "optimize:images": "node scripts/optimize-images.mjs",
+    "gmail:auth": "node scripts/gmail-auth.mjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.53.0",

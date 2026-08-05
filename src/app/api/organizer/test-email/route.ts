@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { hasOrganizerSession } from "@/lib/organizer-session";
-import { sendTestEmail, notificationsEnabled } from "@/lib/notify";
+import { sendTestEmail, notificationsEnabled, activeTransport } from "@/lib/notify";
+import { notifyRecipients } from "@/lib/env";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -13,7 +14,12 @@ export async function GET() {
       { status: 401 },
     );
   }
-  return NextResponse.json({ ok: true, enabled: notificationsEnabled() });
+  return NextResponse.json({
+    ok: true,
+    enabled: notificationsEnabled(),
+    transport: activeTransport(),
+    to: notifyRecipients(),
+  });
 }
 
 export async function POST() {

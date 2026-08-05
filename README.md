@@ -180,14 +180,27 @@ visitor typed, and internal comments must not leak into an export.
 
 ## Email notifications
 
-Set the `SMTP_*` variables and every new signup emails `SIGNUP_NOTIFY_TO` with
-the full details and a link into the back office. Replies go to the person who
-signed up.
+Every new signup emails `SIGNUP_NOTIFY_TO` with the full details and a link
+into the back office. Replies go to the person who signed up.
+
+Two transports, chosen in this order:
+
+| Transport | When it is used                                    |
+| --------- | -------------------------------------------------- |
+| Gmail API | All four `GMAIL_*` variables are set. The intended path — `markilux.us` is Google Workspace. |
+| SMTP      | Gmail is not fully configured but `SMTP_*` is       |
+| None      | Neither is configured — signups still save          |
+
+Gmail goes through `src/lib/gmail.ts`, which talks to the REST API with plain
+`fetch` rather than the `googleapis` client: this runs in a function that
+cold-starts on every booth signup, and the official client pulls in a large
+dependency tree to do the work of two HTTP calls. The scope requested is
+`gmail.send` alone, so the credential cannot read the mailbox. `npm run
+gmail:auth` mints the refresh token — see [DEPLOYMENT.md](DEPLOYMENT.md).
 
 Sending happens in `after()`, so it runs once the response has already reached
 the visitor, and every failure is caught and logged. An unreachable mail server
-cannot fail a signup — leaving the variables unset simply turns notifications
-off. Duplicates do not re-notify.
+cannot fail a signup. Duplicates do not re-notify.
 
 ## Kiosk mode
 

@@ -55,6 +55,48 @@ export const serverEnv = {
   },
 };
 
+/** Who gets told about a new signup. Shared by every transport. */
+export function notifyRecipients(): string[] {
+  return (process.env.SIGNUP_NOTIFY_TO ?? "")
+    .split(",")
+    .map((address) => address.trim())
+    .filter(Boolean);
+}
+
+export interface GmailConfig {
+  clientId: string;
+  clientSecret: string;
+  refreshToken: string;
+  /** The mailbox the refresh token belongs to; Gmail sends as this address. */
+  sender: string;
+  senderName: string;
+  to: string[];
+}
+
+/**
+ * Gmail API credentials. Returns null unless the whole set is present, so a
+ * half-finished setup falls through to SMTP rather than failing at send time.
+ */
+export function gmailConfig(): GmailConfig | null {
+  const clientId = process.env.GMAIL_CLIENT_ID?.trim();
+  const clientSecret = process.env.GMAIL_CLIENT_SECRET?.trim();
+  const refreshToken = process.env.GMAIL_REFRESH_TOKEN?.trim();
+  const sender = process.env.GMAIL_SENDER?.trim();
+  const to = notifyRecipients();
+
+  if (!clientId || !clientSecret || !refreshToken || !sender || to.length === 0)
+    return null;
+
+  return {
+    clientId,
+    clientSecret,
+    refreshToken,
+    sender,
+    senderName: process.env.GMAIL_SENDER_NAME?.trim() || "markilux private sale",
+    to,
+  };
+}
+
 export interface SmtpConfig {
   host: string;
   port: number;
@@ -77,10 +119,7 @@ export function smtpConfig(): SmtpConfig | null {
   const host = process.env.SMTP_HOST?.trim();
   const user = process.env.SMTP_USER?.trim();
   const password = process.env.SMTP_PASSWORD;
-  const to = (process.env.SIGNUP_NOTIFY_TO ?? "")
-    .split(",")
-    .map((address) => address.trim())
-    .filter(Boolean);
+  const to = notifyRecipients();
 
   if (!host || !user || !password || to.length === 0) return null;
 

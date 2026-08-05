@@ -139,17 +139,81 @@ Then, by hand:
 | `ORGANIZER_SESSION_SECRET`  | **yes** | Signs the organizer session cookie (≥32 chars) |
 | `NEXT_PUBLIC_EVENT_SLUG`    | no     | Must match a row in `events.slug`              |
 | `NEXT_PUBLIC_SITE_URL`      | no     | Canonical URL for Open Graph                   |
-| `SMTP_HOST`                 | no     | Mail server for signup notifications           |
+| `SIGNUP_NOTIFY_TO`          | no     | Who gets notified; comma-separate for several  |
+| `GMAIL_CLIENT_ID`           | no     | OAuth client for the Gmail API                 |
+| `GMAIL_CLIENT_SECRET`       | **yes** | OAuth client secret                           |
+| `GMAIL_REFRESH_TOKEN`       | **yes** | Long-lived send authorisation                 |
+| `GMAIL_SENDER`              | no     | Mailbox that sends; must match the token       |
+| `GMAIL_SENDER_NAME`         | no     | Display name on the From line                  |
+| `SMTP_HOST`                 | no     | Fallback mail server                           |
 | `SMTP_PORT`                 | no     | 587 for STARTTLS, 465 for implicit TLS         |
 | `SMTP_USER`                 | **yes** | Mailbox login, usually the full address       |
 | `SMTP_PASSWORD`             | **yes** | App password where the account uses 2FA       |
 | `SMTP_FROM`                 | no     | Defaults to `SMTP_USER`                        |
-| `SIGNUP_NOTIFY_TO`          | no     | Who gets notified; comma-separate for several  |
 
-The `SMTP_*` group is optional. Leave it unset and notifications are off;
-signups still save and still appear in the back office. Once set, confirm it
-works from **/organizer → Settings → Send a test email** rather than waiting to
-find out at the booth.
+Notifications are optional. Leave them unset and signups still save and still
+appear in the back office — you just are not emailed.
+
+---
+
+## Signup notifications over Gmail
+
+`markilux.us` runs on Google Workspace, so the Gmail API is the intended path.
+Gmail is used whenever all four of its variables are set; SMTP is only a
+fallback.
+
+### 1. Create the OAuth client
+
+In the [Google Cloud console](https://console.cloud.google.com/), on the
+project that owns the mailbox:
+
+1. **APIs & Services → Library** → enable **Gmail API**.
+2. **APIs & Services → Credentials → Create credentials → OAuth client ID**.
+3. Application type **Desktop app**. Name it anything.
+4. Copy the client ID and client secret into `.env.local`:
+
+```bash
+GMAIL_CLIENT_ID=...apps.googleusercontent.com
+GMAIL_CLIENT_SECRET=...
+SIGNUP_NOTIFY_TO=privatesale@markilux.us
+```
+
+If the consent screen is still in **Testing**, add the sending mailbox under
+**Audience → Test users**, or the authorisation is refused.
+
+### 2. Mint the refresh token
+
+```bash
+npm run gmail:auth
+```
+
+It prints a URL. Open it, **sign in as the mailbox that should send** the
+notifications, and approve. The script asks Gmail which account you actually
+authorised and prints:
+
+```
+GMAIL_REFRESH_TOKEN=1//0g...
+GMAIL_SENDER=privatesale@markilux.us
+```
+
+Add both to `.env.local`. The only scope requested is `gmail.send` — the app
+can send as that mailbox but cannot read it. Revoke any time at
+[myaccount.google.com/permissions](https://myaccount.google.com/permissions).
+
+### 3. Copy the variables to Vercel
+
+```bash
+vercel env add GMAIL_CLIENT_ID production      # repeat per variable, per target
+```
+
+### 4. Prove it works
+
+**/organizer → Settings**. It names the transport and the recipient, and
+**Send a test email** confirms delivery end to end. Do this before the event,
+not during it.
+
+> A refresh token is revoked if the mailbox password changes, so re-run
+> `npm run gmail:auth` after any password reset.
 
 A missing variable raises a clear `MissingEnvError` on the first request that
 needs it, rather than failing the build.

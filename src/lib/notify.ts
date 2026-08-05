@@ -1,19 +1,35 @@
 import "server-only";
 import nodemailer, { type Transporter } from "nodemailer";
-import { smtpConfig } from "@/lib/env";
+import { smtpConfig, gmailConfig, notifyRecipients } from "@/lib/env";
+import { sendViaGmail, type GmailMessage } from "@/lib/gmail";
 import type { SignupPayload } from "@/lib/validation";
 
 /**
  * New-signup notification.
  *
- * Every function here swallows its own failures. A booth signup that reached
- * the database is a success even if the mail server is unreachable, so nothing
- * in this file is allowed to throw into the request path.
+ * Every exported function here swallows its own failures. A booth signup that
+ * reached the database is a success even if the mail server is unreachable, so
+ * nothing in this file is allowed to throw into the request path.
+ *
+ * Gmail wins when it is configured; SMTP is the fallback. Both unset means
+ * notifications are simply off.
  */
+
+export type Transport = "gmail" | "smtp" | "none";
+
+export function activeTransport(): Transport {
+  if (gmailConfig()) return "gmail";
+  if (smtpConfig()) return "smtp";
+  return "none";
+}
+
+export function notificationsEnabled(): boolean {
+  return activeTransport() !== "none";
+}
 
 let cached: Transporter | null = null;
 
-function transport(): Transporter | null {
+function smtpTransport(): Transporter | null {
   if (cached) return cached;
   const config = smtpConfig();
   if (!config) return null;
@@ -33,8 +49,29 @@ function transport(): Transporter | null {
   return cached;
 }
 
-export function notificationsEnabled(): boolean {
-  return smtpConfig() !== null;
+/** Routes one message through whichever transport is configured. Throws. */
+async function deliver(message: GmailMessage): Promise<void> {
+  const transport = activeTransport();
+
+  if (transport === "gmail") {
+    await sendViaGmail(message);
+    return;
+  }
+
+  const mailer = smtpTransport();
+  const config = smtpConfig();
+  if (!mailer || !config) throw new Error("No mail transport is configured.");
+
+  await mailer.sendMail({
+    from: config.from,
+    to: message.to,
+    replyTo: message.replyToEmail
+      ? `${message.replyToName ?? ""} <${message.replyToEmail}>`.trim()
+      : undefined,
+    subject: message.subject,
+    text: message.text,
+    html: message.html,
+  });
 }
 
 interface NewSignupEmail {
@@ -90,9 +127,7 @@ function buildDetails({
  * visitor is standing at the booth waiting for a confirmation screen.
  */
 export async function sendNewSignupEmail(input: NewSignupEmail): Promise<void> {
-  const mailer = transport();
-  const config = smtpConfig();
-  if (!mailer || !config) return;
+  if (!notificationsEnabled()) return;
 
   const details = buildDetails(input);
   const { signup, eventName, organizerUrl } = input;
@@ -118,14 +153,14 @@ export async function sendNewSignupEmail(input: NewSignupEmail): Promise<void> {
 </body></html>`;
 
   try {
-    await mailer.sendMail({
-      from: config.from,
-      to: config.to,
-      // Replying goes straight to the person who signed up.
-      replyTo: `${signup.name} <${signup.email}>`,
+    await deliver({
+      to: notifyRecipients(),
       subject: `New signup — ${signup.name} (${signup.role})`,
       text,
       html,
+      // Replying goes straight to the person who signed up.
+      replyToName: signup.name,
+      replyToEmail: signup.email,
     });
   } catch (error) {
     console.error("[notify] could not send signup email", error);
@@ -134,27 +169,34 @@ export async function sendNewSignupEmail(input: NewSignupEmail): Promise<void> {
 
 /** Used by the back office to prove the mailbox works before the event. */
 export async function sendTestEmail(): Promise<{ ok: boolean; message: string }> {
-  const mailer = transport();
-  const config = smtpConfig();
-  if (!mailer || !config) {
+  const transport = activeTransport();
+
+  if (transport === "none") {
     return {
       ok: false,
       message:
-        "Email is not configured. Set SMTP_HOST, SMTP_USER, SMTP_PASSWORD and SIGNUP_NOTIFY_TO.",
+        "Email is not configured. Set the GMAIL_* variables (or the SMTP_* ones) " +
+        "along with SIGNUP_NOTIFY_TO.",
     };
   }
 
+  const to = notifyRecipients();
+
   try {
-    await mailer.verify();
-    await mailer.sendMail({
-      from: config.from,
-      to: config.to,
+    await deliver({
+      to,
       subject: "markilux waitlist — test notification",
       text:
         "This is a test from the markilux private sale waitlist back office.\n" +
+        `Sent via ${transport === "gmail" ? "the Gmail API" : "SMTP"}.\n` +
         "If you are reading it, new signup notifications will reach you.",
     });
-    return { ok: true, message: `Test email sent to ${config.to.join(", ")}.` };
+    return {
+      ok: true,
+      message: `Test email sent to ${to.join(", ")} via ${
+        transport === "gmail" ? "the Gmail API" : "SMTP"
+      }.`,
+    };
   } catch (error) {
     console.error("[notify] test email failed", error);
     return {
