@@ -11,7 +11,7 @@
  *   supabase gen types typescript --project-id <ref> > src/lib/supabase/types.ts
  */
 
-import type { Role, Timeline, Interest } from "@/lib/validation";
+import type { Role, Timeline, Interest, LeadStatus } from "@/lib/validation";
 
 export type SignupRow = {
   id: string;
@@ -31,6 +31,9 @@ export type SignupRow = {
   source: "web" | "kiosk";
   confirmation: string;
   created_at: string;
+  status: LeadStatus;
+  staff_notes: string | null;
+  updated_at: string;
 };
 
 export type EventRow = {
@@ -42,8 +45,17 @@ export type EventRow = {
   created_at: string;
 };
 
-export type SignupInsert = Omit<SignupRow, "id" | "created_at" | "consent_at"> &
-  Partial<Pick<SignupRow, "id" | "created_at" | "consent_at">>;
+/** Columns the database fills in: a signup never supplies its own triage state. */
+type SignupDefaulted =
+  | "id"
+  | "created_at"
+  | "consent_at"
+  | "status"
+  | "staff_notes"
+  | "updated_at";
+
+export type SignupInsert = Omit<SignupRow, SignupDefaulted> &
+  Partial<Pick<SignupRow, SignupDefaulted>>;
 
 export type Database = {
   __InternalSupabase: {
@@ -90,6 +102,7 @@ export type Database = {
       signup_role: Role;
       signup_timeline: Timeline;
       signup_interest: Interest;
+      lead_status: LeadStatus;
     };
     CompositeTypes: {
       [_ in never]: never;

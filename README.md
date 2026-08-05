@@ -58,11 +58,15 @@ SignupForm
                                ├─ rate limit by hashed IP ──▶ signup_rate_exceeded()
                                └─ insert ───────────────────▶ signups (service role)
                                                                └─ unique(event, lower(email))
-OrganizerPanel
+                                                            after response
+                                                               └─ SMTP notify
+/organizer (BackOffice)
   └─ passcode ─────────────▶ POST /api/organizer/session
                                └─ signed httpOnly cookie
   └─ list ─────────────────▶ GET /api/organizer/leads
                                └─ cookie required ──────────▶ select
+  └─ triage ───────────────▶ PATCH /api/organizer/leads/:id
+                               └─ cookie required ──────────▶ update status/notes
 ```
 
 The browser never holds a Supabase key of any kind. All database access happens
@@ -75,18 +79,22 @@ src/
   app/
     layout.tsx                     Fonts, metadata, viewport
     page.tsx                       Renders the signup experience
+    organizer/page.tsx             Back office (noindex)
     globals.css                    Modernist design tokens + components
     api/
       signup/route.ts              Validate → spam-gate → rate-limit → insert
       organizer/session/route.ts   Passcode → signed cookie
       organizer/leads/route.ts     Cookie-gated lead list
+      organizer/leads/[id]/route.ts  Cookie-gated status / notes update
+      organizer/test-email/route.ts  Mailbox check and test send
   components/
     SignupExperience.tsx           Welcome / form / confirmation state machine
     SignupForm.tsx                 The form itself
-    OrganizerPanel.tsx             Booth-staff dialog (list, CSV, QR)
+    BackOffice.tsx                 Lead triage, search, CSV, QR, settings
   lib/
-    validation.ts                  Zod schema shared by client and server
+    validation.ts                  Zod schemas shared by client and server
     env.ts                         Lazy, validated environment access
+    notify.ts                      SMTP new-signup email (never throws)
     request.ts                     IP hashing, confirmation codes, safe compare
     organizer-session.ts           HMAC-signed session cookie
     use-kiosk-mode.ts              Persisted kiosk toggle
@@ -153,9 +161,37 @@ Fonts are self-hosted by `next/font`, so nothing is fetched from
 
 ---
 
+## Back office
+
+`/organizer`, reachable from the footer link and gated by the passcode. It is
+`noindex`, and the page ships no lead data in its HTML — everything comes from
+the cookie-gated API after sign-in.
+
+- **Sign ups** — the full list, searchable across every field. Each row carries
+  a **status** (New / Contacted / Follow-up / Closed) and a private
+  **internal notes** box; both save as you change them, optimistically, and roll
+  back if the server refuses. CSV export follows the current filter.
+- **QR code** — generated locally, for the booth sign.
+- **Settings** — kiosk toggle, and a test-email button that proves the mailbox
+  works before the event rather than during it.
+
+`staff_notes` is deliberately separate from `notes`: the latter is what the
+visitor typed, and internal comments must not leak into an export.
+
+## Email notifications
+
+Set the `SMTP_*` variables and every new signup emails `SIGNUP_NOTIFY_TO` with
+the full details and a link into the back office. Replies go to the person who
+signed up.
+
+Sending happens in `after()`, so it runs once the response has already reached
+the visitor, and every failure is caught and logged. An unreachable mail server
+cannot fail a signup — leaving the variables unset simply turns notifications
+off. Duplicates do not re-notify.
+
 ## Kiosk mode
 
-Open the organizer panel (footer link), sign in, and toggle **Kiosk mode**. The
+Open the back office, sign in, and toggle **Kiosk mode** under Settings. The
 page then shows a welcome screen, hides the organizer link, and returns to the
 start seven seconds after each confirmation so the next visitor never sees the
 previous person's name. The setting persists across refreshes.

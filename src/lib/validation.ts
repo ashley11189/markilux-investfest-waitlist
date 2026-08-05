@@ -18,9 +18,18 @@ export const INTERESTS = ["markilux 1600", "Other product lines"] as const;
 
 export const TIMELINES = ["Ready now", "Next 90 days", "Later this year"] as const;
 
+/** Follow-up state, owned by staff. Mirrors the lead_status enum. */
+export const LEAD_STATUSES = [
+  "New",
+  "Contacted",
+  "Follow-up",
+  "Closed",
+] as const;
+
 export type Role = (typeof ROLES)[number];
 export type Interest = (typeof INTERESTS)[number];
 export type Timeline = (typeof TIMELINES)[number];
+export type LeadStatus = (typeof LEAD_STATUSES)[number];
 
 /** Trim, then treat an empty string as "not provided". */
 const optionalText = (max: number) =>
@@ -78,6 +87,28 @@ export const signupSchema = z.object({
 
 export type SignupInput = z.input<typeof signupSchema>;
 export type SignupPayload = z.output<typeof signupSchema>;
+
+/**
+ * A staff edit from the back office. Both fields are optional so the UI can
+ * save a status flip without also resubmitting the notes, but at least one
+ * must be present — an empty patch is a bug, not a no-op worth writing.
+ */
+export const leadUpdateSchema = z
+  .object({
+    status: z.enum(LEAD_STATUSES).optional(),
+    staff_notes: z
+      .string()
+      .trim()
+      .max(2000, "Keep notes under 2000 characters.")
+      .transform((v) => (v === "" ? null : v))
+      .nullable()
+      .optional(),
+  })
+  .refine((v) => v.status !== undefined || v.staff_notes !== undefined, {
+    message: "Nothing to update.",
+  });
+
+export type LeadUpdate = z.output<typeof leadUpdateSchema>;
 
 /** Anything faster than this is a script, not a person filling in six fields. */
 export const MIN_FILL_MS = 2000;

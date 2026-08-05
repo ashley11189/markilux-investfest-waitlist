@@ -55,6 +55,52 @@ export const serverEnv = {
   },
 };
 
+export interface SmtpConfig {
+  host: string;
+  port: number;
+  secure: boolean;
+  user: string;
+  password: string;
+  from: string;
+  to: string[];
+}
+
+/**
+ * SMTP settings for the new-signup notification.
+ *
+ * Returns null when the mailbox is not configured, and the signup route treats
+ * that as "notifications are off". Notifying somebody is strictly less
+ * important than capturing the lead, so an unset — or misconfigured — mailbox
+ * must never be able to fail a submission at the booth.
+ */
+export function smtpConfig(): SmtpConfig | null {
+  const host = process.env.SMTP_HOST?.trim();
+  const user = process.env.SMTP_USER?.trim();
+  const password = process.env.SMTP_PASSWORD;
+  const to = (process.env.SIGNUP_NOTIFY_TO ?? "")
+    .split(",")
+    .map((address) => address.trim())
+    .filter(Boolean);
+
+  if (!host || !user || !password || to.length === 0) return null;
+
+  // 465 is implicit TLS; 587 and 25 start plaintext and upgrade via STARTTLS.
+  const port = Number(process.env.SMTP_PORT?.trim() || 587);
+  const secure = process.env.SMTP_SECURE
+    ? process.env.SMTP_SECURE.trim() === "true"
+    : port === 465;
+
+  return {
+    host,
+    port: Number.isFinite(port) ? port : 587,
+    secure,
+    user,
+    password,
+    from: process.env.SMTP_FROM?.trim() || user,
+    to,
+  };
+}
+
 /** Reports which required variables are absent, for a health check. */
 export function missingEnvKeys(): string[] {
   const keys = [

@@ -6,7 +6,10 @@ import { serverEnv } from "@/lib/env";
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
+import type { LeadStatus } from "@/lib/validation";
+
 export interface LeadRow {
+  id: string;
   created_at: string;
   name: string;
   email: string;
@@ -17,6 +20,9 @@ export interface LeadRow {
   location: string | null;
   notes: string | null;
   confirmation: string;
+  status: LeadStatus;
+  staff_notes: string | null;
+  updated_at: string;
 }
 
 /**
@@ -50,7 +56,7 @@ export async function GET() {
   const { data, error } = await db
     .from("signups")
     .select(
-      "created_at, name, email, phone, role, interests, timeline, location, notes, confirmation",
+      "id, created_at, name, email, phone, role, interests, timeline, location, notes, confirmation, status, staff_notes, updated_at",
     )
     .eq("event_id", event.id)
     .order("created_at", { ascending: false })

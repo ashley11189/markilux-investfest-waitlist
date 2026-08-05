@@ -1,9 +1,9 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { SignupForm, type SignupSuccess } from "@/components/SignupForm";
-import { OrganizerPanel } from "@/components/OrganizerPanel";
 import { useKioskMode } from "@/lib/use-kiosk-mode";
 
 type Screen = "welcome" | "form" | "done";
@@ -12,13 +12,13 @@ type Screen = "welcome" | "form" | "done";
 const KIOSK_RESET_MS = 7000;
 
 export function SignupExperience() {
-  const [kiosk, toggleKioskMode] = useKioskMode();
+  // Kiosk mode is set in the back office; this page only reads it.
+  const [kiosk] = useKioskMode();
 
   // null means "whatever this mode starts on", which keeps the kiosk welcome
   // screen out of the render path until localStorage has actually been read.
   const [screen, setScreen] = useState<Screen | null>(null);
   const [result, setResult] = useState<SignupSuccess | null>(null);
-  const [organizerOpen, setOrganizerOpen] = useState(false);
 
   const current: Screen = screen ?? (kiosk ? "welcome" : "form");
   const headingRef = useRef<HTMLHeadingElement>(null);
@@ -46,14 +46,6 @@ export function SignupExperience() {
     headingRef.current?.focus();
   }, [current]);
 
-  const toggleKiosk = useCallback(() => {
-    toggleKioskMode();
-    setResult(null);
-    setScreen(null);
-    setOrganizerOpen(false);
-    window.scrollTo(0, 0);
-  }, [toggleKioskMode]);
-
   const handleSuccess = useCallback(
     (value: SignupSuccess) => {
       setResult(value);
@@ -62,18 +54,9 @@ export function SignupExperience() {
     [go],
   );
 
-  const organizer = organizerOpen ? (
-    <OrganizerPanel
-      kiosk={kiosk}
-      onToggleKiosk={toggleKiosk}
-      onClose={() => setOrganizerOpen(false)}
-    />
-  ) : null;
-
   if (current === "welcome") {
     return (
-      <>
-        <main className="center">
+      <main className="center">
           <Brand />
           <h2 ref={headingRef} tabIndex={-1}>
             Private sale.
@@ -94,9 +77,7 @@ export function SignupExperience() {
             Start
           </button>
           <p className="tap">markilux USA · InvestFest 2026 · Booth</p>
-        </main>
-        {organizer}
-      </>
+      </main>
     );
   }
 
@@ -141,9 +122,8 @@ export function SignupExperience() {
   }
 
   return (
-    <>
-      <main className="shell">
-        <Brand />
+    <main className="shell">
+      <Brand />
 
         <div className="hero-media" style={{ marginTop: "var(--leading)" }}>
           <Image
@@ -171,15 +151,10 @@ export function SignupExperience() {
         {!kiosk && (
           <div className="foot">
             <span>markilux USA · InvestFest 2026</span>
-            <button type="button" onClick={() => setOrganizerOpen(true)}>
-              Organizer
-            </button>
+            <Link href="/organizer">Organizer</Link>
           </div>
         )}
       </main>
-
-      {organizer}
-    </>
   );
 }
 

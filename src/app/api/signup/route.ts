@@ -1,5 +1,6 @@
-import { NextResponse } from "next/server";
+import { NextResponse, after } from "next/server";
 import { serverEnv } from "@/lib/env";
+import { sendNewSignupEmail } from "@/lib/notify";
 import { supabaseAdmin } from "@/lib/supabase/admin";
 import {
   signupSchema,
@@ -122,6 +123,7 @@ export async function POST(request: Request) {
 
   // ── 6. Insert ─────────────────────────────────────────────────────────────
   const confirmation = confirmationCode();
+  const source = request.headers.get("x-mkx-kiosk") === "1" ? "kiosk" : "web";
   const { error: insertError } = await db.from("signups").insert({
     event_id: event.id,
     name: data.name,
@@ -135,7 +137,7 @@ export async function POST(request: Request) {
     consent: true,
     ip_hash: ipHash,
     user_agent: request.headers.get("user-agent")?.slice(0, 500) ?? null,
-    source: request.headers.get("x-mkx-kiosk") === "1" ? "kiosk" : "web",
+    source,
     confirmation,
   });
 
@@ -167,6 +169,22 @@ export async function POST(request: Request) {
       message: "We could not save that just now. Please try again.",
     });
   }
+
+  // Notify after the response is flushed. The visitor is standing at the booth
+  // waiting on the confirmation screen, and a slow mail server must not be
+  // something they wait for. Only genuine new rows notify — a duplicate means
+  // this person was already reported once.
+  after(async () => {
+    const origin =
+      process.env.NEXT_PUBLIC_SITE_URL?.trim() || new URL(request.url).origin;
+    await sendNewSignupEmail({
+      signup: data,
+      confirmation,
+      eventName: event.name,
+      source,
+      organizerUrl: `${origin.replace(/\/$/, "")}/organizer`,
+    });
+  });
 
   return NextResponse.json({
     ok: true,

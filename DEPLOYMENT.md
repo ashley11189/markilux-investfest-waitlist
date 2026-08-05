@@ -121,8 +121,10 @@ Then, by hand:
 1. Submit a real signup and confirm the row lands in Supabase.
 2. Submit the **same email again** — you should see "already on the list", and
    no second row should appear.
-3. Open the organizer panel, sign in, and confirm the list and CSV export work.
-4. Toggle kiosk mode and confirm the welcome screen appears and auto-resets.
+3. Open `/organizer`, sign in, and confirm the list and CSV export work.
+4. Change a lead's status and add an internal note; refresh and confirm both stuck.
+5. Settings → **Send a test email**, and confirm it arrives.
+6. Toggle kiosk mode and confirm the welcome screen appears and auto-resets.
 
 ---
 
@@ -137,6 +139,17 @@ Then, by hand:
 | `ORGANIZER_SESSION_SECRET`  | **yes** | Signs the organizer session cookie (≥32 chars) |
 | `NEXT_PUBLIC_EVENT_SLUG`    | no     | Must match a row in `events.slug`              |
 | `NEXT_PUBLIC_SITE_URL`      | no     | Canonical URL for Open Graph                   |
+| `SMTP_HOST`                 | no     | Mail server for signup notifications           |
+| `SMTP_PORT`                 | no     | 587 for STARTTLS, 465 for implicit TLS         |
+| `SMTP_USER`                 | **yes** | Mailbox login, usually the full address       |
+| `SMTP_PASSWORD`             | **yes** | App password where the account uses 2FA       |
+| `SMTP_FROM`                 | no     | Defaults to `SMTP_USER`                        |
+| `SIGNUP_NOTIFY_TO`          | no     | Who gets notified; comma-separate for several  |
+
+The `SMTP_*` group is optional. Leave it unset and notifications are off;
+signups still save and still appear in the back office. Once set, confirm it
+works from **/organizer → Settings → Send a test email** rather than waiting to
+find out at the booth.
 
 A missing variable raises a clear `MissingEnvError` on the first request that
 needs it, rather than failing the build.
