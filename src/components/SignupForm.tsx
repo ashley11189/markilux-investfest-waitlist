@@ -29,6 +29,7 @@ const EMPTY = {
   email: "",
   phone: "",
   location: "",
+  hoa_community: "",
   notes: "",
 };
 
@@ -251,6 +252,26 @@ export function SignupForm({ kiosk, onSuccess }: Props) {
             onChange={(e) => set("location")(e.target.value)}
           />
         </div>
+      </div>
+
+      <div className="field">
+        <label className="lbl" htmlFor={fid("hoa_community")}>
+          Subdivision or HOA community
+        </label>
+        <input
+          className="inp"
+          id={fid("hoa_community")}
+          name="hoa_community"
+          type="text"
+          autoComplete="off"
+          placeholder="Skip if your property is not in one"
+          aria-describedby={`${fid("hoa_community")}-hint`}
+          value={text.hoa_community}
+          onChange={(e) => set("hoa_community")(e.target.value)}
+        />
+        <p className="hint" id={`${fid("hoa_community")}-hint`}>
+          For architectural approval purposes only.
+        </p>
       </div>
 
       <p className="legend">Tell us where you fit</p>

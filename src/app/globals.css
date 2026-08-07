@@ -267,6 +267,15 @@ h3[tabindex="-1"]:focus-visible {
   margin-left: 3px;
 }
 
+/* Explains why a field is being asked for. 62% ink is the measured 4.5:1
+   threshold on this background — see the contrast note on --color-divider. */
+.hint {
+  font-size: 12px;
+  line-height: 1.5;
+  color: color-mix(in srgb, var(--ink) 62%, transparent);
+  margin-top: 6px;
+}
+
 .inp {
   width: 100%;
   font-family: var(--font-body);

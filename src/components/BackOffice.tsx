@@ -19,6 +19,7 @@ const EXPORT_COLUMNS: [keyof LeadRow, string][] = [
   ["interests", "Interested in"],
   ["timeline", "Timeline"],
   ["location", "Location"],
+  ["hoa_community", "Subdivision / HOA"],
   ["notes", "Their notes"],
   ["status", "Status"],
   ["staff_notes", "Internal notes"],
@@ -225,6 +226,7 @@ export function BackOffice() {
         lead.email,
         lead.phone,
         lead.location,
+        lead.hoa_community,
         lead.role,
         lead.notes,
         lead.staff_notes,
@@ -443,6 +445,7 @@ export function BackOffice() {
                     <th scope="col">Interested in</th>
                     <th scope="col">Timeline</th>
                     <th scope="col">Location</th>
+                    <th scope="col">Subdivision / HOA</th>
                     <th scope="col">Their notes</th>
                     <th scope="col">Status</th>
                     <th scope="col">Internal notes</th>
@@ -530,6 +533,7 @@ function LeadRowView({
       <td>{lead.interests.join(", ")}</td>
       <td>{lead.timeline ?? ""}</td>
       <td>{lead.location ?? ""}</td>
+      <td className="wrap">{lead.hoa_community ?? ""}</td>
       <td className="wrap">{lead.notes ?? ""}</td>
       <td>
         <label className="sr-only" htmlFor={`status-${lead.id}`}>

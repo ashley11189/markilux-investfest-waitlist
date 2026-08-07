@@ -63,6 +63,8 @@ export const signupSchema = z.object({
 
   phone: optionalText(40),
   location: optionalText(120),
+  /** Subdivision or HOA. Optional — many properties have neither. */
+  hoa_community: optionalText(120),
   notes: optionalText(1000),
 
   role: z.enum(ROLES, { message: "Pick the one that fits best." }),

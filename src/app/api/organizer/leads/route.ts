@@ -18,6 +18,7 @@ export interface LeadRow {
   interests: string[];
   timeline: string | null;
   location: string | null;
+  hoa_community: string | null;
   notes: string | null;
   confirmation: string;
   status: LeadStatus;
@@ -56,7 +57,7 @@ export async function GET() {
   const { data, error } = await db
     .from("signups")
     .select(
-      "id, created_at, name, email, phone, role, interests, timeline, location, notes, confirmation, status, staff_notes, updated_at",
+      "id, created_at, name, email, phone, role, interests, timeline, location, hoa_community, notes, confirmation, status, staff_notes, updated_at",
     )
     .eq("event_id", event.id)
     .order("created_at", { ascending: false })

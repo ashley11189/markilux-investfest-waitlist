@@ -121,6 +121,8 @@ function buildDetails({
     details.push(["Interested in", signup.interests.join(", ")]);
   if (signup.timeline) details.push(["Timeline", signup.timeline]);
   if (signup.location) details.push(["Location", signup.location]);
+  if (signup.hoa_community)
+    details.push(["Subdivision / HOA", signup.hoa_community]);
   if (signup.notes) details.push(["Their notes", signup.notes]);
   details.push(["Confirmation", confirmation]);
   details.push(["Signed up on", source === "kiosk" ? "Booth iPad" : "Own device"]);

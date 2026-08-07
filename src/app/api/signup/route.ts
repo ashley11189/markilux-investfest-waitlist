@@ -172,6 +172,7 @@ export async function POST(request: Request) {
       email: data.email,
       phone: data.phone,
       location: data.location,
+      hoa_community: data.hoa_community,
       notes: data.notes,
       role: data.role,
       timeline: data.timeline,

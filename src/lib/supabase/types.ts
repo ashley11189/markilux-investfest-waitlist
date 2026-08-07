@@ -20,6 +20,7 @@ export type SignupRow = {
   email: string;
   phone: string | null;
   location: string | null;
+  hoa_community: string | null;
   notes: string | null;
   role: Role;
   timeline: Timeline | null;
